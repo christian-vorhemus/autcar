@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>AutCar - Control Board</title>
+
+    <!-- Scripts -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    
+    <script>
+        function cmd(cmd) {
+            $.getJSON('/cmds?cmd=' + cmd, function(response) {
+
+                if(cmd == "connect" && response['status'] == "success") {
+                    $("#notconnectedchip").hide()
+                    $("#connectedchip").show()
+                }
+
+                if(cmd == "connect" && response['status'] == "error") {
+                    console.log("connection refused");
+                }
+
+                if(cmd == "startrecording" && response['status'] == "success") {
+                    $("#rec").show()
+                }
+
+                if(cmd == "stoprecording" && response['status'] == "success") {
+                    $("#rec").hide()
+                }
+
+            });
+        }
+    </script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        .Blink {
+            animation: blinker 1.0s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
+            }
+            @keyframes blinker {  
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        .chip {
+            display: inline-block;
+            padding: 0 20px;
+            height: 20px;
+            font-size: 12px;
+            line-height: 20px;
+            border-radius: 20px;
+            color:white;
+        }
+    </style>
+
+</head>
+<body class="win-type-body">
+
+    <div class="container-fluid flex-column d-flex h-100 bg-faded" style="padding:0px;">
+    <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse" style="position:relative;background-color:black;">
+        <a class="navbar-brand" href="#" style="color:white;">AutCar - Control Board</a>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <span class="navbar-text" id="statustext">
+                </span>
+            </li>
+            <li class="navbar-item">
+                <div class="mx-auto" style="width:10px;">
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+        <div class="row fill d-flex justify-content-start h-100" style="margin-left:5px;margin-right:5px;">
+            <div class="col fill" style="padding:10px;">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <div style="float:left;">Car Live View</div>
+                        <div class="row d-flex" style="float:left;"></div>
+                        <div style="float:right;">
+                            <div id="notconnectedchip">
+                                <div class="chip" onclick="cmd('connect')" style="background-color: #db3847;cursor: pointer;">
+                                    NOT CONNECTED
+                                </div>
+                            </div>
+                            <div class="chip" id="connectedchip" style="background-color: #2ca547;display:none;">
+                                CONNECTED
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-block" style="text-align:center;background-color:black;">
+                        
+                        <img src="{{url_for('video')}}" style="min-height:350px;max-height:450px;">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col fill"  style="padding:10px;">
+                <div class="card h-100">
+                    <div class="card-header">
+                            <div style="float:left;">Car control</div>
+                            <div class="row d-flex" style="float:left;"></div>
+                            <div style="float:right;display:none;"><a href="#" onclick="cmd('autopilot')"class="btn btn-primary">AUTOPILOT</a></div>
+                    </div>
+                    <div class="card-block">
+                        <p class="card-text" style="padding:5px;">Once the connection to the car is established, click on the buttons to control the car manually.</p>
+
+                        <div class="row" style="width:510px;margin: 0 auto;">
+                            <div class="col"></div>
+                            <div class="col"></div>
+                            <div class="col"><a href="#" onclick="cmd('faster')" class="btn btn-success" style="width:70px;height:70px;"><i class="fa fa-angle-double-up" style="font-size:52px;"></i></a></div>
+                            <div class="col"></div>
+                            <div class="col"></div>
+                            <div class="w-100" style="padding-bottom:10px;"></div>
+                            <div class="col"></div>
+                            <div class="col"></div>
+                            <div class="col"><a href="#" onclick="cmd('fast')" class="btn btn-success" style="width:70px;height:70px;"><i class="fa fa-angle-up" style="font-size:52px;"></i></a></div>
+                            <div class="col"></div>
+                            <div class="col"></div>
+                            <div class="w-100" style="padding-bottom:10px;"></div>
+                            <div class="col"><a href="#" onclick="cmd('lefthard')"class="btn btn-primary" style="width:70px;height:70px;"><i class="fa fa-angle-double-left" style="font-size:52px;"></i></a></div>
+                            <div class="col"><a href="#" onclick="cmd('leftlight')" class="btn btn-primary" style="width:70px;height:70px;"><i class="fa fa-angle-left" style="font-size:52px;"></i></a></div>
+                            <div class="col"><a href="#" onclick="cmd('stop')" class="btn btn-danger" style="width:70px;height:70px;"><i class="fa fa-pause" style="font-size:52px;"></i></a></div>
+                            <div class="col"><a href="#" onclick="cmd('rightlight')" class="btn btn-primary" style="width:70px;height:70px;"><i class="fa fa-angle-right" style="font-size:52px;"></i></a></div>
+                            <div class="col"><a href="#" onclick="cmd('righthard')" class="btn btn-primary" style="width:70px;height:70px;"><i class="fa fa-angle-double-right" style="font-size:52px;"></i></a></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row bg-faded fill d-flex justify-content-start h-100" style="margin-left:5px;margin-right:5px;">
+            <div class="col" style="padding:10px;">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <div style="float:left;">Car autopilot data recording</div>
+                        <div class="row d-flex" style="float:left;"></div>
+                        <div style="float:right;display:none;" id="rec"><i class="fa fa-circle text-danger Blink"></i>&nbsp; REC </div>
+                    </div>
+                    <div class="card-block" style="padding:10px;">
+
+                        <div class="container">
+                            <div class="row" style="width:500px;">
+                                <table>
+                                    <tr>
+                                        <td><a href="#" onclick="cmd('startrecording')" class="btn btn-success">START</a></td>
+                                        <td><a href="#" onclick="cmd('stoprecording')" class="btn btn-danger">STOP</a></td>
+                                        <td><a href="#" onclick="cmd('retrievedata')" class="btn btn-primary" style="display:none;">Retrieve recorded data</a></td>
+                                        <td><a href="#" onclick="cmd('setmlmodel')" class="btn btn-primary" style="display:none;">Setup ML model</a></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="max-height:250px;overflow-y:auto;display:none;">
+                                    <ul style="margin-left:-20px;padding-top:10px;">
+                                        <li>1_car_image.jpg | forward fast</li>
+                                        <li>2_car_image.jpg | forward fast</li>
+                                        <li>3_car_image.jpg | forward fast</li>
+                                        <li>1_car_image.jpg | forward fast</li>
+                                        <li>2_car_image.jpg | forward fast</li>
+                                        <li>3_car_image.jpg | forward fast</li>
+                                        <li>1_car_image.jpg | forward fast</li>
+                                        <li>2_car_image.jpg | forward fast</li>
+                                        <li>3_car_image.jpg | forward fast</li>
+                                        <li>1_car_image.jpg | forward fast</li>
+                                        <li>2_car_image.jpg | forward fast</li>
+                                        <li>3_car_image.jpg | forward fast</li>
+                                        <li>1_car_image.jpg | forward fast</li>
+                                        <li>2_car_image.jpg | forward fast</li>
+                                        <li>3_car_image.jpg | forward fast</li>
+                                        <li>1_car_image.jpg | forward fast</li>
+                                        <li>2_car_image.jpg | forward fast</li>
+                                        <li>3_car_image.jpg | forward fast</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col" style="padding:10px;">
+                
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
