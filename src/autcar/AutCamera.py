@@ -15,15 +15,9 @@ class Camera:
         self.__frame = None
         self.host = host
         self.port = port
-        #wd = os.getcwd()
-        #print(wd)
-        #os.chdir(wd+"")
-        script_dir = os.path.dirname(__file__)
-        rel_path = "2091/data.txt"
-        abs_file_path = os.path.join(script_dir, rel_path)
         self.__nosignal = True
         if(capture):
-            self.__nosignalframes = [open('autcar/web/res/' + f + '.jpg', 'rb').read() for f in ['f1', 'f2', 'f3']]
+            #self.__nosignalframes = [open('/autcar/web/res/' + f + '.jpg', 'rb').read() for f in ['f1', 'f2', 'f3']]
             threading.Thread(target=self.frame_updater).start()
 
 
@@ -42,20 +36,17 @@ class Camera:
         if(self.__nosignal == False):
             return self.__frame
         else:
-            fr = self.__nosignalframes[int(time.time()) % 3]
+            fr = None
             return fr
 
 
     def frame_updater(self):
-        print("Called")
         clientsocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         try:
             clientsocket.connect((self.host, self.port))
         except:
             self.__nosignal = True
             return
-
-        print("Socket started")
 
         data = b""
         payload_size = struct.calcsize("L") 
@@ -78,8 +69,6 @@ class Camera:
             frame = pickle.loads(frame_data, encoding='latin1')
             ret, jpeg = cv2.imencode('.jpg', frame)
             self.__frame = jpeg.tobytes()
-
-
 
 
     def connect(self, host = 'localhost', port = 8089):
@@ -106,6 +95,7 @@ class Camera:
             # Could cause incompatibility between Python 2 and 3. remove "encoding" parameter potentially
             frame = pickle.loads(frame_data, encoding='latin1')
             ret, jpeg = cv2.imencode('.jpg', frame)
+            print("new image")
             return jpeg.tobytes()
             #cv2.imshow('frame', frame)
             #cv2.waitKey(1)
@@ -116,15 +106,17 @@ class Camera:
         serversocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         serversocket.bind((host, port))
         serversocket.listen(10)
-        print('Socket now listening on ' + host + ":" + str(port))
+        print('Camera socket now listening on ' + host + ":" + str(port))
 
         while True:
             try:
-                print("New client connection")
                 conn, addr = serversocket.accept()
+                print("New client connection")
                 while True:
+                    time.sleep(4)
                     ret, frame = self.__cam.read()
                     data = pickle.dumps(frame)
+                    print("sending data...")
                     tosend = struct.pack("L", len(data))+data
                     conn.sendall(tosend)
             except:

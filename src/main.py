@@ -48,27 +48,33 @@ def record_data(car):
         counter = counter + 1
         time.sleep(3)
 
-#threading.Thread(target=live_camera).start()
+Thread(target=live_camera).start()
 
 proc = Thread(target=record_data, args=(car,))
+direction = None
 
 while True:
     cmd = rc.get_cmds()
     print(cmd)
     if(cmd == "fast"):
+        direction = "forward"
         car.move("forward", "medium")
     if(cmd == "stop"):
         car.stop()
     if(cmd == "faster"):
+        direction = "forward"
         car.move("forward", "fast")
+    if(cmd == "backwards"):
+        direction = "backwards"
+        car.move("backwards")
     if(cmd == "leftlight"):
-        car.left("light")
+        car.left("light", direction)
     if(cmd == "lefthard"):
-        car.left("medium")
+        car.left("medium", direction)
     if(cmd == "rightlight"):
-        car.right("light")
+        car.right("light", direction)
     if(cmd == "righthard"):
-        car.right("medium")
+        car.right("medium", direction)
     if(cmd == "startrecording"):
         proc.start()
     if(cmd == "stoprecording"):

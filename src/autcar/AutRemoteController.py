@@ -12,6 +12,7 @@ class RemoteController:
 
     def connect(self):
         self.__connection = socket.socket()
+        self.__connection.settimeout(10)
         self.__connection.connect((self.host, self.port))
 
     def listen(self):

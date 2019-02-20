@@ -12,15 +12,6 @@
         function cmd(cmd) {
             $.getJSON('/cmds?cmd=' + cmd, function(response) {
 
-                if(cmd == "connect" && response['status'] == "success") {
-                    $("#notconnectedchip").hide()
-                    $("#connectedchip").show()
-                }
-
-                if(cmd == "connect" && response['status'] == "error") {
-                    console.log("connection refused");
-                }
-
                 if(cmd == "startrecording" && response['status'] == "success") {
                     $("#rec").show()
                 }
@@ -31,6 +22,47 @@
 
             });
         }
+
+        function connect() {
+
+            if($("#address").val() == "") {
+                alert("IP address and port of car must be set");
+                return;
+            } else if($("#address").val().indexOf(":") == -1) {
+                alert("Include the port the car is listening on like 192.168.1.121:8090");
+                return; 
+            }
+            $('connectbutton').addClass('disabled');
+
+            $.getJSON('/connect?&address=' + $("#address").val(), function(response) {
+
+                if(response['status'] == "success") {
+                    $("#connectcontainer").hide()
+                    $("#disconnectcontainer").show()
+                    $('#connectbutton').removeClass('disabled');
+                    //$("#notconnectedchip").hide()
+                    //$("#connectedchip").show()
+                }
+
+                if(response['status'] == "error") {
+                    $('#connectbutton').removeClass('disabled');
+                    alert("Error while connecting to car: Connection not possible")
+                }
+            });
+        }
+
+        function disconnect() {
+
+            $.getJSON('/disconnect', function(response) {
+
+                console.log(response);
+
+                $("#connectcontainer").show()
+                $("#disconnectcontainer").hide()
+            });
+
+        }
+
     </script>
 
     <!-- Stylesheets -->
@@ -62,16 +94,12 @@
     <div class="container-fluid flex-column d-flex h-100 bg-faded" style="padding:0px;">
     <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse" style="position:relative;background-color:black;">
         <a class="navbar-brand" href="#" style="color:white;">AutCar - Control Board</a>
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <span class="navbar-text" id="statustext">
-                </span>
-            </li>
-            <li class="navbar-item">
-                <div class="mx-auto" style="width:10px;">
-                </div>
-            </li>
-        </ul>
+        <div id="connectcontainer">
+            <input type="text" value="192.168.1.121:8090" placeholder="192.168.1.121:8090" style="font-size:22px;float:left;" id="address"> <a href="#" id="connectbutton" onclick="connect()" class="btn btn-success" style="float:right;margin-left:10px;">Connect</a>
+        </div>
+        <div id="disconnectcontainer" style="display:none">
+            <a href="#" onclick="disconnect()" class="btn btn-danger" style="float:right;margin-left:10px;">Disconnect</a>
+        </div>
     </nav>
 
         <div class="row fill d-flex justify-content-start h-100" style="margin-left:5px;margin-right:5px;">
@@ -82,12 +110,12 @@
                         <div class="row d-flex" style="float:left;"></div>
                         <div style="float:right;">
                             <div id="notconnectedchip">
-                                <div class="chip" onclick="cmd('connect')" style="background-color: #db3847;cursor: pointer;">
-                                    NOT CONNECTED
+                                <div class="chip" style="background-color: #db3847;">
+                                    CAMERA NOT CONNECTED
                                 </div>
                             </div>
                             <div class="chip" id="connectedchip" style="background-color: #2ca547;display:none;">
-                                CONNECTED
+                                CAMERA CONNECTED
                             </div>
                         </div>
                     </div>
@@ -126,6 +154,12 @@
                             <div class="col"><a href="#" onclick="cmd('stop')" class="btn btn-danger" style="width:70px;height:70px;"><i class="fa fa-pause" style="font-size:52px;"></i></a></div>
                             <div class="col"><a href="#" onclick="cmd('rightlight')" class="btn btn-primary" style="width:70px;height:70px;"><i class="fa fa-angle-right" style="font-size:52px;"></i></a></div>
                             <div class="col"><a href="#" onclick="cmd('righthard')" class="btn btn-primary" style="width:70px;height:70px;"><i class="fa fa-angle-double-right" style="font-size:52px;"></i></a></div>
+                            <div class="w-100" style="padding-bottom:10px;"></div>
+                            <div class="col"></div>
+                            <div class="col"></div>
+                            <div class="col"><a href="#" onclick="cmd('backwards')" class="btn btn-success" style="width:70px;height:70px;"><i class="fa fa-angle-double-down" style="font-size:52px;"></i></a></div>
+                            <div class="col"></div>
+                            <div class="col"></div>
                         </div>
 
                     </div>

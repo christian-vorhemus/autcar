@@ -1,15 +1,17 @@
 from flask import Flask, render_template, Response, request, jsonify
-import os, sys
+import os, sys, time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from AutCamera import Camera
 from AutRemoteController import RemoteController
  
 app = Flask(__name__)
-rc = RemoteController("192.168.1.121")
-
+rc = None
+car_ip = ""
+car_port = 0
 
 def gen(camera):
     while True:
+        time.sleep(4)
         frame = camera.get_frame()
         if(frame is None):
             continue
@@ -23,23 +25,48 @@ def home():
     except Exception as e:
         return str(e)
 
+
+
+@app.route('/disconnect')
+def disconnect():
+    rc.close()
+    return jsonify({'status': 'success', 'type': 'disconnected'})
+
+@app.route('/connect')
+def connect():
+    global rc
+    global car_ip
+    global car_port
+
+    address = request.args.get('address')
+
+    car_ip, car_port = address.split(":")
+    car_port = int(car_port)
+    try:
+        rc = RemoteController(car_ip, car_port)
+        rc.connect()
+        message = {'status': 'success', 'type': 'connected'}
+    except ConnectionRefusedError:
+        message = {'status': 'error', 'type': 'connection_refused'}
+
+    return jsonify(message)
+
+
 @app.route('/cmds')
 def cmds():
 
+    global rc
     cmd = request.args.get('cmd')
     print("Sent command: " + cmd)
 
-    message = {'status': 'success', 'type': 'cmd_accepted'}
-    if(cmd == "connect"):
-        try:
-            rc.connect()
-            message = {'status': 'success', 'type': 'connected'}
-        except ConnectionRefusedError:
-            message = {'status': 'error', 'type': 'connection_refused'}
+    message = {}
+
     if(cmd == "fast"):
         rc.send_cmd("fast")
     if(cmd == "faster"):
         rc.send_cmd("faster")
+    if(cmd == "backwards"):
+        rc.send_cmd("backwards")
     if(cmd == "leftlight"):
         rc.send_cmd("leftlight")
     if(cmd == "lefthard"):
@@ -63,7 +90,7 @@ def cmds():
 
 @app.route('/video')
 def video():
-    return Response(gen(Camera(True, "192.168.1.121")), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(gen(Camera(True, "192.168.1.121", 8089)), mimetype='multipart/x-mixed-replace; boundary=frame')
 
  
 if __name__ == "__main__":
