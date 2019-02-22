@@ -25,8 +25,6 @@ def home():
     except Exception as e:
         return str(e)
 
-
-
 @app.route('/disconnect')
 def disconnect():
     rc.close()
@@ -78,9 +76,17 @@ def cmds():
     if(cmd == "stop"):
         rc.send_cmd("stop")
     if(cmd == "startrecording"):
-        rc.send_cmd("startrecording")
+        try:
+            rc.send_cmd("startrecording")
+            message = {'status': 'success', 'type': 'recording_started'}
+        except:
+            message = {'status': 'error', 'type': 'recording_notstarted'}
     if(cmd == "stoprecording"):
-        rc.send_cmd("startrecording")
+        try:
+            rc.send_cmd("stoprecording")
+            message = {'status': 'success', 'type': 'recording_stopped'}
+        except:
+            message = {'status': 'error', 'type': 'recording_notstopped'}
     if(cmd == "retrievedata"):
         message = {'status': 'error', 'type': 'not_implemented'}
     if(cmd == "setmlmodel"):
@@ -90,7 +96,7 @@ def cmds():
 
 @app.route('/video')
 def video():
-    return Response(gen(Camera(True, "192.168.1.121", 8089)), mimetype='multipart/x-mixed-replace; boundary=frame')
+        return Response(gen(Camera(True, car_ip, car_port)), mimetype='multipart/x-mixed-replace; boundary=frame')
 
  
 if __name__ == "__main__":

@@ -88,7 +88,6 @@ class Car:
         else:
             motor_delay = 0.001
 
-
         tright = Thread(target = self.__right_motor, args = (di,motor_delay,))
         tleft = Thread(target = self.__left_motor, args = (di,motor_delay,))
         tright.start()

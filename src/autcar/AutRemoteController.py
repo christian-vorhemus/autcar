@@ -25,7 +25,7 @@ class RemoteController:
         message = {'cmd': cmd}
         self.__connection.send(json.dumps(message).encode())
         data = self.__connection.recv(4096)
-        print("Answer Sent: " + data.decode())
+        return data.decode()
 
     def close(self):
         if(self.__connection != None):

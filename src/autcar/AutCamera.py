@@ -20,16 +20,21 @@ class Camera:
             #self.__nosignalframes = [open('/autcar/web/res/' + f + '.jpg', 'rb').read() for f in ['f1', 'f2', 'f3']]
             threading.Thread(target=self.frame_updater).start()
 
-
-    def take_snapshot(self, counter = None):
-        ret, frame = self.__cam.read()
-        if(counter is None):
-            counter = self.__counter
-            self.__counter = counter + 1
-        if not os.path.exists("autcar_train"):
-            os.mkdir("autcar_train")
-        img_name = "autcar_train/{}_car_snapshot.png".format(counter)
+    def __saveFrame(self, frame, folder_name, description):
+        img_name = folder_name + "/" + str(self.__counter) + "_car_snapshot.png"
         cv2.imwrite(img_name, frame)
+        with open(folder_name+'/training.csv', 'a') as f:
+            f.write(str(self.__counter) + "_car_snapshot.png;" + description + "\r\n")
+            self.__counter = self.__counter + 1
+
+
+    def take_snapshot(self, folder_name, car):
+        ret, frame = self.__cam.read()
+        carcmd = car.current_command
+        print(carcmd)
+
+        # Saving to file costs time, outsource it to a new thread
+        threading.Thread(target=self.__saveFrame, args=(frame, folder_name, str(carcmd),)).start()
 
 
     def get_frame(self):
