@@ -11,7 +11,6 @@ car_port = 0
 
 def gen(camera):
     while True:
-        time.sleep(4)
         frame = camera.get_frame()
         if(frame is None):
             continue
@@ -96,7 +95,7 @@ def cmds():
 
 @app.route('/video')
 def video():
-        return Response(gen(Camera(True, car_ip, car_port)), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(gen(Camera(True, "192.168.1.121", 8089)), mimetype='multipart/x-mixed-replace; boundary=frame')
 
  
 if __name__ == "__main__":

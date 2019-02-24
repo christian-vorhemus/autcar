@@ -1,9 +1,11 @@
 from autcar import Camera, Car, RemoteController, Capture
+from threading import Thread
+import time
 
-cam = Camera()
+#cam = Camera()
 rc = RemoteController()
 car = Car()
-cap = Capture(car, cam)
+cap = Capture(car, 1)
 
 rc.listen()
 
@@ -11,13 +13,15 @@ def live_camera():
     print("Camera started")
     cam.listen()
 
-#Thread(target=live_camera).start()
+#livecam = Thread(target=live_camera)
+#livecam.daemon = True
+#livecam.start()
 
 direction = None
 
 while True:
     cmd = rc.get_cmds()
-    print(cmd)
+    print(cmd + ", time:" + str(int(time.time())))
     if(cmd == "fast"):
         direction = "forward"
         car.move("forward", "medium")

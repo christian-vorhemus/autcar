@@ -11,30 +11,12 @@ class Camera:
 
     def __init__(self, capture = False, host = 'localhost', port = 8089):
         self.__cam = cv2.VideoCapture(0)
-        self.__counter = 0
         self.__frame = None
         self.host = host
         self.port = port
         self.__nosignal = True
         if(capture):
-            #self.__nosignalframes = [open('/autcar/web/res/' + f + '.jpg', 'rb').read() for f in ['f1', 'f2', 'f3']]
             threading.Thread(target=self.frame_updater).start()
-
-    def __saveFrame(self, frame, folder_name, description):
-        img_name = folder_name + "/" + str(self.__counter) + "_car_snapshot.png"
-        cv2.imwrite(img_name, frame)
-        with open(folder_name+'/training.csv', 'a') as f:
-            f.write(str(self.__counter) + "_car_snapshot.png;" + description + "\r\n")
-            self.__counter = self.__counter + 1
-
-
-    def take_snapshot(self, folder_name, car):
-        ret, frame = self.__cam.read()
-        carcmd = car.current_command
-        print(carcmd)
-
-        # Saving to file costs time, outsource it to a new thread
-        threading.Thread(target=self.__saveFrame, args=(frame, folder_name, str(carcmd),)).start()
 
 
     def get_frame(self):
@@ -99,7 +81,7 @@ class Camera:
 
             # Could cause incompatibility between Python 2 and 3. remove "encoding" parameter potentially
             frame = pickle.loads(frame_data, encoding='latin1')
-            ret, jpeg = cv2.imencode('.jpg', frame)
+            # ret, jpeg = cv2.imencode('.jpg', frame)
             print("new image")
             return jpeg.tobytes()
             #cv2.imshow('frame', frame)
@@ -118,8 +100,9 @@ class Camera:
                 conn, addr = serversocket.accept()
                 print("New client connection")
                 while True:
-                    time.sleep(4)
                     ret, frame = self.__cam.read()
+                    encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 50]
+                    result, frame = cv2.imencode('.jpg', frame, encode_param)
                     data = pickle.dumps(frame)
                     print("sending data...")
                     tosend = struct.pack("L", len(data))+data
