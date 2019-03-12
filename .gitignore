@@ -18,6 +18,9 @@ lib/
 lib64/
 parts/
 sdist/
+src/mlscripts/
+car_cntk.model
+car_model.h5
 var/
 wheels/
 *.egg-info/
