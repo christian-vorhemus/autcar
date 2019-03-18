@@ -9,9 +9,9 @@ cap = Capture(car, 1)
 
 rc.listen()
 
-def live_camera():
-    print("Camera started")
-    cam.listen()
+#def live_camera():
+#    print("Camera started")
+#    cam.listen()
 
 #livecam = Thread(target=live_camera)
 #livecam.daemon = True

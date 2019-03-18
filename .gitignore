@@ -18,7 +18,8 @@ lib/
 lib64/
 parts/
 sdist/
-src/mlscripts/
+src/ml/data/
+src/ml/train_keras.py
 car_cntk.model
 car_model.h5
 var/

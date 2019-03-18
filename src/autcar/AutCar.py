@@ -18,9 +18,10 @@ class Car:
         [1,0,0,1]
     ]
 
-    def __init__(self):
+    def __init__(self, model=1):
         self.__stop_right = False
         self.__stop_left = False
+        self._model = model
         GPIO.setmode(GPIO.BOARD)
         self.__reset_pins()
         self.current_command = {'type': 'started'}
@@ -28,10 +29,12 @@ class Car:
     def __reset_pins(self):
         time.sleep(0.1)
         for pin in self.__control_pins_left:
+            a = 1
             GPIO.setup(pin, GPIO.OUT)
             GPIO.output(pin, 0)
 
         for pin in self.__control_pins_right:
+            a = 1
             GPIO.setup(pin, GPIO.OUT)
             GPIO.output(pin, 0)
 
