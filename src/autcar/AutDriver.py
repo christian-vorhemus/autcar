@@ -1,12 +1,13 @@
 from threading import Thread
 import time
-#import onnxruntime as rt
+import onnxruntime as rt
+from keras.models import load_model
 import cv2
 from PIL.ImageOps import equalize
 from PIL import Image
 import numpy as np
-import tensorflow as tf
-from tensorflow.python.platform import gfile
+#import tensorflow as tf
+#from tensorflow.python.platform import gfile
 
 class Driver:
 
@@ -15,7 +16,7 @@ class Driver:
         self.__cam = cv2.VideoCapture(0)
         self.__model_file = model
         self.__frame = None
-        self.__proc = Thread(target=self.__drive)
+        self.__proc = Thread(target=self.__drive_onnx)
         self.__stop_recording = False
         self.__capture_interval = capture_interval
         self.__counter = 0
@@ -38,8 +39,62 @@ class Driver:
         except:
             raise Exception('pad_image error')
 
+    def __drive_keras(self):
+        self.__last_timestamp = time.time()
 
-    def __drive(self):
+        try:
+            model = load_model(self.__model_file)
+        except Exception as e:
+            print("Model file not available")
+
+        while True:
+            if(self.__stop_recording):
+                break
+
+            # We constantly read new images from the cam to empty the VideoCapture buffer
+            ret, frame = self.__cam.read()
+            self.__frame = frame
+            current_time = time.time()
+
+            if(current_time - self.__last_timestamp > self.__capture_interval):
+                self.__last_timestamp = current_time
+
+                try:
+                    img = Image.fromarray(self.__frame)
+                except Exception as e:
+                    print("Cant read image")
+                try:
+                    processed_image = equalize(self.__scale_image(self.__pad_image(img)))
+                except Exception as e:
+                    print("Err while reading image")
+
+                X = np.array(processed_image)/255.0
+                X = np.expand_dims(X, axis=0)
+
+                pred = model.predict(X)
+                index = np.argmax(pred)
+
+                if(index == 0):
+                    if(self.__last_command == "forward"):
+                        continue
+                    print("forward")
+                    self.__last_command = "forward"
+                    self.__car.move("forward", "medium")
+                elif(index == 1):
+                    if(self.__last_command == "left"):
+                        continue
+                    print("left")
+                    self.__last_command = "left"
+                    self.__car.left("light", "forward")
+                elif(index == 2):
+                    if(self.__last_command == "right"):
+                        continue
+                    print("right")
+                    self.__last_command = "right"
+                    self.__car.right("light", "forward")
+
+
+    def __drive_tensorflow(self):
         self.__last_timestamp = time.time()
 
         with tf.Session() as sess:
@@ -153,6 +208,7 @@ class Driver:
                     self.__car.move("rightlight", "forward")
 
     def start(self):
+        print("Auto driver started")
         self.__proc.start()
 
     def stop(self):

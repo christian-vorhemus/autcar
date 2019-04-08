@@ -21,6 +21,9 @@ sdist/
 src/ml/data/
 src/ml/train_keras.py
 car_cntk.model
+car_cntk_1.model
+car_cntk_2.model
+car_cntk_3.model
 car_model.h5
 var/
 wheels/

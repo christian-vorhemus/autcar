@@ -4,14 +4,14 @@ import csv
 import ast
 from shutil import copyfile
 
-if not os.path.exists("src/mlscripts/data/merged"):
-    os.makedirs("src/mlscripts/data/merged")
+if not os.path.exists("src/ml/data/merged"):
+    os.makedirs("src/ml/data/merged")
 
-files = os.listdir("src/mlscripts/data")
+files = os.listdir("src/ml/data")
 
 num = 0
 for file in files:
-    with open("src/mlscripts/data/"+file+"/training.csv") as training_file:
+    with open("src/ml/data/"+file+"/training.csv") as training_file:
         csv_reader = csv.reader(training_file, delimiter=';')
         print(file)
         if(file == "merged"):
@@ -28,10 +28,10 @@ for file in files:
             if(cmd_type == "stop"):
                 continue
 
-            copyfile("src/mlscripts/data/"+file+"/"+filename, "src/mlscripts/data/merged/snapshot_"+str(num)+".png")
+            copyfile("src/ml/data/"+file+"/"+filename, "src/ml/data/merged/snapshot_"+str(num)+".png")
 
             text = "snapshot_"+str(num)+".png;" + cmd_type + "\n"
-            nf = open('src/mlscripts/data/merged/training.csv', 'a', encoding="utf-8")
+            nf = open('src/ml/data/merged/training.csv', 'a', encoding="utf-8")
             nf.write(text)
             nf.close()
 
