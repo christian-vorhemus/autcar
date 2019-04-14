@@ -14,7 +14,7 @@ def parse_arguments():
 
 def reboot():
 	subprocess.check_call("sudo reboot", shell=True)
-	
+
 def install_onnxruntime():
     from pip import pep425tags
     supported_tags = pep425tags.supported_tags
@@ -36,9 +36,11 @@ def install_onnxruntime():
 def create_swap():
     if(os.path.isfile('./swapfile') is False):
         subprocess.check_call("sudo dd if=/dev/zero of=swapfile bs=1M count=2500", shell=True)
-
-    subprocess.check_call("sudo mkswap swapfile", shell=True)
-    subprocess.check_call("sudo swapon swapfile", shell=True)
+    try:
+        subprocess.check_call("sudo mkswap swapfile", shell=True)
+        subprocess.check_call("sudo swapon swapfile", shell=True)
+    except:
+        return
 
 def install_pip():
     subprocess.check_call("sudo apt-get -y install python3-pip", shell=True)
@@ -112,9 +114,9 @@ def main():
     print("Install ONNXRuntime")
     install_onnxruntime()
     print("ONNXRuntime installed")
-	
+
     print("Sucessfully installed AutCar platform! Reboot required.")
-	
+
     if(args.prevent_reboot == False):
         print("Rebooting now...")
         reboot()
