@@ -2,7 +2,6 @@ import subprocess
 import argparse
 import os
 import glob
-from pip import pep425tags
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="AutCar install script", usage='')
@@ -17,6 +16,7 @@ def reboot():
 	subprocess.check_call("sudo reboot", shell=True)
 	
 def install_onnxruntime():
+    from pip import pep425tags
     supported_tags = pep425tags.supported_tags
     paths = glob.glob("tools/*.whl")
     filepath = ""
