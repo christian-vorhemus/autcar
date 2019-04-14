@@ -13,6 +13,9 @@ def parse_arguments():
 
     return parser.parse_args()
 
+def reboot():
+	subprocess.check_call("sudo reboot", shell=True)
+	
 def install_onnxruntime():
     supported_tags = pep425tags.supported_tags
     paths = glob.glob("tools/*.whl")
@@ -110,7 +113,11 @@ def main():
     install_onnxruntime()
     print("ONNXRuntime installed")
 	
-	print("Sucessfully installed AutCar platform!")
+    print("Sucessfully installed AutCar platform! Reboot required.")
+	
+    if(args.prevent_reboot == False):
+        print("Rebooting now...")
+        reboot()
 
 if __name__ == '__main__':
     main()
