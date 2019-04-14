@@ -57,6 +57,9 @@ def install_git():
 def install_gpio():
     subprocess.check_call("sudo apt-get -y install python3-rpi.gpio", shell=True)
 
+def install_numpy():
+    subprocess.check_call("sudo pip3 install numpy", shell=True)
+
 def install_pillow():
     subprocess.check_call("sudo apt-get -y install libjpeg-dev zlib1g-dev", shell=True)
     subprocess.check_call("python3 -m pip install Pillow", shell=True)
@@ -94,6 +97,10 @@ def main():
     print("Install GPIO connectors...")
     install_gpio()
     print("GPIO installed")
+
+    print("Install numpy...")
+    install_numpy()
+    print("Numpy installed")
 
     print("Install Pillow...")
     install_pillow()
