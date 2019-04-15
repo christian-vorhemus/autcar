@@ -1,4 +1,5 @@
 from threading import Thread
+import subprocess
 import time
 import cv2
 import os
@@ -22,6 +23,11 @@ class Capture:
         self.__capture_interval = capture_interval
         self.__counter = 0
         self.__last_timestamp = 0
+        try:
+            # Load Rasperry Pi Cam kernel module bcm2835-v4l2
+            subprocess.check_call("sudo modprobe bcm2835-v4l2", shell=True)
+        except:
+            print("Warning: Couldn't load bcm2835-v4l2 kernel module")
 
     def __save_frame(self, frame, folder_name, description):
         #t = str(int(time.time()))

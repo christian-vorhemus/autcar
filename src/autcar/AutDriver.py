@@ -1,11 +1,11 @@
 from threading import Thread
 import time
 import onnxruntime as rt
-from keras.models import load_model
 import cv2
 from PIL.ImageOps import equalize
 from PIL import Image
 import numpy as np
+#from keras.models import load_model
 #import tensorflow as tf
 #from tensorflow.python.platform import gfile
 
@@ -22,6 +22,11 @@ class Driver:
         self.__counter = 0
         self.__last_command = None
         self.__last_timestamp = 0
+        try:
+            # Load Rasperry Pi Cam kernel module bcm2835-v4l2
+            subprocess.check_call("sudo modprobe bcm2835-v4l2", shell=True)
+        except:
+            print("Warning: Couldn't load bcm2835-v4l2 kernel module")
 
     def __pad_image(self, image):
         target_size = max(image.size)

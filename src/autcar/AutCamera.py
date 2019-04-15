@@ -6,15 +6,22 @@ import socket
 import threading
 import os
 import time
+import subprocess
 
 class Camera:
 
-    def __init__(self, capture = False, host = 'localhost', port = 8089):
+    def __init__(self, capture = False, host = 'localhost', port = 8089, rotation = None):
         self.__cam = cv2.VideoCapture(0)
         self.__frame = None
         self.host = host
         self.port = port
+        self.__rotation = rotation
         self.__nosignal = True
+        try:
+            # Load Rasperry Pi Cam kernel module bcm2835-v4l2
+            subprocess.check_call("sudo modprobe bcm2835-v4l2", shell=True)
+        except:
+            print("Warning: Couldn't load bcm2835-v4l2 kernel module")
         if(capture):
             threading.Thread(target=self.frame_updater).start()
 
@@ -25,6 +32,13 @@ class Camera:
         else:
             fr = None
             return fr
+
+
+    def read(self):
+        ret, frame = self.__cam.read()
+        if(self.__rotation != None):
+            frame = cv2.flip(frame, self.__rotation)
+        return ret, frame
 
 
     def frame_updater(self):
