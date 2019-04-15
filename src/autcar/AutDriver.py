@@ -6,7 +6,7 @@ import os
 from PIL.ImageOps import equalize
 from PIL import Image
 import numpy as np
-from AutCamera import Camera
+from autcar import Camera
 #from keras.models import load_model
 #import tensorflow as tf
 #from tensorflow.python.platform import gfile
@@ -16,8 +16,6 @@ class Driver:
     def __init__(self, model, car, capture_interval = 2, rotation = -1):
         self.__car = car
         self.__cam = Camera(rotation=rotation)
-        #self.__cam = cv2.VideoCapture(0)
-
         if(os.path.isfile(model) == False):
             raise Exception("Error: File %s does not exist. Did you train and create a model file?"%model)
             return

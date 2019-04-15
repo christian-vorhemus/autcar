@@ -1,7 +1,7 @@
 from threading import Thread
 import subprocess
 import time
-from AutCamera import Camera
+from autcar import Camera
 import cv2
 import os
 
@@ -18,7 +18,6 @@ class Capture:
         self.__folder_name = folder_name
         self.__car = car
         self.__cam = Camera(rotation=rotation)
-        #self.__cam = cv2.VideoCapture(0)
         self.__frame = None
         self.__proc = Thread(target=self.__record_data)
         self.__stop_recording = False
