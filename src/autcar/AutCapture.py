@@ -1,12 +1,13 @@
 from threading import Thread
 import subprocess
 import time
+from AutCamera import Camera
 import cv2
 import os
 
 class Capture:
 
-    def __init__(self, car, capture_interval = 2, folder_name = "autcar_training"):
+    def __init__(self, car, capture_interval = 2, folder_name = "autcar_training", rotation = -1):
         """
         A capture object can be used to record training data while the car is driving
 
@@ -16,26 +17,19 @@ class Capture:
         """
         self.__folder_name = folder_name
         self.__car = car
-        self.__cam = cv2.VideoCapture(0)
+        self.__cam = Camera(rotation=rotation)
+        #self.__cam = cv2.VideoCapture(0)
         self.__frame = None
         self.__proc = Thread(target=self.__record_data)
         self.__stop_recording = False
         self.__capture_interval = capture_interval
         self.__counter = 0
         self.__last_timestamp = 0
-        try:
-            # Load Rasperry Pi Cam kernel module bcm2835-v4l2
-            subprocess.check_call("sudo modprobe bcm2835-v4l2", shell=True)
-        except:
-            print("Warning: Couldn't load bcm2835-v4l2 kernel module")
 
     def __save_frame(self, frame, folder_name, description):
-        #t = str(int(time.time()))
-        #img_name = folder_name + "/" + t + "_car_snapshot.png"
         img_name = folder_name + "/" + str(self.__counter) + "_car_snapshot.png"
         cv2.imwrite(img_name, frame)
         with open(folder_name+'/training.csv', 'a') as f:
-            #f.write(t + "_car_snapshot.png;" + description + "\r\n")
             f.write(str(self.__counter) + "_car_snapshot.png;" + str(description) + "\r\n")
             self.__counter = self.__counter + 1
 

@@ -17,8 +17,8 @@ class Camera:
         self.port = port
         self.__rotation = rotation
         self.__nosignal = True
+        # Load Rasperry Pi Cam kernel module bcm2835-v4l2
         try:
-            # Load Rasperry Pi Cam kernel module bcm2835-v4l2
             subprocess.check_call("sudo modprobe bcm2835-v4l2", shell=True)
         except:
             print("Warning: Couldn't load bcm2835-v4l2 kernel module")

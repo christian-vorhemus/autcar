@@ -5,15 +5,17 @@ import cv2
 from PIL.ImageOps import equalize
 from PIL import Image
 import numpy as np
+from AutCamera import Camera
 #from keras.models import load_model
 #import tensorflow as tf
 #from tensorflow.python.platform import gfile
 
 class Driver:
 
-    def __init__(self, model, car, capture_interval = 1):
+    def __init__(self, model, car, capture_interval = 1, rotation = -1):
         self.__car = car
-        self.__cam = cv2.VideoCapture(0)
+        self.__cam = Camera(rotation=rotation)
+        #self.__cam = cv2.VideoCapture(0)
         self.__model_file = model
         self.__frame = None
         self.__proc = Thread(target=self.__drive_onnx)
@@ -22,11 +24,6 @@ class Driver:
         self.__counter = 0
         self.__last_command = None
         self.__last_timestamp = 0
-        try:
-            # Load Rasperry Pi Cam kernel module bcm2835-v4l2
-            subprocess.check_call("sudo modprobe bcm2835-v4l2", shell=True)
-        except:
-            print("Warning: Couldn't load bcm2835-v4l2 kernel module")
 
     def __pad_image(self, image):
         target_size = max(image.size)
