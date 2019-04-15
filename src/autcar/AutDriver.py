@@ -2,6 +2,7 @@ from threading import Thread
 import time
 import onnxruntime as rt
 import cv2
+import os
 from PIL.ImageOps import equalize
 from PIL import Image
 import numpy as np
@@ -12,10 +13,15 @@ from AutCamera import Camera
 
 class Driver:
 
-    def __init__(self, model, car, capture_interval = 1, rotation = -1):
+    def __init__(self, model, car, capture_interval = 2, rotation = -1):
         self.__car = car
         self.__cam = Camera(rotation=rotation)
         #self.__cam = cv2.VideoCapture(0)
+
+        if(os.path.isfile(model) == False):
+            raise Exception("Error: File %s does not exist. Did you train and create a model file?"%model)
+            return
+
         self.__model_file = model
         self.__frame = None
         self.__proc = Thread(target=self.__drive_onnx)
@@ -183,11 +189,11 @@ class Driver:
 
                 X = np.array([np.moveaxis(np.array(processed_image), -1, 0)])/255.0
 
-                #sess = rt.InferenceSession(self.__model_file)
-                #input_name = sess.get_inputs()[0].name
-                #label_name = sess.get_outputs()[0].name
-                #pred = sess.run([label_name], {input_name: X.astype(np.float32)})[0]
-                #index = np.argmax(pred)
+                sess = rt.InferenceSession(self.__model_file)
+                input_name = sess.get_inputs()[0].name
+                label_name = sess.get_outputs()[0].name
+                pred = sess.run([label_name], {input_name: X.astype(np.float32)})[0]
+                index = np.argmax(pred)
                 index = 0
 
                 if(index == 0):
