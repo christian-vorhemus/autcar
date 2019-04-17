@@ -2,14 +2,16 @@ from sklearn.model_selection import train_test_split
 from cntk.learners import learning_parameter_schedule, adam, UnitType, learning_rate_schedule
 from cntk.ops import input_variable
 from cntk.layers import Dense, Sequential, Activation, Embedding, Convolution2D, MaxPooling, Stabilizer, Convolution, Dropout, BatchNormalization
-from cntk.ops import sequence, load_model
+from cntk.ops import sequence, load_model, combine, input_variable
+from cntk.ops.functions import CloneMethod
 from PIL.ImageOps import equalize
+from cntk.logging.graph import find_by_name, get_node_outputs
 from PIL import Image
 from cntk.logging import ProgressPrinter
 from cntk.losses import cosine_distance, cross_entropy_with_softmax, squared_error, binary_cross_entropy
 from cntk.initializer import glorot_uniform, glorot_normal
 from cntk.train import Trainer
-from cntk import classification_error, sgd, softmax, tanh, relu, ModelFormat
+from cntk import classification_error, sgd, softmax, tanh, relu, ModelFormat, placeholder
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
@@ -19,7 +21,7 @@ from tensorflow.python.platform import gfile
 
 def pad_image(image):
     target_size = max(image.size)
-    result = Image.new('RGB', (target_size, target_size), "white")
+    result = Image.new('RGB', (target_size, target_size), "black")
     try:
         result.paste(image, (int((target_size - image.size[0]) / 2), int((target_size - image.size[1]) / 2)))
     except:
@@ -29,7 +31,7 @@ def pad_image(image):
 
 def scale_image(image):
     try:
-        return image.resize((160,120))
+        return image.resize((224,224))
     except:
         raise Exception('pad_image error')
 
@@ -42,6 +44,7 @@ def create_dataset(num_classes):
     X_values = []
     y_values = []
 
+    command_counter_start = {}
     command_counter = {}
 
     with open("src/ml/data/merged/training.csv") as training_file:
@@ -49,19 +52,16 @@ def create_dataset(num_classes):
 
         for row in csv_reader:
             command = row[1]
-            if(command_counter.get(command, 0) == 0):
-                command_counter[command] = 1
+            if(command_counter_start.get(command, 0) == 0):
+                command_counter_start[command] = 1
             else:
-                command_counter[command] = command_counter[command] + 1
+                command_counter_start[command] = command_counter_start[command] + 1
 
         training_file.seek(0)
 
-        # Get the class with the fewest samples
-        min_class = min(command_counter, key = lambda x: command_counter.get(x))
-        minimum = command_counter[min_class]
-        command_counter = {}
-
-        minimum = 2500
+        # Get the class with the most samples
+        max_class = max(command_counter_start, key = lambda x: command_counter_start.get(x))
+        maximum = command_counter_start[max_class]
 
         for row in csv_reader:
             image = row[0]
@@ -72,17 +72,13 @@ def create_dataset(num_classes):
             else:
                 command_counter[command] = command_counter[command] + 1
 
-            # Uncomment to ensure balanced dataset
-            if(command_counter[command] > minimum):
-                continue
-
             try:
                 img = Image.open("src/ml/data/merged/"+image)
             except Exception as e:
                 print("Cant read "+image)
                 continue
             try:
-                processed_image = equalize(scale_image(img))
+                processed_image = equalize(scale_image(pad_image(img)))
             except:
                 continue
             X_values.append(np.moveaxis(np.array(processed_image), -1, 0))
@@ -100,7 +96,47 @@ def create_dataset(num_classes):
                 yv[2] = 1
             y_values.append(yv)
 
-    return np.array(X_values)/255.0, np.array(y_values)
+        # Randomly duplicate classes from minorities to balance classes
+        finished = False
+        while not finished:
+            training_file.seek(0)
+            for row in csv_reader:
+                image = row[0]
+                command = row[1]
+
+                if(command_counter[command] < maximum):
+                    command_counter[command] = command_counter[command] + 1
+                    try:
+                        img = Image.open("src/ml/data/merged/"+image)
+                    except Exception as e:
+                        print("Cant read "+image)
+                        continue
+                    try:
+                        processed_image = equalize(scale_image(pad_image(img)))
+                    except:
+                        continue
+                    X_values.append(np.moveaxis(np.array(processed_image), -1, 0))
+                    # X_values.append(np.array(processed_image))
+                    # plot(processed_image)
+
+                    #y_values.append(command)
+                    # Add 3 because we have 3 classes (forward, left, right)
+                    yv = np.zeros(num_classes)
+                    if(command == "move"):
+                        yv[0] = 1
+                    if(command == "left"):
+                        yv[1] = 1
+                    if(command == "right"):
+                        yv[2] = 1
+                    y_values.append(yv)
+
+            finished = True
+            for key, value in command_counter.items():
+                if(value < maximum):
+                    finished = False
+                    break
+
+    return np.array(X_values).astype(np.float32), np.array(y_values).astype(np.float32)
 
 
 
@@ -257,6 +293,28 @@ def print_training_progress(trainer, mb, frequency, verbose=1):
     return mb, training_loss, eval_error
 
 
+def create_model_pretrained(num_classes, input_features, freeze=False):
+    # Load the pretrained classification net and find nodes
+    base_model = load_model("C:/Users/chvorhem/Desktop/ML-Garage/ResNet18_ImageNet_CNTK.model")
+    feature_node = find_by_name(base_model, "features")
+    last_node = find_by_name(base_model, "z.x")
+
+    # Clone the desired layers with fixed weights
+    cloned_layers = combine([last_node.owner]).clone(
+        CloneMethod.freeze if freeze else CloneMethod.clone,
+        {feature_node: placeholder(name='features')})
+
+    # Add new dense layer for class prediction
+    #feat_norm  = input_features - Constant(114)
+    #cloned_out = cloned_layers(feat_norm)
+
+    cloned_out = cloned_layers(input_features)
+
+    z = Dense(num_classes, activation=softmax, name="prediction") (cloned_out)
+
+    return z
+
+
 def train():
 
     num_classes = 3
@@ -292,20 +350,6 @@ def train():
         Dense(num_classes, activation=softmax)
     ])
 
-
-    create_model_nn = Sequential([
-        Dense(57600, activation=relu),
-        Dropout(0.1),
-        Dense(10000, activation=relu),
-        Dropout(0.1),
-        Dense(2500, activation=relu),
-        Dropout(0.1),
-        Dense(100, activation=relu),
-        Dropout(0.1),
-        Dense(num_classes, activation=softmax)
-    ])
-
-
     print("-------")
     print(X_train.shape)
     print(y_train.shape)
@@ -313,10 +357,11 @@ def train():
     # plt.imshow(X_train[4])
     # plt.show()
 
-    feature = input_variable(shape=(3, 120, 160))
+    feature = input_variable(shape=(3, 224, 224))
     label = input_variable(num_classes)
 
-    model = create_model(feature)
+    model = create_model_pretrained(3, feature)
+    #model = create_model(feature)
 
     #feature_nn = input_variable(shape=(57600))
     #model = create_model_nn(feature_nn)
@@ -333,82 +378,87 @@ def train():
 
     # scenario 1 ------------------------------------------------------------------
 
-    # trainingloss_summary = []
-    # testerror = []
-    # max_epochs = 1
-    # minibatch_size = 80
+    trainingloss_summary = []
+    testerror = []
+    max_epochs = 2
+    minibatch_size = 70
 
-    # # Number of epochs in for-loop. 
-    # for epoch in range(max_epochs):
+    # Number of epochs in for-loop. 
+    for epoch in range(max_epochs):
 
-    #     end = minibatch_size
-    #     running = True
+        end = minibatch_size
+        running = True
 
-    #     while running:
+        while running:
 
-    #         if(end >= len(X_train)):
-    #             end = len(X_train)-1
-    #             running = False
+            if(end >= len(X_train)):
+                end = len(X_train)-1
+                running = False
 
-    #         X_current = X_train[end-minibatch_size:end]
-    #         y_current = y_train[end-minibatch_size:end]
+            X_current = X_train[end-minibatch_size:end]
+            y_current = y_train[end-minibatch_size:end]
 
-    #         trainer.train_minibatch({feature : X_current, label : y_current})
-    #         if(epoch % 5 == 0):
-    #             training_loss = trainer.previous_minibatch_loss_average
-    #             trainingloss_summary.append(training_loss)
-    #             t = trainer.test_minibatch({feature : X_test, label : y_test})
-    #             testerror.append(t)
-        
-    #         end = end + minibatch_size
+            trainer.train_minibatch({feature : X_current, label : y_current})
 
-    # epoch_count = range(0, len(trainingloss_summary))
-    # plt.plot(trainingloss_summary, label='training loss')
-    # plt.plot(epoch_count, trainingloss_summary, 'r--')
-    # plt.plot(epoch_count, testerror, 'b-')
-    # plt.legend(['Training Loss', 'Test accuracy'])
-    # plt.xlabel('Epoch')
-    # plt.ylabel('Loss')
-    # plt.show()
-    # model.save("car_cntk.model", format=ModelFormat.ONNX)
+            end = end + minibatch_size
+
+        training_loss = trainer.previous_minibatch_loss_average
+        trainingloss_summary.append(training_loss)
+
+        # Returns classification error
+        t = trainer.test_minibatch({feature : X_test, label : y_test})
+        testerror.append(t)
+
+        print("epoch #{}: training_loss={}, test_error={}".format(epoch, trainingloss_summary[-1], testerror[-1]))
+
+
+    epoch_count = range(0, len(trainingloss_summary))
+    plt.plot(trainingloss_summary, label='training loss')
+    plt.plot(epoch_count, trainingloss_summary, 'r--')
+    plt.plot(epoch_count, testerror, 'b-')
+    plt.legend(['Training Loss', 'Test accuracy'])
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.show()
+    model.save("car_cntk.model", format=ModelFormat.ONNX)
 
     # scenario 2 -----------------------------------------------------------------
 
-    minibatch_size = 80
-    num_minibatches = len(X_train) // minibatch_size
-    num_passes = 30
-    training_progress_output_freq = 1
-    plotdata = {"batchsize":[], "loss":[], "error":[]}
+    # minibatch_size = 80
+    # num_minibatches = len(X_train) // minibatch_size
+    # num_passes = 30
+    # training_progress_output_freq = 1
+    # plotdata = {"batchsize":[], "loss":[], "error":[]}
 
-    tf = np.array_split(X_train, num_minibatches)
-    tl = np.array_split(y_train, num_minibatches)
+    # tf = np.array_split(X_train, num_minibatches)
+    # tl = np.array_split(y_train, num_minibatches)
 
-    for i in range(num_minibatches*num_passes): # multiply by the
-        features = np.ascontiguousarray(tf[i%num_minibatches])
-        labels = np.ascontiguousarray(tl[i%num_minibatches])
+    # for i in range(num_minibatches*num_passes): # multiply by the
+    #     features = np.ascontiguousarray(tf[i%num_minibatches])
+    #     labels = np.ascontiguousarray(tl[i%num_minibatches])
 
-        trainer.train_minibatch({feature : features, label : labels})
-        batchsize, loss, error = print_training_progress(trainer, i, training_progress_output_freq, verbose=1)
-        if not (loss == "NA" or error =="NA"):
-            plotdata["batchsize"].append(batchsize)
-            plotdata["loss"].append(loss)
-            plotdata["error"].append(error)
+    #     trainer.train_minibatch({feature : features, label : labels})
+    #     batchsize, loss, error = print_training_progress(trainer, i, training_progress_output_freq, verbose=1)
+    #     if not (loss == "NA" or error =="NA"):
+    #         plotdata["batchsize"].append(batchsize)
+    #         plotdata["loss"].append(loss)
+    #         plotdata["error"].append(error)
 
-    plt.figure(1)
-    plt.subplot(211)
-    plt.plot(plotdata["batchsize"], plotdata["loss"], 'b--')
-    plt.xlabel('Minibatch number')
-    plt.ylabel('Loss')
-    plt.title('Minibatch run vs. Training loss ')
+    # plt.figure(1)
+    # plt.subplot(211)
+    # plt.plot(plotdata["batchsize"], plotdata["loss"], 'b--')
+    # plt.xlabel('Minibatch number')
+    # plt.ylabel('Loss')
+    # plt.title('Minibatch run vs. Training loss ')
 
-    plt.subplot(212)
-    plt.plot(plotdata["batchsize"], plotdata["error"], 'r--')
-    plt.xlabel('Minibatch number')
-    plt.ylabel('Label Prediction Error')
-    plt.title('Minibatch run vs. Label Prediction Error ')
-    plt.show()
+    # plt.subplot(212)
+    # plt.plot(plotdata["batchsize"], plotdata["error"], 'r--')
+    # plt.xlabel('Minibatch number')
+    # plt.ylabel('Label Prediction Error')
+    # plt.title('Minibatch run vs. Label Prediction Error ')
+    # plt.show()
 
-    model.save("car_cntk.model", format=ModelFormat.ONNX)
+    # model.save("car_cntk.model", format=ModelFormat.ONNX)
 
 train()
 #test_onnx()

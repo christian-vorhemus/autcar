@@ -22,7 +22,7 @@ class Driver:
 
         self.__model_file = model
         self.__frame = None
-        self.__proc = Thread(target=self.__drive_onnx)
+        self.__proc = Thread(target=self.__drive_onnx_new)
         self.__stop_recording = False
         self.__capture_interval = capture_interval
         self.__counter = 0
@@ -39,11 +39,19 @@ class Driver:
             raise Exception('pad_image error')
         return result
 
+    def __normalize(self, arr, desired_mean = 0, desired_std = 1):
+        arr = arr.astype('float')
+        for i in range(3):
+            mean = arr[...,i].mean()
+            std = arr[...,i].std()
+            arr[...,i] = (arr[...,i] - mean)*(desired_std/std) + desired_mean
+        return arr
+
     def __scale_image(self, image):
         try:
-            return image.resize((128,128))
+            return image.resize((448,336))
         except:
-            raise Exception('pad_image error')
+            raise Exception('scale_image error')
 
     def __drive_keras(self):
         self.__last_timestamp = time.time()
@@ -164,6 +172,9 @@ class Driver:
 
     def __drive_onnx(self):
         self.__last_timestamp = time.time()
+        sess = rt.InferenceSession(self.__model_file)
+        input_name = sess.get_inputs()[0].name
+        label_name = sess.get_outputs()[0].name
 
         while True:
             if(self.__stop_recording):
@@ -187,9 +198,6 @@ class Driver:
 
                 X = np.array([np.moveaxis(np.array(processed_image), -1, 0)])/255.0
 
-                sess = rt.InferenceSession(self.__model_file)
-                input_name = sess.get_inputs()[0].name
-                label_name = sess.get_outputs()[0].name
                 pred = sess.run([label_name], {input_name: X.astype(np.float32)})[0]
                 index = np.argmax(pred)
                 index = 0
@@ -212,6 +220,60 @@ class Driver:
                     print("right")
                     self.__last_command = "right"
                     self.__car.move("rightlight", "forward")
+
+
+    def __drive_onnx_new(self):
+        self.__last_timestamp = time.time()
+        sess = rt.InferenceSession(self.__model_file)
+        input_name = sess.get_inputs()[0].name
+        label_name = sess.get_outputs()[0].name
+
+        while True:
+            if(self.__stop_recording):
+                break
+
+            # We constantly read new images from the cam to empty the VideoCapture buffer
+            ret, frame = self.__cam.read()
+            self.__frame = frame
+            current_time = time.time()
+
+            if(current_time - self.__last_timestamp > self.__capture_interval):
+                self.__last_timestamp = current_time
+                try:
+                    img = Image.fromarray(self.__frame)
+                except Exception as e:
+                    print("Cant read image")
+                try:
+                    processed_image = self.__normalize(np.array(self.__scale_image(img)))
+                except Exception as e:
+                    print(e)
+                    print("Err while reading image")
+
+                X = np.array([np.moveaxis(np.array(processed_image), -1, 0)])
+
+                pred = sess.run([label_name], {input_name: X.astype(np.float32)})[0]
+                index = np.argmax(pred)
+
+                if(index == 1):
+                    if(self.__last_command == "forward"):
+                        continue
+                    print("forward")
+                    self.__last_command = "forward"
+                    self.__car.move("forward", "medium")
+                elif(index == 0):
+                    if(self.__last_command == "left"):
+                        continue
+                    print("left")
+                    self.__last_command = "left"
+                    self.__car.move("leftlight", "forward")
+                elif(index == 2):
+                    if(self.__last_command == "right"):
+                        continue
+                    print("right")
+                    self.__last_command = "right"
+                    self.__car.move("rightlight", "forward")
+    
+
 
     def start(self):
         print("Auto driver started")

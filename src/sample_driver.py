@@ -1,5 +1,5 @@
 from autcar import Car, Driver
 
 car = Car()
-driver = Driver("car_cntk.model", car)
+driver = Driver("rh.onnx", car)
 driver.start()
