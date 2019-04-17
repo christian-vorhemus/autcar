@@ -213,13 +213,13 @@ class Driver:
                         continue
                     print("left")
                     self.__last_command = "left"
-                    self.__car.move("leftlight", "forward")
+                    self.__car.left("light", "forward")
                 elif(index == 2):
                     if(self.__last_command == "right"):
                         continue
                     print("right")
                     self.__last_command = "right"
-                    self.__car.move("rightlight", "forward")
+                    self.__car.right("light", "forward")
 
 
     def __drive_onnx_new(self):
@@ -265,16 +265,14 @@ class Driver:
                         continue
                     print("left")
                     self.__last_command = "left"
-                    self.__car.move("leftlight", "forward")
+                    self.__car.left("light", "forward")
                 elif(index == 2):
                     if(self.__last_command == "right"):
                         continue
                     print("right")
                     self.__last_command = "right"
-                    self.__car.move("rightlight", "forward")
+                    self.__car.right("light", "forward")
     
-
-
     def start(self):
         print("Auto driver started")
         self.__proc.start()
