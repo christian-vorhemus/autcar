@@ -78,7 +78,7 @@ def create_dataset(num_classes):
                 print("Cant read "+image)
                 continue
             try:
-                processed_image = equalize(scale_image(pad_image(img)))
+                processed_image = scale_image(pad_image(img))
             except:
                 continue
             X_values.append(np.moveaxis(np.array(processed_image), -1, 0))
@@ -112,7 +112,7 @@ def create_dataset(num_classes):
                         print("Cant read "+image)
                         continue
                     try:
-                        processed_image = equalize(scale_image(pad_image(img)))
+                        processed_image = scale_image(pad_image(img))
                     except:
                         continue
                     X_values.append(np.moveaxis(np.array(processed_image), -1, 0))
@@ -325,6 +325,9 @@ def train():
 
     np.random.seed(7)
 
+    a = X_values[44]
+    ima = Image.fromarray(a.astype('uint8'))
+
     X_train, X_test, y_train, y_test = train_test_split(X_values, y_values, test_size=0.2)
 
     #X_train = X_train.reshape(len(X_train), -1)
@@ -360,8 +363,8 @@ def train():
     feature = input_variable(shape=(3, 224, 224))
     label = input_variable(num_classes)
 
-    model = create_model_pretrained(3, feature)
-    #model = create_model(feature)
+    #model = create_model_pretrained(3, feature)
+    model = create_model(feature)
 
     #feature_nn = input_variable(shape=(57600))
     #model = create_model_nn(feature_nn)

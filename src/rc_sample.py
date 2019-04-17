@@ -5,7 +5,7 @@ import time
 #cam = Camera()
 rc = RemoteController()
 car = Car()
-cap = Capture(car, 1)
+cap = Capture(car=car, capture_interval=2)
 
 rc.listen()
 

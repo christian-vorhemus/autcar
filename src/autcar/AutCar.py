@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 from threading import Thread
+from multiprocessing import Process, Value
 
 class Car:
 
@@ -19,8 +20,8 @@ class Car:
     ]
 
     def __init__(self, model=1):
-        self.__stop_right = False
-        self.__stop_left = False
+        self.__tright = None
+        self.__tleft = None
         self._model = model
         GPIO.setmode(GPIO.BOARD)
         self.__reset_pins()
@@ -40,8 +41,6 @@ class Car:
 
     def __right_motor(self, direction, delay):
         while True:
-            if(self.__stop_right):
-                break
             for halfstep in range(len(self.__sequence)):
                 for pin in range(4):
                     if(direction == 1):
@@ -53,8 +52,6 @@ class Car:
 
     def __left_motor(self, direction, delay):
         while True:
-            if(self.__stop_left):
-                break
             for halfstep in range(len(self.__sequence)):
                 for pin in range(4):
                     if(direction == 1):
@@ -74,8 +71,6 @@ class Car:
 
         self.stop()
         time.sleep(0.1)
-        self.__stop_right = False
-        self.__stop_left = False
 
         if(direction == "forward"):
             di = 1
@@ -91,18 +86,21 @@ class Car:
         else:
             motor_delay = 0.001
 
-        tright = Thread(target = self.__right_motor, args = (di,motor_delay,))
-        tleft = Thread(target = self.__left_motor, args = (di,motor_delay,))
-        tright.start()
-        tleft.start()
+        self.__tright = Process(target = self.__right_motor, args = (di,motor_delay,))
+        self.__tleft = Process(target = self.__left_motor, args = (di,motor_delay,))
+        self.tright.start()
+        self.tleft.start()
         self.current_command = {'type' : 'move', 'direction' : direction, 'speed': speed}
 
     def stop(self):
         """
         Stops the car
         """
-        self.__stop_left = True
-        self.__stop_right = True
+        try:
+            self.__tleft.terminate()
+            self.__tright.terminate()
+        except:
+            pass
         self.__reset_pins()
         self.current_command = {'type' : 'stop'}
 
@@ -117,8 +115,6 @@ class Car:
 
         self.stop()
         time.sleep(0.1)
-        self.__stop_left = True
-        self.__stop_right = True
 
         if(direction == "backwards"):
             di = 0
@@ -140,14 +136,11 @@ class Car:
 
         time.sleep(0.1)
 
-        __tright = Thread(target = self.__right_motor, args = (di,__speed_right,))
-        __tleft = Thread(target = self.__left_motor, args = (di,__speed_left,))
+        self.__tright = Process(target = self.__right_motor, args = (di,__speed_right,))
+        self.__tleft = Process(target = self.__left_motor, args = (di,__speed_left,))
 
-        self.__stop_left = False
-        self.__stop_right = False
-
-        __tright.start()
-        __tleft.start()
+        self.__tright.start()
+        self.__tleft.start()
         self.current_command = {'type' : 'right', 'direction' : direction, 'style': style}
 
 
@@ -161,8 +154,6 @@ class Car:
 
         self.stop()
         time.sleep(0.1)
-        self.__stop_left = True
-        self.__stop_right = True
 
         if(direction == "backwards"):
             di = 0
@@ -184,12 +175,9 @@ class Car:
 
         time.sleep(0.1)
 
-        __tright = Thread(target = self.__right_motor, args = (di,__speed_right,))
-        __tleft = Thread(target = self.__left_motor, args = (di,__speed_left,))
+        self.__tright = Process(target = self.__right_motor, args = (di,__speed_right,))
+        self.__tleft = Process(target = self.__left_motor, args = (di,__speed_left,))
 
-        self.__stop_left = False
-        self.__stop_right = False
-
-        __tright.start()
-        __tleft.start()
+        self.__tright.start()
+        self.__tleft.start()
         self.current_command = {'type' : 'left', 'direction' : direction, 'style': style}
