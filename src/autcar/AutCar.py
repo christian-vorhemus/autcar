@@ -88,8 +88,8 @@ class Car:
 
         self.__tright = Process(target = self.__right_motor, args = (di,motor_delay,))
         self.__tleft = Process(target = self.__left_motor, args = (di,motor_delay,))
-        self.tright.start()
-        self.tleft.start()
+        self.__tright.start()
+        self.__tleft.start()
         self.current_command = {'type' : 'move', 'direction' : direction, 'speed': speed}
 
     def stop(self):

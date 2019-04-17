@@ -23,7 +23,7 @@ class Driver:
 
         self.__model_file = model
         self.__frame = None
-        self.__proc = Thread(target=self.__drive_onnx_new)
+        self.__proc = Process(target=self.__drive_onnx_new)
         self.__stop_driving = False
         self.__capture_interval = capture_interval
         self.__counter = 0
@@ -230,62 +230,59 @@ class Driver:
         label_name = sess.get_outputs()[0].name
         index = Value("i", -1)
 
-        try:
-            while True:
-                if(self.__stop_driving):
-                    break
+        while True:
+            # We constantly read new images from the cam to empty the VideoCapture buffer
+            ret, frame = self.__cam.read()
+            self.__frame = frame
+            current_time = time.time()
 
-                # We constantly read new images from the cam to empty the VideoCapture buffer
-                ret, frame = self.__cam.read()
-                self.__frame = frame
-                current_time = time.time()
+            if(current_time - self.__last_timestamp > self.__capture_interval):
+                self.__last_timestamp = current_time
+                try:
+                    img = Image.fromarray(self.__frame)
+                except Exception as e:
+                    print("Cant read image")
+                try:
+                    processed_image = self.__normalize(np.array(self.__scale_image(img)))
+                except Exception as e:
+                    print(e)
+                    print("Error while reading image")
 
-                if(current_time - self.__last_timestamp > self.__capture_interval):
-                    self.__last_timestamp = current_time
-                    try:
-                        img = Image.fromarray(self.__frame)
-                    except Exception as e:
-                        print("Cant read image")
-                    try:
-                        processed_image = np.array(equalize(self.__scale_image(img)))
-                    except Exception as e:
-                        print(e)
-                        print("Error while reading image")
+                X = np.array([np.moveaxis(np.array(processed_image), -1, 0)])
 
-                    X = np.array([np.moveaxis(np.array(processed_image), -1, 0)])
+                def predict(X, index):
+                    pred = sess.run([label_name], {input_name: X.astype(np.float32)})[0]
+                    index.value = np.argmax(pred)
 
-                    def predict(X, index):
-                        pred = sess.run([label_name], {input_name: X.astype(np.float32)})[0]
-                        index.value = np.argmax(pred)
+                t = Process(target=predict, args=(X,index,))
+                t.start()
 
-                    t = Process(target=predict, args=(X,index,))
-                    t.start()
+                if(index.value == 1):
+                    if(self.__last_command == "forward"):
+                        continue
+                    print("forward")
+                    self.__last_command = "forward"
+                    self.__car.move("forward", "medium")
+                elif(index.value == 0):
+                    if(self.__last_command == "left"):
+                        continue
+                    print("left")
+                    self.__last_command = "left"
+                    self.__car.left("light", "forward")
+                elif(index.value == 2):
+                    if(self.__last_command == "right"):
+                        continue
+                    print("right")
+                    self.__last_command = "right"
+                    self.__car.right("light", "forward")
 
-                    if(index.value == 1):
-                        if(self.__last_command == "forward"):
-                            continue
-                        print("forward")
-                        self.__last_command = "forward"
-                        self.__car.move("forward", "medium")
-                    elif(index.value == 0):
-                        if(self.__last_command == "left"):
-                            continue
-                        print("left")
-                        self.__last_command = "left"
-                        self.__car.left("light", "forward")
-                    elif(index.value == 2):
-                        if(self.__last_command == "right"):
-                            continue
-                        print("right")
-                        self.__last_command = "right"
-                        self.__car.right("light", "forward")
-
-        except KeyboardInterrupt:
-            exit()
     
     def start(self):
         print("Auto driver started")
-        self.__proc.start()
+        try:
+            self.__proc.start()
+        except KeyboardInterrupt:
+            exit()
 
     def stop(self):
-        self.__stop_driving = True
+        self.__proc.terminate()
