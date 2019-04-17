@@ -23,7 +23,7 @@ class Driver:
 
         self.__model_file = model
         self.__frame = None
-        self.__proc = Process(target=self.__drive_onnx_new)
+        self.__proc = Thread(target=self.__drive_onnx_new)
         self.__stop_driving = False
         self.__capture_interval = capture_interval
         self.__counter = 0
@@ -231,6 +231,9 @@ class Driver:
         index = Value("i", -1)
 
         while True:
+            if(self.__stop_driving):
+                break
+
             # We constantly read new images from the cam to empty the VideoCapture buffer
             ret, frame = self.__cam.read()
             self.__frame = frame
@@ -285,4 +288,4 @@ class Driver:
             exit()
 
     def stop(self):
-        self.__proc.terminate()
+        self.__stop_driving = True
