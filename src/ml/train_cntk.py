@@ -29,6 +29,14 @@ def pad_image(image):
         raise Exception('pad_image error')
     return result
 
+def normalize(arr):
+    arr = arr.astype('float')
+    for i in range(3):
+        mean = arr[...,i].mean()
+        std = arr[...,i].std()
+        arr[...,i] = (arr[...,i] - mean)/std
+    return arr
+
 def scale_image(image):
     try:
         return image.resize((224,224))
@@ -40,7 +48,7 @@ def plot(image_array):
     plt.imshow(image_array)
     plt.show()
 
-def create_dataset(num_classes):
+def create_balanced_dataset(num_classes):
     X_values = []
     y_values = []
 
@@ -78,7 +86,7 @@ def create_dataset(num_classes):
                 print("Cant read "+image)
                 continue
             try:
-                processed_image = scale_image(pad_image(img))
+                processed_image = normalize(np.array(scale_image(pad_image(img))))
             except:
                 continue
             X_values.append(np.moveaxis(np.array(processed_image), -1, 0))
@@ -112,7 +120,7 @@ def create_dataset(num_classes):
                         print("Cant read "+image)
                         continue
                     try:
-                        processed_image = scale_image(pad_image(img))
+                        processed_image = normalize(np.array(scale_image(pad_image(img))))
                     except:
                         continue
                     X_values.append(np.moveaxis(np.array(processed_image), -1, 0))
@@ -318,7 +326,7 @@ def create_model_pretrained(num_classes, input_features, freeze=False):
 def train():
 
     num_classes = 3
-    X_values, y_values = create_dataset(num_classes)
+    X_values, y_values = create_balanced_dataset(num_classes)
 
     #X_values = np.moveaxis(X_values, 0, -1)
     #y_values = np.moveaxis(y_values, -1, 0)
@@ -326,7 +334,7 @@ def train():
     np.random.seed(7)
 
     a = X_values[44]
-    ima = Image.fromarray(a.astype('uint8'))
+    #ima = Image.fromarray(a.astype('uint8'))
 
     X_train, X_test, y_train, y_test = train_test_split(X_values, y_values, test_size=0.2)
 
@@ -343,9 +351,6 @@ def train():
         Convolution2D(filter_shape=(3,3), num_filters=64, strides=(1,1), pad=True, name="third_conv"),
         Activation(relu),
         MaxPooling(filter_shape=(3,3), strides=(2,2), name="third_max"),
-        Convolution2D(filter_shape=(3,3), num_filters=48, strides=(1,1), pad=True, name="fourth_conv"),
-        Activation(relu),
-        MaxPooling(filter_shape=(3,3), strides=(2,2), name="fourth_max"),
         Convolution2D(filter_shape=(5,5), num_filters=32, strides=(1,1), pad=True, name="fifth_conv"),
         Activation(relu),
         Dense(100, activation=relu),

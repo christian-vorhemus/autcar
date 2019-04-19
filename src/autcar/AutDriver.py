@@ -285,6 +285,7 @@ class Driver:
         try:
             self.__proc.start()
         except KeyboardInterrupt:
+            print("Keyboard interrupt")
             exit()
 
     def stop(self):
