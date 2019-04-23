@@ -466,7 +466,7 @@ def train2():
 
     # apply model to input
     # model = create_basic_model(input_var_norm, out_dims=num_classes)
-    model = create_model(input_var_norm)
+    model = create_model(input_var)
 
     ce = cross_entropy_with_softmax(model, label_var)
     pe = classification_error(model, label_var)

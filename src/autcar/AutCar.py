@@ -125,13 +125,13 @@ class Car:
         __speed_left = 0.001
 
         if(style == "medium"):
-            __speed_right = 0.005 
-            __speed_left = 0.0006
+            __speed_right = 0.005
+            __speed_left = 0.001
         elif(style == "harsh"):
             __speed_right = 0.005
             __speed_left = 0.0006
         elif(style == "light"):
-            __speed_right = 0.005
+            __speed_right = 0.003
             __speed_left = 0.001
 
         time.sleep(0.1)
@@ -164,14 +164,14 @@ class Car:
         __speed_left = 0.001
 
         if(style == "medium"):
-            __speed_right = 0.0006 
+            __speed_right = 0.001
             __speed_left = 0.005
         elif(style == "harsh"):
             __speed_right = 0.0006
             __speed_left = 0.005
         elif(style == "light"):
             __speed_right = 0.001
-            __speed_left = 0.005
+            __speed_left = 0.003
 
         time.sleep(0.1)
 

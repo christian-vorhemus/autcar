@@ -189,7 +189,9 @@ class Driver:
             if(current_time - self.__last_timestamp > self.__capture_interval):
                 self.__last_timestamp = current_time
                 try:
-                    img = Image.fromarray(self.__frame)
+                    # OpenCV reads BGR, Pillow reads RGB -> convert
+                    imgconv = cv2.cvtColor(self.__frame, cv2.COLOR_BGR2RGB)
+                    img = Image.fromarray(imgconv)
                 except Exception as e:
                     print("Cant read image")
                 try:
@@ -203,7 +205,6 @@ class Driver:
 
                 pred = sess.run([label_name], {input_name: X.astype(np.float32)})[0]
                 index = np.argmax(pred)
-                index = 0
 
                 if(index == 0):
                     if(self.__last_command == "forward"):
@@ -244,7 +245,9 @@ class Driver:
             if(current_time - self.__last_timestamp > self.__capture_interval):
                 self.__last_timestamp = current_time
                 try:
-                    img = Image.fromarray(self.__frame)
+                    # OpenCV reads BGR, Pillow reads RGB -> convert
+                    imgconv = cv2.cvtColor(self.__frame, cv2.COLOR_BGR2RGB)
+                    img = Image.fromarray(imgconv)
                 except Exception as e:
                     print("Cant read image")
                 try:
@@ -255,12 +258,8 @@ class Driver:
 
                 X = np.array([np.moveaxis(np.array(processed_image), -1, 0)])
 
-                def predict(X, index):
-                    pred = sess.run([label_name], {input_name: X.astype(np.float32)})[0]
-                    index.value = np.argmax(pred)
-
-                t = Process(target=predict, args=(X,index,))
-                t.start()
+                pred = sess.run([label_name], {input_name: X.astype(np.float32)})[0]
+                index = np.argmax(pred)
 
                 if(index.value == 1):
                     if(self.__last_command == "forward"):
