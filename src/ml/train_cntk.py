@@ -1,17 +1,19 @@
 from sklearn.model_selection import train_test_split
 from cntk.learners import learning_parameter_schedule, adam, UnitType, learning_rate_schedule
 from cntk.ops import input_variable
-from cntk.layers import Dense, Sequential, Activation, Embedding, Convolution2D, MaxPooling, Stabilizer, Convolution, Dropout, BatchNormalization
+from cntk.io import MinibatchSource, ImageDeserializer, StreamDefs, StreamDef
+import cntk.io.transforms as xforms
+from cntk.layers import default_options, Dense, Sequential, Activation, Embedding, Convolution2D, MaxPooling, Stabilizer, Convolution, Dropout, BatchNormalization
 from cntk.ops import sequence, load_model, combine, input_variable
 from cntk.ops.functions import CloneMethod
 from PIL.ImageOps import equalize
 from cntk.logging.graph import find_by_name, get_node_outputs
 from PIL import Image
-from cntk.logging import ProgressPrinter
+from cntk.logging import ProgressPrinter, log_number_of_parameters
 from cntk.losses import cosine_distance, cross_entropy_with_softmax, squared_error, binary_cross_entropy
 from cntk.initializer import glorot_uniform, glorot_normal
 from cntk.train import Trainer
-from cntk import classification_error, sgd, softmax, tanh, relu, ModelFormat, placeholder
+from cntk import classification_error, sgd, softmax, tanh, relu, ModelFormat, placeholder, element_times, momentum_schedule, momentum_sgd
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
@@ -37,9 +39,9 @@ def normalize(arr):
         arr[...,i] = (arr[...,i] - mean)/std
     return arr
 
-def scale_image(image):
+def scale_image(image, scaling=(223,168)):
     try:
-        return image.resize((224,224))
+        return image.resize(scaling, Image.LINEAR)
     except:
         raise Exception('pad_image error')
 
@@ -48,7 +50,7 @@ def plot(image_array):
     plt.imshow(image_array)
     plt.show()
 
-def create_balanced_dataset(num_classes):
+def load_dataset(num_classes):
     X_values = []
     y_values = []
 
@@ -323,10 +325,265 @@ def create_model_pretrained(num_classes, input_features, freeze=False):
     return z
 
 
+
+def test2():
+    start_line = 1837
+    number_training = 50
+    images = []
+    ground_truth = []
+
+    with open("src/ml/data/autcar_training_balanced/test_map.txt") as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter='\t')
+        row_count = 0
+        capture = False
+        for index, row in enumerate(csv_reader):
+            if(index == start_line):
+                capture = True
+            if(capture):
+                images.append(row[0])
+                ground_truth.append(row[1])
+            if(index > start_line + number_training):
+                break
+
+    #model = load_model("car_cntk.model", format=ModelFormat.ONNX)
+
+    sess = rt.InferenceSession("car_cntk_onnx.model")
+    print(sess.get_inputs()[0].shape)
+    input_name = sess.get_inputs()[0].name
+    label_name = sess.get_outputs()[0].name
+
+    for i, image in enumerate(images):
+        try:
+            img = Image.open(image)
+        except Exception as e:
+            print("Cant read "+image)
+        try:
+            processed_image = scale_image(img)
+        except:
+            print("Err while reading " + image)
+
+        test = np.array(processed_image)
+        #print(test.shape)
+
+        r, g, b = processed_image.split()
+        processed_image = Image.merge("RGB", (b, g, r))
+
+        X = np.array([np.moveaxis((np.array(processed_image).astype('float32')-128), -1, 0)])
+
+        X = X * (1.0 / 256.0)
+        #print(X.shape)
+
+        pred = sess.run([label_name], {input_name: X.astype(np.float32)})[0]
+        #result = model.eval({model.arguments[0]: X})
+        index = np.argmax(pred)
+
+        if(index == 0):
+            prediction = "0"
+        elif(index == 1):
+            prediction = "1"
+        elif(index == 2):
+            prediction = "2"
+
+        print(image + ". Ground truth: " + ground_truth[i] + ", Prediction: " + prediction)
+
+
+def create_basic_model(input, out_dims):
+    with default_options(init=glorot_uniform(), activation=relu):
+        net = Convolution((5,5), 32, pad=True)(input)
+        net = MaxPooling((3,3), strides=(2,2))(net)
+
+        net = Convolution((5,5), 32, pad=True)(net)
+        net = MaxPooling((3,3), strides=(2,2))(net)
+
+        net = Convolution((5,5), 64, pad=True)(net)
+        net = MaxPooling((3,3), strides=(2,2))(net)
+
+        net = Dense(64)(net)
+        net = Dense(out_dims, activation=None)(net)
+
+    return net
+
+
+def train2():
+    map_file_train = "src/ml/data/autcar_training_balanced/train_map.txt"
+    map_file_test = "src/ml/data/autcar_training_balanced/test_map.txt"
+    mean_file = "src/ml/data/autcar_training_balanced/meanfile.xml"
+    num_classes = 3
+    num_train = 0
+    num_test = 0
+    num_channels = 3
+    image_width = 223
+    image_height = 168
+    max_epochs = 5
+
+    with open(map_file_train) as f:
+        for num_train, l in enumerate(f):
+            pass
+
+    with open(map_file_test) as f:
+        for num_test, l in enumerate(f):
+            pass
+
+    transforms = [
+        xforms.scale(width=image_width, height=image_height, channels=num_channels, interpolations='linear'),
+        xforms.mean(mean_file),
+    ]
+
+    # ImageDeserializer loads images in the BGR format, not RGB
+    reader_train = MinibatchSource(ImageDeserializer(map_file_train, StreamDefs(
+        features = StreamDef(field='image', transforms=transforms),
+        labels   = StreamDef(field='label', shape=num_classes)
+    )))
+
+    reader_test = MinibatchSource(ImageDeserializer(map_file_test, StreamDefs(
+        features = StreamDef(field='image', transforms=transforms),
+        labels   = StreamDef(field='label', shape=num_classes)
+    )))
+
+    input_var = input_variable((num_channels, image_height, image_width))
+    label_var = input_variable((num_classes))
+
+    # Normalize the input
+    feature_scale = 1.0 / 256.0
+    input_var_norm = element_times(feature_scale, input_var)
+
+    create_model = Sequential([
+        Convolution2D(filter_shape=(5,5), num_filters=32, strides=(1,1), pad=True, name="first_conv"),
+        Activation(relu),
+        MaxPooling(filter_shape=(3,3), strides=(2,2), name="first_max"),
+        Convolution2D(filter_shape=(3,3), num_filters=48, strides=(1,1), pad=True, name="second_conv"),
+        Activation(relu),
+        MaxPooling(filter_shape=(3,3), strides=(2,2), name="second_max"),
+        Convolution2D(filter_shape=(3,3), num_filters=64, strides=(1,1), pad=True, name="third_conv"),
+        Activation(relu),
+        MaxPooling(filter_shape=(3,3), strides=(2,2), name="third_max"),
+        Convolution2D(filter_shape=(5,5), num_filters=32, strides=(1,1), pad=True, name="fifth_conv"),
+        Activation(relu),
+        Dense(100, activation=relu),
+        Dropout(0.1),
+        Dense(num_classes, activation=softmax)
+    ])
+
+    # apply model to input
+    # model = create_basic_model(input_var_norm, out_dims=num_classes)
+    model = create_model(input_var_norm)
+
+    ce = cross_entropy_with_softmax(model, label_var)
+    pe = classification_error(model, label_var)
+
+    # training config
+    epoch_size     = num_train
+    minibatch_size = 64
+
+    # Set training parameters
+    lr_per_minibatch = learning_parameter_schedule([0.01]*10 + [0.003]*10 + [0.001], epoch_size = epoch_size)
+    momentums = momentum_schedule(0.9, minibatch_size = minibatch_size)
+    l2_reg_weight = 0.001
+
+    # trainer object
+    learner = momentum_sgd(model.parameters, lr = lr_per_minibatch, momentum = momentums, l2_regularization_weight=l2_reg_weight)
+    progress_printer = ProgressPrinter(tag='Training', num_epochs=max_epochs)
+    trainer = Trainer(model, (ce, pe), [learner], [progress_printer])
+
+    # define mapping from reader streams to network inputs
+    input_map = {
+        input_var: reader_train.streams.features,
+        label_var: reader_train.streams.labels
+    }
+
+    # log_number_of_parameters(model) ; print()
+
+    # perform model training
+    batch_index = 0
+    plot_data = {'batchindex':[], 'loss':[], 'error':[]}
+    for epoch in range(max_epochs):       # loop over epochs
+        sample_count = 0
+        while sample_count < epoch_size:  # loop over minibatches in the epoch
+            data = reader_train.next_minibatch(min(minibatch_size, epoch_size - sample_count), input_map=input_map) # fetch minibatch.
+
+            #for item in data.items():
+            #    a = item[1].data.data
+                #https://cntk.ai/pythondocs/cntk.core.html#cntk.core.NDArrayView
+            #    b = a.slice_view([0,0,0,0,0], (3,168,223)).asarray()
+            #    c = 1
+
+            trainer.train_minibatch(data)                                   # update model with it
+            #print(sample_count)
+            sample_count += data[label_var].num_samples                     # count samples processed so far
+
+            # For visualization...
+            plot_data['batchindex'].append(batch_index)
+            plot_data['loss'].append(trainer.previous_minibatch_loss_average)
+            plot_data['error'].append(trainer.previous_minibatch_evaluation_average)
+
+            batch_index += 1
+        trainer.summarize_training_progress()
+
+    #
+    # Evaluation action
+    #
+    epoch_size     = num_test
+    minibatch_size = 16
+
+    # process minibatches and evaluate the model
+    metric_numer    = 0
+    metric_denom    = 0
+    sample_count    = 0
+    minibatch_index = 0
+
+    while sample_count < epoch_size:
+        current_minibatch = min(minibatch_size, epoch_size - sample_count)
+
+        # Fetch next test min batch.
+        data = reader_test.next_minibatch(current_minibatch, input_map=input_map)
+
+        # minibatch data to be trained with
+        metric_numer += trainer.test_minibatch(data) * current_minibatch
+        metric_denom += current_minibatch
+
+        # Keep track of the number of samples processed so far.
+        sample_count += data[label_var].num_samples
+        minibatch_index += 1
+
+    print("")
+    print("Final Results: Minibatch[1-{}]: errs = {:0.1f}% * {}".format(minibatch_index+1, (metric_numer*100.0)/metric_denom, metric_denom))
+    print("")
+
+    model.save("car_cntk.model", format=ModelFormat.ONNX)
+
+    # Visualize training result:
+    window_width            = 32
+    loss_cumsum             = np.cumsum(np.insert(plot_data['loss'], 0, 0))
+    error_cumsum            = np.cumsum(np.insert(plot_data['error'], 0, 0))
+
+    # Moving average.
+    plot_data['batchindex'] = np.insert(plot_data['batchindex'], 0, 0)[window_width:]
+    plot_data['avg_loss']   = (loss_cumsum[window_width:] - loss_cumsum[:-window_width]) / window_width
+    plot_data['avg_error']  = (error_cumsum[window_width:] - error_cumsum[:-window_width]) / window_width
+
+    plt.figure(1)
+    plt.subplot(211)
+    plt.plot(plot_data["batchindex"], plot_data["avg_loss"], 'b--')
+    plt.xlabel('Minibatch number')
+    plt.ylabel('Loss')
+    plt.title('Minibatch run vs. Training loss ')
+
+    plt.show()
+
+    plt.subplot(212)
+    plt.plot(plot_data["batchindex"], plot_data["avg_error"], 'r--')
+    plt.xlabel('Minibatch number')
+    plt.ylabel('Label Prediction Error')
+    plt.title('Minibatch run vs. Label Prediction Error ')
+    plt.show()
+
+
+
+
 def train():
 
     num_classes = 3
-    X_values, y_values = create_balanced_dataset(num_classes)
+    X_values, y_values = load_dataset(num_classes)
 
     #X_values = np.moveaxis(X_values, 0, -1)
     #y_values = np.moveaxis(y_values, -1, 0)
@@ -468,5 +725,6 @@ def train():
 
     # model.save("car_cntk.model", format=ModelFormat.ONNX)
 
-train()
+#train2()
+test2()
 #test_onnx()

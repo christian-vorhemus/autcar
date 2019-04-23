@@ -19,7 +19,7 @@ class Car:
         [1,0,0,1]
     ]
 
-    def __init__(self, model=1):
+    def __init__(self, model='one'):
         self.__tright = None
         self.__tleft = None
         self._model = model

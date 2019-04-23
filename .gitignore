@@ -19,12 +19,15 @@ lib64/
 parts/
 sdist/
 src/ml/data/
+src/ml/create_dataset.py
+src/ml/create_balanced_dataset.py
 src/ml/train_keras.py
 src/ml/autcar_onnx.py
 car_cntk.model
 car_cntk_1.model
 car_cntk_2.model
 car_cntk_3.model
+car_cntk.onnx
 rh.onnx
 car_model.h5
 var/

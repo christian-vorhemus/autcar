@@ -23,7 +23,7 @@ class Driver:
 
         self.__model_file = model
         self.__frame = None
-        self.__proc = Thread(target=self.__drive_onnx_new)
+        self.__proc = Thread(target=self.__drive_onnx)
         self.__stop_driving = False
         self.__capture_interval = capture_interval
         self.__counter = 0
@@ -48,11 +48,11 @@ class Driver:
             arr[...,i] = (arr[...,i] - mean)*(desired_std/std) + desired_mean
         return arr
 
-    def __scale_image(self, image):
+    def __scale_image(self, image, scaling=(223,168)):
         try:
-            return image.resize((448,336))
+            return image.resize(scaling, Image.LINEAR)
         except:
-            raise Exception('scale_image error')
+            raise Exception('pad_image error')
 
     def __drive_keras(self):
         self.__last_timestamp = time.time()
@@ -193,11 +193,13 @@ class Driver:
                 except Exception as e:
                     print("Cant read image")
                 try:
-                    processed_image = equalize(self.__scale_image(self.__pad_image(img)))
+                    processed_image = self.__scale_image(img)
                 except:
                     print("Err while reading image")
 
-                X = np.array([np.moveaxis(np.array(processed_image), -1, 0)])/255.0
+                r, g, b = processed_image.split()
+                processed_image = Image.merge("RGB", (b, g, r))
+                X = np.array([np.moveaxis((np.array(processed_image).astype('float32')-128), -1, 0)])
 
                 pred = sess.run([label_name], {input_name: X.astype(np.float32)})[0]
                 index = np.argmax(pred)
