@@ -27,6 +27,7 @@ car_cntk.model
 car_cntk_1.model
 car_cntk_2.model
 car_cntk_3.model
+car_cntk2.onnx
 car_cntk.onnx
 rh.onnx
 car_model.h5

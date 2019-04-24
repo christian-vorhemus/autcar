@@ -327,12 +327,12 @@ def create_model_pretrained(num_classes, input_features, freeze=False):
 
 
 def test2():
-    start_line = 1837
-    number_training = 50
+    start_line = 44
+    number_training = 20
     images = []
     ground_truth = []
 
-    with open("src/ml/data/autcar_training_balanced/test_map.txt") as csv_file:
+    with open("src/ml/data/autcar_training_balanced_new/test_map.txt") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter='\t')
         row_count = 0
         capture = False
@@ -347,7 +347,7 @@ def test2():
 
     #model = load_model("car_cntk.model", format=ModelFormat.ONNX)
 
-    sess = rt.InferenceSession("car_cntk_onnx.model")
+    sess = rt.InferenceSession("car_cntk2.onnx")
     print(sess.get_inputs()[0].shape)
     input_name = sess.get_inputs()[0].name
     label_name = sess.get_outputs()[0].name
@@ -405,16 +405,16 @@ def create_basic_model(input, out_dims):
 
 
 def train2():
-    map_file_train = "src/ml/data/autcar_training_balanced/train_map.txt"
-    map_file_test = "src/ml/data/autcar_training_balanced/test_map.txt"
-    mean_file = "src/ml/data/autcar_training_balanced/meanfile.xml"
+    map_file_train = "src/ml/data/autcar_training_balanced_new/train_map.txt"
+    map_file_test = "src/ml/data/autcar_training_balanced_new/test_map.txt"
+    mean_file = "src/ml/data/autcar_training_balanced_new/meanfile.xml"
     num_classes = 3
     num_train = 0
     num_test = 0
     num_channels = 3
     image_width = 223
     image_height = 168
-    max_epochs = 5
+    max_epochs = 14
 
     with open(map_file_train) as f:
         for num_train, l in enumerate(f):

@@ -59,7 +59,7 @@ def install_gpio():
 
 def install_numpy():
     # Maybe switch to sudo apt-get -y install python3-dev python3-numpy
-    subprocess.check_call("python3 -m pip install numpy", shell=True)
+    subprocess.check_call("sudo apt-get -y install python3-dev python3-numpy", shell=True)
 
 def install_pillow():
     subprocess.check_call("sudo apt-get -y install libjpeg-dev zlib1g-dev", shell=True)
