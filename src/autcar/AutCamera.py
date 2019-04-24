@@ -11,6 +11,14 @@ import subprocess
 class Camera:
 
     def __init__(self, capture = False, host = 'localhost', port = 8089, rotation = None):
+        """
+        A camera object which is used to capture single images from a camera or start a live stream. It uses OpenCV under the hood.
+
+        @param capture: If True, a camera socket is opened, default is false
+        @param host: Defines the name of the host for camera strean. Default is localhost
+        @param port: Defines the port the camera is using for sending live images. Default to 8089
+        @param rotation: Defines if camera images should be rotated. Default is none, use -1 for 180 degree rotation
+        """
         self.__frame = None
         self.host = host
         self.port = port
@@ -22,10 +30,8 @@ class Camera:
         except:
             print("Warning: Couldn't load bcm2835-v4l2 kernel module")
         self.__cam = cv2.VideoCapture(0)
-        
         if(capture):
             threading.Thread(target=self.frame_updater).start()
-
 
     def get_frame(self):
         if(self.__nosignal == False):
@@ -34,13 +40,11 @@ class Camera:
             fr = None
             return fr
 
-
     def read(self):
         ret, frame = self.__cam.read()
         if(self.__rotation != None):
             frame = cv2.flip(frame, self.__rotation)
         return ret, frame
-
 
     def frame_updater(self):
         clientsocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -72,9 +76,7 @@ class Camera:
             ret, jpeg = cv2.imencode('.jpg', frame)
             self.__frame = jpeg.tobytes()
 
-
     def connect(self, host = 'localhost', port = 8089):
-
         clientsocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         clientsocket.connect((host, port))
 
@@ -99,12 +101,8 @@ class Camera:
             # ret, jpeg = cv2.imencode('.jpg', frame)
             print("new image")
             return jpeg.tobytes()
-            #cv2.imshow('frame', frame)
-            #cv2.waitKey(1)
-
 
     def listen(self, host = '', port = 8089):
-
         serversocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         serversocket.bind((host, port))
         serversocket.listen(10)

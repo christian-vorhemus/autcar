@@ -58,8 +58,10 @@ def install_gpio():
     subprocess.check_call("sudo apt-get -y install python3-rpi.gpio", shell=True)
 
 def install_numpy():
-    # Maybe switch to sudo apt-get -y install python3-dev python3-numpy
     subprocess.check_call("sudo apt-get -y install python3-dev python3-numpy", shell=True)
+
+def uninstall_old_numpy():
+    subprocess.check_call("python3 -m pip uninstall numpy --yes", shell=True)
 
 def install_pillow():
     subprocess.check_call("sudo apt-get -y install libjpeg-dev zlib1g-dev", shell=True)
@@ -73,7 +75,7 @@ def install_libqt4():
 
 def install_opencv():
     subprocess.check_call("sudo apt-get -y install libcblas-dev libhdf5-dev libhdf5-serial-dev libatlas-base-dev libjasper-dev libqtgui4 libilmbase-dev openexr libgstreamer1.0-0 libavcodec-dev libavformat-dev libswscale-dev", shell=True)
-	subprocess.check_call("python3 -m pip install opencv-python", shell=True)
+    subprocess.check_call("python3 -m pip install opencv-python", shell=True)
 
 def main():
     args = parse_arguments()
@@ -122,6 +124,10 @@ def main():
     print("Install ONNXRuntime")
     install_onnxruntime()
     print("ONNXRuntime installed")
+
+    print("Uninstall old numpy version...")
+    uninstall_old_numpy()
+    print("Old numpy uninstalled")
 
     print("Sucessfully installed AutCar platform! Reboot required.")
 

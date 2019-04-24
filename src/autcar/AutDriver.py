@@ -14,7 +14,15 @@ from autcar import Camera
 
 class Driver:
 
-    def __init__(self, model, car, capture_interval = 2, rotation = -1):
+    def __init__(self, model, car, capture_interval = 2, rotation = None):
+        """
+        A Driver object is used to autonomously drive a car. It needs a car object and a path to a model file
+
+        @param model: A file path to a trained ONNX model file
+        @param car: The car object which is used to control the motor
+        @param capture_interval: Defines how often pictures are taken. Default is 2 seconds
+        @param rotation: Defines if camera images should be rotated. Default is none, use -1 for 180 degree rotation
+        """
         self.__car = car
         self.__cam = Camera(rotation=rotation)
         if(os.path.isfile(model) == False):

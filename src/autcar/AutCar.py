@@ -20,6 +20,11 @@ class Car:
     ]
 
     def __init__(self, model='one'):
+        """
+        Use this object to control the motor of the car
+
+        @param model: Selects which model type should be used. At the moment, only "one" is supported
+        """
         self.__tright = None
         self.__tleft = None
         self._model = model

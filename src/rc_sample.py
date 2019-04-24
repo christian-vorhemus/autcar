@@ -2,21 +2,11 @@ from autcar import Camera, Car, RemoteController, Capture
 from threading import Thread
 import time
 
-#cam = Camera()
 rc = RemoteController()
 car = Car()
-cap = Capture(car=car, capture_interval=2)
+cap = Capture(car=car, capture_interval=2, rotation=-1)
 
 rc.listen()
-
-#def live_camera():
-#    print("Camera started")
-#    cam.listen()
-
-#livecam = Thread(target=live_camera)
-#livecam.daemon = True
-#livecam.start()
-
 direction = None
 
 while True:
