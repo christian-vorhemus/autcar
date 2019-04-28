@@ -11,7 +11,7 @@ files = os.listdir("src/ml/data")
 
 num = 0
 for file in files:
-    if(file == "merged" or file == "autcar_training_balanced" or file == "merged_new"):
+    if(file == "merged" or file == "autcar_training_balanced" or file == "merged_new" or file == "merged"):
         continue
     with open("src/ml/data/"+file+"/training.csv") as training_file:
         csv_reader = csv.reader(training_file, delimiter=';')

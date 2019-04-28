@@ -83,7 +83,7 @@ class Car:
             di = 0
 
         if(speed == "fast"):
-            motor_delay = 0.0006
+            motor_delay = 0.0007
         elif(speed == "medium"):
             motor_delay = 0.001
         elif(speed == "slow"):

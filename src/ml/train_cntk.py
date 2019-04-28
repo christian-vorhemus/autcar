@@ -327,7 +327,7 @@ def create_model_pretrained(num_classes, input_features, freeze=False):
 
 
 def test2():
-    start_line = 44
+    start_line = 80
     number_training = 20
     images = []
     ground_truth = []
@@ -347,7 +347,7 @@ def test2():
 
     #model = load_model("car_cntk.model", format=ModelFormat.ONNX)
 
-    sess = rt.InferenceSession("car_cntk2.onnx")
+    sess = rt.InferenceSession("car_cntk.model")
     print(sess.get_inputs()[0].shape)
     input_name = sess.get_inputs()[0].name
     label_name = sess.get_outputs()[0].name
@@ -414,7 +414,7 @@ def train2():
     num_channels = 3
     image_width = 223
     image_height = 168
-    max_epochs = 14
+    max_epochs = 28
 
     with open(map_file_train) as f:
         for num_train, l in enumerate(f):
