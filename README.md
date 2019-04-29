@@ -25,7 +25,7 @@ Do you have all the parts listed above? Great, next please follow the guide [her
 
 ### 3) Learn how to use the library
 
-The following tutorials are available at the moment:
+The following tutorials are available at the moment:<p>
 [1. Basics - Learn how AutCar works in general](https://github.com/christian-vorhemus/autcar/blob/master/src/README.md)
 
 ## FAQ & troubleshooting
