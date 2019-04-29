@@ -41,7 +41,7 @@ and change the default password.
 
 ### 2) Download and install AutCar on your Raspberry
 
-1) In your Raspberry Pi shell, make sure that you have Git installed
+1) Install Git by entering
 ```
 sudo apt-get -y install git
 ```
