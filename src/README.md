@@ -13,7 +13,7 @@ If you already have a Rasperry Pi 3 with the newest Raspbian Lite up and running
 3) Download a SSH client, for example [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
 4) Plug a SD card to your computer, start your disk image writer and write the Raspian .img file to the card
 5) Open the /boot partition of the SD card, and create a new file named "wpa_supplicant.conf"
-6) Add the following content to the file but replace <YOUR-WIFI-SSID> and <YOUR-WIFI-KEY> with the SSID (name) and password of your WLAN access point.
+6) Add the following content to the file but replace &lt;YOUR-WIFI-SSID&gt; and &lt;YOUR-WIFI-KEY&gt; with the SSID (name) and password of your WLAN access point.
 ```
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
