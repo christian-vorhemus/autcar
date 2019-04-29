@@ -60,7 +60,7 @@ cd autcar/src/
 ```
 python3 install.py
 ```
-Installation can take up to 1 hour on a Raspberry Pi 3. A restart is required after the installation and will be perfordmed automatically. If you want to prevent that, use the --prevent-reboot flag
+Installation can take up to 1 hour on a Raspberry Pi 3. A restart is required after the installation and will be performed automatically. If you want to prevent that, use the --prevent-reboot flag
 
 ```
 python3 install.py --prevent-reboot
