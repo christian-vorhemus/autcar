@@ -1,9 +1,12 @@
 <img src="images/autcar_logo.png" width="400" />
 
+This is the source code for the AutCar project - Build your own autonomous driving toy car.
+
+<img src="images/autcar_modelone.png" width="400" />
+
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/christian-vorhemus/autcar.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/christian-vorhemus/autcar/alerts/)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/christian-vorhemus/autcar.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/christian-vorhemus/autcar/context:javascript)
 
-This is the source code for the AutCar project - Build your own autonomous driving toy car.
 
 **Important**: This code is heavily under development right now, you'll certainly find bugs and shortcomings. Please create issues or contribute to the code.
 
