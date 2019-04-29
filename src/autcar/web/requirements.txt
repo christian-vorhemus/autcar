@@ -2,3 +2,5 @@ flask
 cntk
 numpy
 onnxruntime
+Pillow
+pandas-ml

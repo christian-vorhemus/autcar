@@ -9,6 +9,7 @@ import random
 import time
 import xml.etree.cElementTree as et
 import xml.dom.minidom
+from PIL import Image
 import cntk
 from cntk.learners import learning_parameter_schedule
 from cntk.ops import input_variable
@@ -20,10 +21,12 @@ from cntk.logging import ProgressPrinter
 from cntk.losses import cross_entropy_with_softmax
 from cntk import classification_error, softmax, relu, ModelFormat, element_times, momentum_schedule, momentum_sgd
 import onnxruntime as rt
+from pandas_ml import ConfusionMatrix
+import matplotlib.pyplot as plt
 
 class Trainer:
 
-    def __init__(self, image_width = 223, image_height = 168):
+    def __init__(self, image_width = 224, image_height = 168):
         """
         A trainer object that is used to prepare the dataset, train and test the model
         """
@@ -53,7 +56,12 @@ class Trainer:
         x = xml.dom.minidom.parse(fname)
         with open(fname, 'w') as f:
             f.write(x.toprettyxml(indent = '  '))
-            
+
+    def __scale_image(self, image):
+        try:
+            return image.resize((self.__image_width,self.__image_height), Image.LINEAR)
+        except:
+            raise Exception('scale_image error')   
 
     def create_balanced_dataset(self, path_to_folders: Union[str, List[str]], outputfolder_path: str = 'balanced_dataset', train_test_split: float = 0.8):
         image_counter = 0
@@ -318,25 +326,47 @@ class Trainer:
         model.save(output_model_path, format=ModelFormat.ONNX)
 
 
+    def __plot_test(self, confusion_matrix):
+        #plt.figure(1)
+        #plt.subplot(211)
+        #plt.plot(plot_data["batchindex"], plot_data["avg_loss"], 'b--')
+        #plt.xlabel('Minibatch number')
+        #plt.ylabel('Loss')
+        #plt.title('Minibatch run vs. Training loss ')
+
+        fig, ax = plt.subplots()
+        fig.patch.set_visible(False)
+        ax.axis('off')
+        ax.axis('tight')
+        
+        df = confusion_matrix.stats()["class"]
+
+        # 10 = recall, 12 = precision, 17 = accuracy, 18 = F1-score
+        ndf = df.ix[[10,12,17,18]]
+
+        ndf['Scores'] = ["Recall", "Precision", "Accuracy", "F1-Score"]
+
+        ax.table(cellText=ndf.values, colLabels=ndf.columns, loc='center')
+        fig.tight_layout()
+        confusion_matrix.plot()
+        plt.show()
+
     def test(self, path_to_model: str, path_to_test_map: str):
+        images = []
+        ground_truth = []
+        predictions = []
         try:
             with open(path_to_test_map) as csv_file:
                 csv_reader = csv.reader(csv_file, delimiter='\t')
                 row_count = 0
                 capture = False
-                for index, row in enumerate(csv_reader):
-                    if(index == start_line):
-                        capture = True
-                    if(capture):
-                        images.append(row[0])
-                        ground_truth.append(row[1])
-                    if(index > start_line + number_training):
-                        break
+                for row in csv_reader:
+                    images.append(row[0])
+                    ground_truth.append(self.__commands[int(row[1])])
         except:
             raise Exception("Could not parse testmap. Did you provide a path to a valid test_map.txt file?")
 
         sess = rt.InferenceSession(path_to_model)
-        print(sess.get_inputs()[0].shape)
         input_name = sess.get_inputs()[0].name
         label_name = sess.get_outputs()[0].name
 
@@ -346,27 +376,18 @@ class Trainer:
             except Exception as e:
                 print("Cant read "+image)
             try:
-                processed_image = scale_image(img)
+                processed_image = self.__scale_image(img)
             except:
                 print("Err while reading " + image)
 
-            test = np.array(processed_image)
-            r, g, b = processed_image.split()
-            processed_image = Image.merge("RGB", (b, g, r))
             X = np.array([np.moveaxis((np.array(processed_image).astype('float32')-128), -1, 0)])
             X = X * (1.0 / 256.0)
 
             pred = sess.run([label_name], {input_name: X.astype(np.float32)})[0]
-            #result = model.eval({model.arguments[0]: X})
-            index = np.argmax(pred)
+            index = int(np.argmax(pred))
+            predictions.append(self.__commands[index])
 
-            self.__commands[index]
+        confusion_matrix = ConfusionMatrix(ground_truth, predictions)
+        #print("Confusion matrix:\n%s" % confusion_matrix)
 
-            if(index == 0):
-                prediction = "0"
-            elif(index == 1):
-                prediction = "1"
-            elif(index == 2):
-                prediction = "2"
-
-            print(image + ". Ground truth: " + ground_truth[i] + ", Prediction: " + prediction)
+        self.__plot_test(confusion_matrix)

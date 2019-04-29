@@ -23,6 +23,11 @@ Or, collect (and print) all the parts yourself. You will need the following:
 
 Do you have all the parts listed above? Great, next please follow the guide [here](https://github.com/christian-vorhemus/autcar/blob/master/src/README.md) to install all dependencies and start the car.
 
+### 3) Learn how to use the library
+
+The following tutorials are available at the moment:
+[1. Basics - Learn how AutCar works in general](https://github.com/christian-vorhemus/autcar/blob/master/src/README.md)
+
 ## FAQ & troubleshooting
 <i>Q: I have trained a machine learning model but the car is not following the lines.</i>
 <p>
