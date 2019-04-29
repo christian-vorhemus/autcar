@@ -315,5 +315,5 @@ class Trainer:
         model.save(output_model_path, format=ModelFormat.ONNX)
 
 
-    def test(self):
+    def test(self, path_to_model, path_to_test_map):
         print("test")

@@ -1,8 +1,8 @@
 ## Hardware Assembly
 
+- To do -
 
-
-## Software
+## Software Setup
 
 ### 1) Configure your Raspberry Pi
 
@@ -38,3 +38,34 @@ It is recommended to change your password. To do so, enter
 passwd
 ```
 and change the default password.
+
+### 2) Download and install AutCar on your Raspberry
+
+1) In your Raspberry Pi shell, make sure that you have Git installed
+```
+sudo apt-get -y install git
+```
+
+2) Download the AutCar library
+```
+git clone https://github.com/christian-vorhemus/autcar.git
+```
+
+3) Change directory to enter the /src folder auf the downloaded /autcar folder
+```
+cd autcar/src/
+```
+
+4) Install the dependencies
+```
+python3 install.py
+```
+Installation can take up to 1 hour on a Raspberry Pi 3. A restart is required after the installation and will be perfordmed automatically. If you want to prevent that, use the --prevent-reboot flag
+
+```
+python3 install.py --prevent-reboot
+```
+It can happen that installation fails due to network timeouts. In that case, just run the install script again until you see "Sucessfully installed AutCar platform!"
+
+
+### 3) Download and install AutCar on your PC
