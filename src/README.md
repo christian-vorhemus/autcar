@@ -51,7 +51,7 @@ sudo apt-get -y install git
 git clone https://github.com/christian-vorhemus/autcar.git
 ```
 
-3) Change directory to enter the /src folder auf the downloaded /autcar folder
+3) Change directory to enter the /src folder of the downloaded /autcar folder
 ```
 cd autcar/src/
 ```
@@ -94,5 +94,6 @@ Your car is now listening for commands, default on port 8090
 python autcar/src/autcar/web/server.py
 ```
 3) Open a browser and enter the address http://localhost:8080. You should now see the AutCar Control Board in the browser.
+<img src="../images/autcar_controlboard.png" width="400" />
 4) Enter the IP address and port of the car in the right upper corner and click on "Connect"
 5) Click on the car control buttons to manually move the car.
