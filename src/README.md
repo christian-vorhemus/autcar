@@ -69,3 +69,30 @@ It can happen that installation fails due to network timeouts. In that case, jus
 
 
 ### 3) Download and install AutCar on your PC
+
+Before you start, make sure that you have **Python 3.5 or newer** installed on your PC!
+
+1) Download the AutCar library now also on your PC. If you use a Windows PC go to [git-scm.com/download/win](https://git-scm.com/download/win) and download Git.
+2) Open a command prompt and enter
+```
+git clone https://github.com/christian-vorhemus/autcar.git
+```
+3) Install the dependencies with
+```
+pip install -r autcar/src/autcar/web/requirements.txt
+```
+
+### 4) Connect to your car and drive!
+
+1) On your Raspberry Pi, start the sample remote control script rc_sample.py
+```
+python3 rc_sample.py
+```
+Your car is now listening for commands, default on port 8090
+2) On your PC, start the web client with
+```
+python autcar/src/autcar/web/server.py
+```
+3) Open a browser and enter the address http://localhost:8080. You should now see the AutCar Control Board in the browser.
+4) Enter the IP address and port of the car in the right upper corner and click on "Connect"
+5) Click on the car control buttons to manually move the car.
