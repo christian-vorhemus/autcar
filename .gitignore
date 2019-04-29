@@ -18,9 +18,7 @@ lib/
 lib64/
 parts/
 sdist/
-src/ml
-src/ml/create_dataset.py
-src/ml/train_cntk.py
+/src/ml
 rh.onnx
 car_cntk.model
 var/
