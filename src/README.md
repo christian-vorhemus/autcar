@@ -41,7 +41,7 @@ and change the default password.
 
 ### 2) Download and install AutCar on your Raspberry
 
-1) In your Raspberry Pi shell, make sure that you have Git installed
+1) Install Git by entering
 ```
 sudo apt-get -y install git
 ```
@@ -51,7 +51,7 @@ sudo apt-get -y install git
 git clone https://github.com/christian-vorhemus/autcar.git
 ```
 
-3) Change directory to enter the /src folder auf the downloaded /autcar folder
+3) Change directory to enter the /src folder of the downloaded /autcar folder
 ```
 cd autcar/src/
 ```
@@ -60,7 +60,7 @@ cd autcar/src/
 ```
 python3 install.py
 ```
-Installation can take up to 1 hour on a Raspberry Pi 3. A restart is required after the installation and will be perfordmed automatically. If you want to prevent that, use the --prevent-reboot flag
+Installation can take up to 1 hour on a Raspberry Pi 3. A restart is required after the installation and will be performed automatically. If you want to prevent that, use the --prevent-reboot flag
 
 ```
 python3 install.py --prevent-reboot
@@ -84,15 +84,16 @@ pip install -r autcar/src/autcar/web/requirements.txt
 
 ### 4) Connect to your car and drive!
 
-1) On your Raspberry Pi, start the sample remote control script rc_sample.py
+1. On your Raspberry Pi, start the sample remote control script rc_sample.py
 ```
 python3 rc_sample.py
 ```
 Your car is now listening for commands, default on port 8090
-2) On your PC, start the web client with
+2. On your PC, start the web client with
 ```
 python autcar/src/autcar/web/server.py
 ```
-3) Open a browser and enter the address http://localhost:8080. You should now see the AutCar Control Board in the browser.
-4) Enter the IP address and port of the car in the right upper corner and click on "Connect"
-5) Click on the car control buttons to manually move the car.
+3. Open a browser and enter the address http://localhost:8080. You should now see the AutCar Control Board in the browser.
+<img src="../images/autcar_controlboard.png" width="400" />
+4. Enter the IP address and port of the car in the right upper corner and click on "Connect"<br>
+5. Click on the car control buttons to manually move the car.
