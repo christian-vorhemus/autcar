@@ -19,6 +19,7 @@ from cntk.ops.functions import CloneMethod
 from cntk.logging import ProgressPrinter
 from cntk.losses import cross_entropy_with_softmax
 from cntk import classification_error, softmax, relu, ModelFormat, element_times, momentum_schedule, momentum_sgd
+import onnxruntime as rt
 
 class Trainer:
 
@@ -28,6 +29,13 @@ class Trainer:
         """
         self.__image_width = image_width
         self.__image_height = image_height
+        self.__commands = ["move_forward", "left_medium", "right_medium", "left_light", "right_light"]
+        # Label encoding
+        # 0 = move_forward
+        # 1 = left_medium
+        # 2 = right_medium
+        # 3 = left_light
+        # 4 = right_light
 
     def __saveMean(self, fname, image_width, image_height, data):
         root = et.Element('opencv_storage')
@@ -47,18 +55,17 @@ class Trainer:
             f.write(x.toprettyxml(indent = '  '))
             
 
-    def create_balanced_dataset(self, path_to_folders: Union[str, List[str]], outputfolder_path = 'balanced_dataset', train_test_split = 0.8):
+    def create_balanced_dataset(self, path_to_folders: Union[str, List[str]], outputfolder_path: str = 'balanced_dataset', train_test_split: float = 0.8):
         image_counter = 0
         command_counter_start = {}
         command_counter = {}
         ignore_list = ["stop", "move_backwards"]
-        commands = ["move_forward", "left_medium", "right_medium", "left_light", "right_light"]
-        # Label encoding
-        # 0 = move_forward
-        # 1 = left_medium
-        # 2 = right_medium
-        # 3 = left_light
-        # 4 = right_light
+
+        outputfolder_path = outputfolder_path.rstrip('/')
+        if os.path.exists(outputfolder_path):
+            shutil.rmtree(outputfolder_path)
+        
+        os.makedirs(outputfolder_path)
 
         if(type(path_to_folders) == str):
             files = [path_to_folders]
@@ -97,10 +104,6 @@ class Trainer:
         max_class = max(command_counter_start, key = lambda x: command_counter_start.get(x))
         maximum = command_counter_start[max_class]
 
-        outputfolder_path = outputfolder_path.rstrip('/')
-        if not os.path.exists(outputfolder_path):
-            os.makedirs(outputfolder_path)
-
         dataMean = np.full((3*self.__image_height*self.__image_width,), 128)
         self.__saveMean(outputfolder_path+"/meanfile.xml", self.__image_width, self.__image_height, dataMean)
         train_file = open(outputfolder_path+"/train_map.txt","w+")
@@ -130,7 +133,7 @@ class Trainer:
                         command_counter[cmd_type] = command_counter[cmd_type] + 1
 
                     shutil.copy(file+"/"+image, outputfolder_path+"/image_"+str(image_counter)+".png")
-                    info = outputfolder_path+"/image_"+str(image_counter)+".png"+"\t"+str(commands.index(cmd_type))+"\n"
+                    info = outputfolder_path+"/image_"+str(image_counter)+".png"+"\t"+str(self.__commands.index(cmd_type))+"\n"
                     if(random.uniform(0, 1) < train_test_split):
                         train_file.write(info)
                     else:
@@ -164,7 +167,7 @@ class Trainer:
                         if(command_counter[cmd_type] < maximum):
                             command_counter[cmd_type] = command_counter[cmd_type] + 1
                             shutil.copy(file+"/"+image, outputfolder_path+"/image_"+str(image_counter)+".png")
-                            info = outputfolder_path+"/image_"+str(image_counter)+".png"+"\t"+str(commands.index(cmd_type))+"\n"
+                            info = outputfolder_path+"/image_"+str(image_counter)+".png"+"\t"+str(self.__commands.index(cmd_type))+"\n"
                             if(random.uniform(0, 1) < train_test_split):
                                 train_file.write(info)
                             else:
@@ -182,7 +185,7 @@ class Trainer:
 
         return True
 
-    def train(self, path_to_folder, epochs = 10, output_model_path = "driver_model.onnx"):
+    def train(self, path_to_folder: str, epochs: int = 10, output_model_path: str = "driver_model.onnx"):
 
         path_to_folder = path_to_folder.rstrip('/')
 
@@ -315,5 +318,55 @@ class Trainer:
         model.save(output_model_path, format=ModelFormat.ONNX)
 
 
-    def test(self, path_to_model, path_to_test_map):
-        print("test")
+    def test(self, path_to_model: str, path_to_test_map: str):
+        try:
+            with open(path_to_test_map) as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter='\t')
+                row_count = 0
+                capture = False
+                for index, row in enumerate(csv_reader):
+                    if(index == start_line):
+                        capture = True
+                    if(capture):
+                        images.append(row[0])
+                        ground_truth.append(row[1])
+                    if(index > start_line + number_training):
+                        break
+        except:
+            raise Exception("Could not parse testmap. Did you provide a path to a valid test_map.txt file?")
+
+        sess = rt.InferenceSession(path_to_model)
+        print(sess.get_inputs()[0].shape)
+        input_name = sess.get_inputs()[0].name
+        label_name = sess.get_outputs()[0].name
+
+        for i, image in enumerate(images):
+            try:
+                img = Image.open(image)
+            except Exception as e:
+                print("Cant read "+image)
+            try:
+                processed_image = scale_image(img)
+            except:
+                print("Err while reading " + image)
+
+            test = np.array(processed_image)
+            r, g, b = processed_image.split()
+            processed_image = Image.merge("RGB", (b, g, r))
+            X = np.array([np.moveaxis((np.array(processed_image).astype('float32')-128), -1, 0)])
+            X = X * (1.0 / 256.0)
+
+            pred = sess.run([label_name], {input_name: X.astype(np.float32)})[0]
+            #result = model.eval({model.arguments[0]: X})
+            index = np.argmax(pred)
+
+            self.__commands[index]
+
+            if(index == 0):
+                prediction = "0"
+            elif(index == 1):
+                prediction = "1"
+            elif(index == 2):
+                prediction = "2"
+
+            print(image + ". Ground truth: " + ground_truth[i] + ", Prediction: " + prediction)

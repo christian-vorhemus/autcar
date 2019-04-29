@@ -1,4 +1,7 @@
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except:
+    print("Warning: RPi.GPIO could not be loaded")
 import time
 from threading import Thread
 from multiprocessing import Process, Value
