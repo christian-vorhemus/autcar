@@ -1,8 +1,6 @@
 <img src="images/autcar_logo.png" width="400" />
-
 This is the source code for the AutCar project - Build your own autonomous driving toy car!
-
-<img src="images/autcar_modelone.png" width="400" />
+<img src="images/autcar_modelone.png" width="600" />
 
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/christian-vorhemus/autcar.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/christian-vorhemus/autcar/alerts/)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/christian-vorhemus/autcar.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/christian-vorhemus/autcar/context:javascript)
@@ -16,7 +14,7 @@ You have two options: Either get a development kit with all hardware parts ready
 Or, collect (and print) all the parts yourself. You will need the following:
 
 1) A Raspberry Pi 3 (important: the original Raspberry Pi or Raspberry Pi Zero (WH) **won't work**. You need a chip with ARMv7 processor).
-2) Two motors and an expensian board to connect both to your Raspberry Pi.
+2) Two motors and an expansion board to connect both to your Raspberry Pi.
 3) A camera (either an USB webcam or a Raspberry Pi cam).
 4) A battery pack to run your Raspberry Pi.
 5) 3D printed chassis and wheels. You can find sample models [here](https://github.com/christian-vorhemus/autcar/tree/master/src/3dmodels).
