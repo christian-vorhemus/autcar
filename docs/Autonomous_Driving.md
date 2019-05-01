@@ -56,7 +56,7 @@ Additionally, take the the following into account:
  
 9. Look into the autcar_training folder, it should contain several images and a train.csv file.
 
-<img src="../images/D1.jpg" width="400">
+<img src="../images/D2.jpg" width="400">
 
 ### 3) Train your model
 
