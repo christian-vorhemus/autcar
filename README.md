@@ -11,7 +11,7 @@ This is the source code for the AutCar project - Build your own autonomous drivi
 
 You have two options: Either get a development kit with all hardware parts ready and packed for you at [www.autcar.com](http://www.autcar.com).
 
-Or, collect (and print) all the parts yourself. You will need the following:
+Or, collect (and 3D print) all the parts yourself. You will need the following:
 
 1) A Raspberry Pi 3 (important: the original Raspberry Pi or Raspberry Pi Zero (WH) **won't work**. You need a chip with ARMv7 processor).
 2) Two motors and an expansion board to connect both to your Raspberry Pi.
@@ -25,7 +25,7 @@ Do you have all the parts listed above? Great, next please follow the guide [her
 
 ### 3) Learn how to use the library
 
-The following tutorials are available at the moment:
+The following tutorials are available at the moment:<p>
 [1. Basics - Learn how AutCar works in general](https://github.com/christian-vorhemus/autcar/blob/master/src/README.md)
 
 ## FAQ & troubleshooting

@@ -13,7 +13,7 @@ If you already have a Rasperry Pi 3 with the newest Raspbian Lite up and running
 3) Download a SSH client, for example [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
 4) Plug a SD card to your computer, start your disk image writer and write the Raspian .img file to the card
 5) Open the /boot partition of the SD card, and create a new file named "wpa_supplicant.conf"
-6) Add the following content to the file but replace <YOUR-WIFI-SSID> and <YOUR-WIFI-KEY> with the SSID (name) and password of your WLAN access point.
+6) Add the following content to the file but replace &lt;YOUR-WIFI-SSID&gt; and &lt;YOUR-WIFI-KEY&gt; with the SSID (name) and password of your WLAN access point.
 ```
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
@@ -72,7 +72,7 @@ It can happen that installation fails due to network timeouts. In that case, jus
 
 Before you start, make sure that you have **Python 3.5 or newer** installed on your PC!
 
-1) Download the AutCar library now also on your PC. If you use a Windows PC go to [git-scm.com/download/win](https://git-scm.com/download/win) and download Git.
+1) We also need the AutCar library on our PC. If you use Windows, go to [git-scm.com/download/win](https://git-scm.com/download/win) and download Git.
 2) Open a command prompt and enter
 ```
 git clone https://github.com/christian-vorhemus/autcar.git
@@ -88,11 +88,13 @@ pip install -r autcar/src/autcar/web/requirements.txt
 ```
 python3 rc_sample.py
 ```
-Your car is now listening for commands, default on port 8090
+
+Your car is now listening for commands (by default on port 8090)
+
 2. On your PC, start the web client with
-```
-python autcar/src/autcar/web/server.py
-```
+ ```
+ python autcar/src/autcar/web/server.py
+ ```
 3. Open a browser and enter the address http://localhost:8080. You should now see the AutCar Control Board in the browser.
 <img src="../images/autcar_controlboard.png" width="400" />
 4. Enter the IP address and port of the car in the right upper corner and click on "Connect"<br>
