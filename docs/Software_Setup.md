@@ -1,4 +1,6 @@
-## Software Setup
+# Software Setup
+
+In this chapter, you'll learn how to install the AutCar library both on your Raspberry Pi and PC and connect to your car.
 
 ### 1) Configure your Raspberry Pi
 
