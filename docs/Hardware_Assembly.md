@@ -3,15 +3,31 @@
 In this chapter you'll see how to assembly all the hardware parts to construct your car!
 
 ### 1) Prepare all parts
-Todo
+Make sure you have all parts next to you before you start
+- The chassis (underbody)
+- Two motors
+- Two motor-wheel connectors
+- Expansion board to connect motors and Raspberry Pi
+- Two gummed back wheels
+- Two front wheels (including axle)
+- Raspberry Pi 3
+- Raspberry Pi Camera
+- Two screws
+
+Additionally, you will need the following:
+- Crosstip screwdriver
+- Scissors or a stanley knife
+- File (optional)
+
+First, remove the brim from the motor-wheel connectors. You can do this either by hand or with the help of a scissor
 
 <img src="../images/A1.jpg" width="400">
 
-Todo
+Do the same with the chassis:
 
 <img src="../images/A2.jpg" width="400">
 
-Todo
+
 
 <img src="../images/A3.jpg" width="400">
 
