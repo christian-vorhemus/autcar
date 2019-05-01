@@ -193,7 +193,26 @@ class Trainer:
 
         return True
 
-    def train(self, path_to_folder: str, epochs: int = 10, output_model_path: str = "driver_model.onnx"):
+
+    def get_no_classes(self, path_to_folder: str):
+        path_to_folder = path_to_folder.rstrip('/')
+        classes_set = set()
+        map_file_train = path_to_folder+"/train_map.txt"
+
+        try:
+            with open(map_file_train) as f:
+                csv_reader = csv.reader(f, delimiter='\t')
+                for row in csv_reader:
+                    cmd = row[1]
+                    classes_set.add(cmd)
+        except Exception as e:
+            raise Exception("No train_map.txt file found in path "+path_to_folder+". Did you create a dataset using create_balanced_dataset()?")
+
+        num_classes = len(classes_set)
+        return num_classes
+
+
+    def train(self, path_to_folder: str, model_definition, epochs: int = 10, output_model_path: str = "driver_model.onnx"):
 
         path_to_folder = path_to_folder.rstrip('/')
 
@@ -201,7 +220,6 @@ class Trainer:
         map_file_test = path_to_folder+"/test_map.txt"
         mean_file = path_to_folder+"/meanfile.xml"
         classes_set = set()
-        num_classes = 3
         num_train = 0
         num_test = 0
         num_channels = 3
@@ -245,24 +263,7 @@ class Trainer:
         feature_scale = 1.0 / 256.0
         input_var_norm = element_times(feature_scale, input_var)
 
-        create_model = Sequential([
-            Convolution2D(filter_shape=(5,5), num_filters=32, strides=(1,1), pad=True, name="first_conv"),
-            Activation(relu),
-            MaxPooling(filter_shape=(3,3), strides=(2,2), name="first_max"),
-            Convolution2D(filter_shape=(3,3), num_filters=48, strides=(1,1), pad=True, name="second_conv"),
-            Activation(relu),
-            MaxPooling(filter_shape=(3,3), strides=(2,2), name="second_max"),
-            Convolution2D(filter_shape=(3,3), num_filters=64, strides=(1,1), pad=True, name="third_conv"),
-            Activation(relu),
-            MaxPooling(filter_shape=(3,3), strides=(2,2), name="third_max"),
-            Convolution2D(filter_shape=(5,5), num_filters=32, strides=(1,1), pad=True, name="fifth_conv"),
-            Activation(relu),
-            Dense(100, activation=relu),
-            Dropout(0.1),
-            Dense(num_classes, activation=softmax)
-        ])
-
-        model = create_model(input_var)
+        model = model_definition(input_var)
 
         ce = cross_entropy_with_softmax(model, label_var)
         pe = classification_error(model, label_var)

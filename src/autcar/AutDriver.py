@@ -56,7 +56,7 @@ class Driver:
             arr[...,i] = (arr[...,i] - mean)*(desired_std/std) + desired_mean
         return arr
 
-    def __scale_image(self, image, scaling=(223,168)):
+    def __scale_image(self, image, scaling=(224,168)):
         try:
             return image.resize(scaling, Image.LINEAR)
         except:
@@ -241,6 +241,14 @@ class Driver:
         label_name = sess.get_outputs()[0].name
         index = Value("i", -1)
 
+        def norm(_img):
+            tt=np.asarray(_img).astype('float32')
+            tt=tt/255
+            tt[0]=(tt[0]-0.485)/0.229
+            tt[1]=(tt[1]-0.456)/0.224
+            tt[2]=(tt[2]-0.406)/0.225
+            return tt
+
         while True:
             if(self.__stop_driving):
                 break
@@ -259,29 +267,29 @@ class Driver:
                 except Exception as e:
                     print("Cant read image")
                 try:
-                    processed_image = self.__normalize(np.array(self.__scale_image(img)))
+                    processed_image = norm(self.__scale_image(img, (224, 168)))
                 except Exception as e:
                     print(e)
                     print("Error while reading image")
 
-                X = np.array([np.moveaxis(np.array(processed_image), -1, 0)])
+                X = np.array([np.moveaxis(processed_image, -1, 0)])
 
                 pred = sess.run([label_name], {input_name: X.astype(np.float32)})[0]
                 index = np.argmax(pred)
 
-                if(index.value == 1):
+                if(index == 0):
                     if(self.__last_command == "forward"):
                         continue
                     print("forward")
                     self.__last_command = "forward"
                     self.__car.move("forward", "medium")
-                elif(index.value == 0):
+                elif(index == 1):
                     if(self.__last_command == "left"):
                         continue
                     print("left")
                     self.__last_command = "left"
                     self.__car.left("light", "forward")
-                elif(index.value == 2):
+                elif(index == 2):
                     if(self.__last_command == "right"):
                         continue
                     print("right")
