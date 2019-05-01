@@ -7,7 +7,7 @@ This is the source code for the AutCar project - Build your own autonomous drivi
 
 ## Getting started
 
-### 1) Hardware Prerequisites
+### 1) Hardware prerequisites
 
 You have two options: Either get a development kit with all hardware parts ready and packed for you at [www.autcar.com](http://www.autcar.com).
 
@@ -21,7 +21,7 @@ Or, collect (and 3D print) all the parts yourself. You will need the following:
 
 Please check [this document](https://github.com/christian-vorhemus/autcar/blob/master/docs/Hardware_Assembly.md) to learn how to assembly all parts.
 
-### 2) Setup
+### 2) Software setup
 
 Do you have a car ready to go? Great, next please follow the guide [here](https://github.com/christian-vorhemus/autcar/blob/master/docs/Software_Setup.md) to install all dependencies and start the car.
 
