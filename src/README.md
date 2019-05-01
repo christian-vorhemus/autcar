@@ -72,7 +72,7 @@ It can happen that installation fails due to network timeouts. In that case, jus
 
 Before you start, make sure that you have **Python 3.5 or newer** installed on your PC!
 
-1) Download the AutCar library now also on your PC. If you use a Windows PC go to [git-scm.com/download/win](https://git-scm.com/download/win) and download Git.
+1) We also need the AutCar library on our PC. If you use Windows, go to [git-scm.com/download/win](https://git-scm.com/download/win) and download Git.
 2) Open a command prompt and enter
 ```
 git clone https://github.com/christian-vorhemus/autcar.git
