@@ -88,11 +88,13 @@ pip install -r autcar/src/autcar/web/requirements.txt
 ```
 python3 rc_sample.py
 ```
-Your car is now listening for commands, default on port 8090
+
+Your car is now listening for commands (by default on port 8090)
+
 2. On your PC, start the web client with
-```
-python autcar/src/autcar/web/server.py
-```
+ ```
+ python autcar/src/autcar/web/server.py
+ ```
 3. Open a browser and enter the address http://localhost:8080. You should now see the AutCar Control Board in the browser.
 <img src="../images/autcar_controlboard.png" width="400" />
 4. Enter the IP address and port of the car in the right upper corner and click on "Connect"<br>
