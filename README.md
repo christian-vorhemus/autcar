@@ -17,7 +17,7 @@ Or, collect (and 3D print) all the parts yourself. You will need the following:
 2) Two motors and an expansion board to connect both to your Raspberry Pi.
 3) A camera (either an USB webcam or a Raspberry Pi cam).
 4) A battery pack to run your Raspberry Pi.
-5) 3D printed chassis and wheels. You can find sample models [here](https://github.com/christian-vorhemus/autcar/tree/master/src/3dmodels).
+5) 3D printed chassis and wheels. You can find sample models [here](https://github.com/christian-vorhemus/autcar/tree/master/3dmodels).
 
 Please check [this document](https://github.com/christian-vorhemus/autcar/blob/master/docs/Hardware_Assembly.md) to learn how to assembly all parts.
 
