@@ -55,11 +55,11 @@ Afterwards, put both back wheel into the motor bracket.
 <img src="../images/A8.jpg" width="400">
 
 ### 4) Connect all parts
-Todo
+Gently place the battery pack in the chassis and put the Raspberry Pi on top of it. There is no need to fasten it. Now, plug the motors into the expansion board and put the expansion board on the GPIO pins as shown in the image below:
 
 <img src="../images/A9.jpg" width="400">
 
-Todo
+Last, put the camera into the front mounting and tie the motor cords together. Take the built-in USB cable of the battery pack and plug it into the Raspberry Pi power plug.
 
 <img src="../images/A10.jpg" width="400">
 
