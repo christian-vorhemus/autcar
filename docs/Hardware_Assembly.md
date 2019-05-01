@@ -28,7 +28,7 @@ Do the same with the chassis:
 
 <img src="../images/A2.jpg" width="400">
 
-Check if you can put one of the motors into the motor bracket. You should feel a certain resistance but the brackets shouldn't bend to much. You may want to use a file and carefully abrade the little rise in the motor bracket:
+Check if you can put one of the motors into the motor bracket. You should feel a certain resistance but the brackets shouldn't bend too much. You may want to use a file and carefully abrade the little rise in the motor bracket:
 
 <img src="../images/A3.jpg" width="400">
 
