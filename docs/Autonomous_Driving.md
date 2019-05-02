@@ -69,3 +69,5 @@ Additionally, take the the following into account:
 ### 5) Run model on your AutCar
 
 - To do -
+
+<img src="../images/drive.gif" width="400">
