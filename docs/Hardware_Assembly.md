@@ -5,15 +5,15 @@ In this chapter you'll see how to assembly all the hardware parts to construct y
 ### 1) Prepare all parts
 Make sure you have all parts next to you before you start
 - The chassis (underbody)
-- Two motors
-- Two motor-wheel connectors
+- 2x motors
+- 2x motor-wheel connectors
 - Battery pack
 - Expansion board to connect motors and Raspberry Pi
-- Two gummed back wheels
-- Two front wheels (including axle)
+- 2x gummed back wheels
+- 2x front wheels (including axle)
 - Raspberry Pi 3
 - Raspberry Pi Camera
-- Two screws
+- 2x screws
 
 Additionally, you will need the following:
 - Crosstip screwdriver
