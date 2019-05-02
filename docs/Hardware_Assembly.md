@@ -50,7 +50,7 @@ Repeat with the second back wheel and plug the motor-wheel connector on the moto
 
 <img src="../images/A7.jpg" width="400">
 
-Afterwards, put both back wheel into the motor bracket.
+Afterwards, plug both motors into the motor bracket.
 
 <img src="../images/A8.jpg" width="400">
 
