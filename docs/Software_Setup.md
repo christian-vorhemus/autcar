@@ -2,7 +2,15 @@
 
 In this chapter, you'll learn how to install the AutCar library both on your Raspberry Pi and PC and connect to your car.
 
-### 1) Configure your Raspberry Pi
+### 1) Prerequisites
+
+You'll need the following:
+- A PC and either a wirless access point or an Ethernet connection
+- A micro SD card
+- A micro SD card reader or a built-in SD card reader on your computer
+- Your AutCar (configuration is shown in the [Hardware Assembly documentation](https://github.com/christian-vorhemus/autcar/blob/master/docs/Hardware_Assembly.md))
+
+### 2) Configure your Raspberry Pi
 
 If you already have a Rasperry Pi 3 with the newest Raspbian Lite up and running, you can skip this section.
 
@@ -37,7 +45,7 @@ passwd
 ```
 and change the default password.
 
-### 2) Download and install AutCar on your Raspberry
+### 3) Download and install AutCar on your Raspberry
 
 1) If not done already, install Git. You can do so by entering the following command on your Raspberry Pi shell:
 ```
@@ -66,7 +74,7 @@ python3 install.py --prevent-reboot
 It can happen that installation fails due to network timeouts. In that case, just run the install script again until you see "Sucessfully installed AutCar platform!"
 
 
-### 3) Download and install AutCar on your PC
+### 4) Download and install AutCar on your PC
 
 Before you start, make sure that you have **Python 3.5 or newer** installed on your PC!
 
@@ -80,7 +88,7 @@ git clone https://github.com/christian-vorhemus/autcar.git
 pip install -r autcar/src/autcar/web/requirements.txt
 ```
 
-### 4) Connect to your car and drive!
+### 5) Connect to your car and drive!
 
 1. On your Raspberry Pi, start the sample remote control script rc_sample.py
  ```
