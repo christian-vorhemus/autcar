@@ -5,15 +5,15 @@ In this chapter you'll see how to assembly all the hardware parts to construct y
 ### 1) Prepare all parts
 Make sure you have all parts next to you before you start
 - The chassis (underbody)
-- Two motors
-- Two motor-wheel connectors
+- 2x motors
+- 2x motor-wheel connectors
 - Battery pack
 - Expansion board to connect motors and Raspberry Pi
-- Two gummed back wheels
-- Two front wheels (including axle)
+- 2x gummed back wheels
+- 2x front wheels (including axle)
 - Raspberry Pi 3
 - Raspberry Pi Camera
-- Two screws
+- 2x screws
 
 Additionally, you will need the following:
 - Crosstip screwdriver
@@ -28,7 +28,7 @@ Do the same with the chassis:
 
 <img src="../images/A2.jpg" width="400">
 
-Check if you can put one of the motors into the motor bracket. You should feel a certain resistance but the brackets shouldn't bend too much. You may want to use a file and carefully abrade the little rise in the motor bracket:
+Check if you can put one of the motors into the motor bracket. You should feel a certain resistance but the brackets shouldn't bend too much. You may want to use a file and carefully abrade the little bulge in the motor bracket:
 
 <img src="../images/A3.jpg" width="400">
 
@@ -50,7 +50,7 @@ Repeat with the second back wheel and plug the motor-wheel connector on the moto
 
 <img src="../images/A7.jpg" width="400">
 
-Afterwards, put both back wheel into the motor bracket.
+Afterwards, plug both motors into the motor bracket.
 
 <img src="../images/A8.jpg" width="400">
 
@@ -59,7 +59,7 @@ Gently place the battery pack in the chassis and put the Raspberry Pi on top of 
 
 <img src="../images/A9.jpg" width="400">
 
-Last, put the camera into the front mounting and tie the motor cords together. Take the built-in USB cable of the battery pack and plug it into the Raspberry Pi power plug.
+Last, plug the camera into the Raspberry Pi Camera CSI interface and fix it in the front mounting. The battery pack has a built-in micro USB cable you can use to power the Raspberry Pi. Don't power up your device yet, first prepare a micro SD card with the operating system on it. You'll learn how to do this in a second.
 
 <img src="../images/A10.jpg" width="400">
 
