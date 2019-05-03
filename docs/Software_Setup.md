@@ -80,9 +80,9 @@ Before you start, make sure that you have **Python 3.5 or newer** installed on y
 
 1) We also need the AutCar library on our PC. Download the zipped library using this [this link](https://github.com/christian-vorhemus/autcar/archive/master.zip)
 
-3) Install the dependencies with
+3) Open a cmd window, change directory to `autcar-master/src` and  install the dependencies with
 ```
-pip install -r autcar/src/autcar/web/requirements.txt
+pip install -r autcar/web/requirements.txt
 ```
 
 ### 5) Connect to your car and drive!
