@@ -102,7 +102,7 @@ pip install -r autcar/src/autcar/web/requirements.txt
  python autcar/src/autcar/web/server.py
  ```
 3. Open a browser and enter the address http://localhost:8080. You should now see the AutCar Control Board:
- ![](../images/autcar_controlboard.png)
+    <img src="../images/autcar_controlboard.png" width="400">
 4. Enter the IP address and port of the car in the right upper corner and click on "Connect"<br>
 5. Click on the car control buttons to manually move the car.
 
