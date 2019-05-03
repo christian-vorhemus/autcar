@@ -78,14 +78,11 @@ It can happen that installation fails due to network timeouts. In that case, jus
 
 Before you start, make sure that you have **Python 3.5 or newer** installed on your PC!
 
-1) We also need the AutCar library on our PC. If you use Windows, go to [git-scm.com/download/win](https://git-scm.com/download/win) and download Git.
-2) Open a command prompt and enter
+1) We also need the AutCar library on our PC. Download the zipped library using [this link](https://github.com/christian-vorhemus/autcar/archive/master.zip)
+
+3) Open a cmd window, change directory to `autcar-master/src` and  install the dependencies with
 ```
-git clone https://github.com/christian-vorhemus/autcar.git
-```
-3) Install the dependencies with
-```
-pip install -r autcar/src/autcar/web/requirements.txt
+pip install -r autcar/web/requirements.txt
 ```
 
 ### 5) Connect to your car and drive!
@@ -102,7 +99,7 @@ pip install -r autcar/src/autcar/web/requirements.txt
  python autcar/src/autcar/web/server.py
  ```
 3. Open a browser and enter the address http://localhost:8080. You should now see the AutCar Control Board:
- ![](../images/autcar_controlboard.png)
+    <p><img src="../images/autcar_controlboard.png" width="400" margin="20"></p>
 4. Enter the IP address and port of the car in the right upper corner and click on "Connect"<br>
 5. Click on the car control buttons to manually move the car.
 
