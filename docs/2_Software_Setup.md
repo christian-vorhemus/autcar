@@ -103,4 +103,4 @@ pip install -r autcar/web/requirements.txt
 4. Enter the IP address and port of the car in the right upper corner and click on "Connect"<br>
 5. Click on the car control buttons to manually move the car.
 
-You should now be able to control the car manually, great! Next, let's see how we can enable autonomous driving mode, [click here](https://github.com/christian-vorhemus/autcar/blob/master/docs/Autonomous_Driving.md) to learn more.
+You should now be able to control the car manually, great! Next, let's see how we can enable autonomous driving mode, [click here](3_Autonomous_Driving.md) to learn more.
