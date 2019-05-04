@@ -63,4 +63,4 @@ Last, plug the camera into the Raspberry Pi Camera CSI interface and fix it in t
 
 <img src="../images/A10.jpg" width="400">
 
-Your car is ready, perfect! Next, let's install the software, click [here](https://github.com/christian-vorhemus/autcar/blob/master/docs/Software_Setup.md)
+Your car is ready, perfect! Next, let's install the software, click [here](docs/2_Software_Setup.md)
