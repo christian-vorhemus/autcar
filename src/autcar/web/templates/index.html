@@ -29,7 +29,7 @@
                 alert("IP address and port of car must be set");
                 return;
             } else if($("#address").val().indexOf(":") == -1) {
-                alert("Include the port the car is listening on like 192.168.1.121:8090");
+                alert("Include the port the car is listening on like 192.168.1.1:8090");
                 return; 
             }
             $('connectbutton').addClass('disabled');
@@ -95,7 +95,7 @@
     <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse" style="position:relative;background-color:black;">
         <a class="navbar-brand" href="#" style="color:white;">AutCar - Control Board</a>
         <div id="connectcontainer">
-            <input type="text" value="192.168.1.121:8090" placeholder="192.168.1.121:8090" style="font-size:22px;float:left;" id="address"> <a href="#" id="connectbutton" onclick="connect()" class="btn btn-success" style="float:right;margin-left:10px;">Connect</a>
+            <input type="text" value="192.168.1.1:8090" placeholder="192.168.1.1:8090" style="font-size:22px;float:left;" id="address"> <a href="#" id="connectbutton" onclick="connect()" class="btn btn-success" style="float:right;margin-left:10px;">Connect</a>
         </div>
         <div id="disconnectcontainer" style="display:none">
             <a href="#" onclick="disconnect()" class="btn btn-danger" style="float:right;margin-left:10px;">Disconnect</a>

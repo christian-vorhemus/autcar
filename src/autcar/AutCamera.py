@@ -58,7 +58,7 @@ class Camera:
         payload_size = struct.calcsize("L") 
         while True:
             while len(data) < payload_size:
-                data += clientsocket.recv(4096)
+                data += clientsocket.recv(100000)
 
             self.__nosignal = False
             packed_msg_size = data[:payload_size]
@@ -66,7 +66,7 @@ class Camera:
             msg_size = struct.unpack("L", packed_msg_size)[0]
 
             while len(data) < msg_size:
-                data += clientsocket.recv(4096)
+                data += clientsocket.recv(100000)
 
             frame_data = data[:msg_size]
             data = data[msg_size:]
@@ -114,12 +114,13 @@ class Camera:
                 print("New client connection")
                 while True:
                     ret, frame = self.__cam.read()
-                    encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 50]
-                    result, frame = cv2.imencode('.jpg', frame, encode_param)
+                    (w, h, c) = frame.shape
+                    frame = cv2.resize(frame,(200, 150))
                     data = pickle.dumps(frame)
                     print("sending data...")
                     tosend = struct.pack("L", len(data))+data
                     conn.sendall(tosend)
+                    time.sleep(3)
             except:
                 continue
             

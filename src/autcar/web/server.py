@@ -8,14 +8,24 @@ app = Flask(__name__)
 rc = None
 car_ip = ""
 car_port = 0
+connected = False
 
-def gen(camera):
+def gen():
+    global car_ip
+    global car_port
+    global connected
+    camera = None
     while True:
-        frame = camera.get_frame()
-        if(frame is None):
-            continue
-        yield (b'--frame\r\n'
-        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        if(car_port != 0):
+            if(connected == False):
+                camera = Camera(True, car_ip, car_port-1)
+                connected = True
+
+            frame = camera.get_frame()
+            if(frame is None):
+                continue
+            yield (b'--frame\r\n'
+            b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 @app.route('/')
 def home():
@@ -39,6 +49,9 @@ def connect():
 
     car_ip, car_port = address.split(":")
     car_port = int(car_port)
+
+    # return Response(status = 200)
+
     try:
         rc = RemoteController(car_ip, car_port)
         rc.connect()
@@ -95,7 +108,7 @@ def cmds():
 
 @app.route('/video')
 def video():
-    return Response(gen(Camera(True, "192.168.1.121", 8089)), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
  
 if __name__ == "__main__":
