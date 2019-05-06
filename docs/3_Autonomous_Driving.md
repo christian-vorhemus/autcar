@@ -89,6 +89,15 @@ Additionally, take the the following into account:
 
 ### 5) Run model on your AutCar
 
-- To do -
+1. Transfer your model to the autcar/src folder of your Raspberry Pi. Open an command prompt on your PC and type
+ ```
+ scp path/to/driver_model.onnx pi@192.168.1.101:/home/pi/autcar/src
+ ```
+ 
+2. On your Raspberry Pi shell, run `driver_sample.py` by typing
+ ```
+ python3 driver_sample.py
+ ```
 
+3. Your car should start moving after a few seconds. 
 <img src="../images/drive.gif" width="400">
