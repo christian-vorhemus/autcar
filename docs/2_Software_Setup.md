@@ -76,7 +76,7 @@ It can happen that installation fails due to network timeouts. In that case, jus
 
 ### 4) Download and install AutCar on your PC
 
-Before you start, make sure that you have **Python 3.5 or newer** installed on your PC!
+Before you start, make sure that you have **Python 3.5 or newer** installed on your PC! Follow [this](https://www.python.org/downloads/) download page to get Python.
 
 1) We also need the AutCar library on our PC. Download the zipped library using [this link](https://github.com/christian-vorhemus/autcar/archive/master.zip)
 
