@@ -75,7 +75,7 @@ Additionally, take the the following into account:
   ```
  python autcar/src/training_sample.py
   ```
-  Training will take 30-60 minutes with 20 epochs depending on your PC. The output should be a file named `driver_model.onnx`
+  Training will roughly take 30-60 minutes with ~2000 images and 20 epochs depending on your PC. The output should be a file named `driver_model.onnx`
 
 ### 4) Test your model
 
