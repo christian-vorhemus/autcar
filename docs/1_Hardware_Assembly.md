@@ -5,7 +5,7 @@ In this chapter you'll see how to assembly all the hardware parts to construct y
 ### 1) Prepare all parts
 Make sure you have all parts next to you before you start
 - The chassis (underbody)
-- 2x motors
+- 2x motors (we use 5V 28BYJ-48 stepper motors)
 - 2x motor-wheel connectors
 - Battery pack
 - Expansion board to connect motors and Raspberry Pi
@@ -14,6 +14,8 @@ Make sure you have all parts next to you before you start
 - Raspberry Pi 3
 - Raspberry Pi Camera
 - 2x screws
+
+Depending on where you live, you will get all these parts easily at your electronics retailer. The chassis and wheels can be 3D printed based on [these](https://github.com/christian-vorhemus/autcar/tree/master/3dmodels) models. If you don't want to collect the parts yourself, you can get a ready-to-use Dev Kit [here](https://www.autcar.com/index.php?route=product/product&product_id=50).
 
 Additionally, you will need the following:
 - Crosstip screwdriver
