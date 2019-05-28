@@ -52,9 +52,9 @@ Repeat with the second back wheel and plug the motor-wheel connector on the moto
 
 <img src="../images/A7.jpg" width="400">
 
-Afterwards, plug both motors into the motor bracket.
+Afterwards, plug both motors into the motor bracket. Make sure the motors are connected as shown in the image below.
 
-<img src="../images/A8.jpg" width="400">
+<img src="../images/A8_2.jpg" width="400">
 
 ### 4) Connect all parts
 Gently place the battery pack in the chassis and put the Raspberry Pi on top of it. There is no need to fasten it. Now, plug the motors into the expansion board and put the expansion board on the GPIO pins as shown in the image below:
