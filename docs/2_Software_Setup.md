@@ -14,7 +14,7 @@ You'll need the following:
 
 If you already have a Rasperry Pi 3 with the newest Raspbian Lite up and running, you can skip this section.
 
-1) Download Raspbian Lite from [here](https://www.raspberrypi.org/downloads/raspbian/)
+1) Download **Raspbian Stretch Lite** from [here](https://www.raspberrypi.org/downloads/raspbian/)
 2) Download a tool to write disk images to a SD card. On Windows, you can use [Win32 Disk Imager](https://www.heise.de/download/product/win32-disk-imager-92033)
 3) Download a SSH client, for example [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
 4) Plug a SD card to your computer, start your disk image writer and write the Raspian .img file to the card
