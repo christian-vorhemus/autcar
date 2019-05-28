@@ -20,20 +20,21 @@ If you already have a Rasperry Pi 3 with the newest Raspbian Lite up and running
 4) Plug a SD card to your computer, start your disk image writer and write the Raspian .img file to the card
 5) Open the /boot partition of the SD card, and create a new file named "wpa_supplicant.conf"
 6) Add the following content to the file but replace &lt;YOUR-WIFI-SSID&gt; and &lt;YOUR-WIFI-KEY&gt; with the SSID (name) and password of your WLAN access point.
-```
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-country=AT
+    ```
+    ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+    update_config=1
+    country=AT
 
-network={
-    ssid="<YOUR-WIFI-SSID>"
-    psk="<YOUR-WIFI-KEY>"
-    key_mgmt=WPA-PSK
-}
-```
-6) Create an empty file "ssh" (no file ending!) on /boot partition to enable ssh
-7) Start your Raspberry Pi and search on your WLAN access point which IP address your Raspberry Pi is using. Most access points provide a web interface you can use to find the IP address, however, the address of the web interface differrs from router to router. If you don't know it, open a browser and try 192.168.1.1, 10.0.0.1 or 10.0.0.138 to open the web interface and note down the IP address of your Raspberry.
-8) Open PuTTY, enter the IP address of your Raspberry Pi and click "Open". The default credentials are
+    network={
+        ssid="<YOUR-WIFI-SSID>"
+        psk="<YOUR-WIFI-KEY>"
+        key_mgmt=WPA-PSK
+    }
+    ```
+    If you use an unsecured access point (you shouldn't do this by the way) remove the `psk` key-value pair and add use `key_mgmt=NONE`
+7) Create an empty file "ssh" (no file ending!) on /boot partition to enable ssh
+8) Start your Raspberry Pi and search on your WLAN access point which IP address your Raspberry Pi is using. Most access points provide a web interface you can use to find the IP address, however, the address of the web interface differrs from router to router. If you don't know it, open a browser and try 192.168.1.1, 10.0.0.1 or 10.0.0.138 to open the web interface and note down the IP address of your Raspberry.
+9) Open PuTTY, enter the IP address of your Raspberry Pi and click "Open". The default credentials are
 ```
 Username: pi
 Password: raspberry
