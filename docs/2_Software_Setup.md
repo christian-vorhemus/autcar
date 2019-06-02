@@ -15,7 +15,7 @@ You'll need the following:
 If you already have a Rasperry Pi 3 with the newest Raspbian Lite up and running, you can skip this section.
 
 1) Download **Raspbian Stretch Lite** from [here](https://www.raspberrypi.org/downloads/raspbian/)
-2) Download a tool to write disk images to a SD card. On Windows, you can use [Win32 Disk Imager](https://www.heise.de/download/product/win32-disk-imager-92033)
+2) Download a tool to write disk images to a SD card. On Windows, you can use [Win32 Disk Imager](https://www.heise.de/download/product/win32-disk-imager-92033). On a Mac you may use [Etcher](https://www.balena.io/etcher/)
 3) Download a SSH client, for example [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
 4) Plug a SD card to your computer, start your disk image writer and write the Raspian .img file to the card
 5) Open the /boot partition of the SD card, and create a new file named "wpa_supplicant.conf"
