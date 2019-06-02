@@ -33,6 +33,7 @@ If you already have a Rasperry Pi 3 with the newest Raspbian Lite up and running
     ```
     If you use an unsecured access point (you shouldn't do this by the way) remove the `psk` key-value pair and set `key_mgmt` to `NONE`
 7) Create an empty file "ssh" (no file ending!) on /boot partition to enable ssh
+    <p><img src="../images/boot_files.png" width="400" margin="20"></p>
 8) Start your Raspberry Pi and search on your WLAN access point which IP address your Raspberry Pi is using. Most access points provide a web interface you can use to find the IP address, however, the address of the web interface differrs from router to router. If you don't know it, open a browser and try 192.168.1.1, 10.0.0.1 or 10.0.0.138 to open the web interface and note down the IP address of your Raspberry.
 9) Open PuTTY, enter the IP address of your Raspberry Pi and click "Open". The default credentials are
 ```
