@@ -44,7 +44,7 @@ Copy the following code into the file:
   
   This script creates a car object and calls the `move()` method which tells the car to drive forward. Then, we wait for three seconds until we stop the car.
  
- Lets play around with this methods even more: The following code generates a random integer between 0 and 3 and controlls the car based on this number. This happens 5 times until the car is stopped:
+ Let's play around with this methods even more: The following code generates a random integer between 0 and 3 and controls the car based on this number. This happens 5 times until the car is stopped:
   ```python
   from autcar import Car
   import random
@@ -67,7 +67,7 @@ Copy the following code into the file:
     
   car.stop()
   ```
-  You can pass arguments to the methods to specifiy in more detail what to do. For example, the first argument in `move()` method tells the car in which direction to move (supported are "forward" and "backwards"). The first argument in `left()` or `right()` tells the car how strong it should change the direction (supported are "light", "medium" and "harsh").
+  You can pass arguments to the methods to specify in more detail what to do. For example, the first argument in `move()` method tells the car in which direction to move (supported are "forward" and "backwards"). The first argument in `left()` or `right()` tells the car how strong it should change the direction (supported are "light", "medium" and "harsh").
   
 ## Create a live stream from your car
 
