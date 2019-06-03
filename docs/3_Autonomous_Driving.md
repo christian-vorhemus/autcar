@@ -84,7 +84,7 @@ Drive several rounds (we recommend to record at least 10 fully driven rounds) an
 2. Change the first parameter so it points to the .onnx model you created with `trainer.train()` and the second parameter to point to the balanced dataset `test_map.txt` file
 3. Run the function. You get two images as an output: A confusion matrix and a table containing several different scores:
 
-    <img src="../images/D3.jpg" width="400">
+    <img src="../images/D3_2.jpg" width="400">
     
  In this example you see that the model is pretty good at prediction "right" and "left" but confuses "left" and "forward" from time to time. In the table you see that the accuracy for prediction the class "forward" correctly is just about 60% - this is pretty low and tells us that we should improve the model in the next step.
 
