@@ -1,5 +1,9 @@
-from autcar import Car, Driver
+from autcar import Car, Driver, Camera, Model
 
 car = Car()
-driver = Driver("driver_model.onnx", car, capture_interval=2, rotation=-1)
+cam = Camera(rotation=-1)
+
+model = Model("driver_keras.onnx")
+
+driver = Driver([model], car, cam, execution_interval=2)
 driver.start()

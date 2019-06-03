@@ -20,9 +20,12 @@ parts/
 sdist/
 /src/ml
 driver_model.onnx
-rh_26042019_336x448_v1.onnx
-rh_29042019_168x224_v1.onnx
-rh.onnx
+driver_keras.onnx
+driver_keras_old.onnx
+driver_pytorch.onnx
+customvision.onnx
+pytorch.onnx
+driver_cntk.onnx
 car_cntk.model
 var/
 wheels/

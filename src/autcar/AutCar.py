@@ -102,7 +102,7 @@ class Car:
 
     def stop(self):
         """
-        Stops the car
+        Stops the motors of the car
         """
         try:
             self.__tleft.terminate()

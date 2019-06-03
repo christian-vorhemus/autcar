@@ -7,18 +7,18 @@ import os
 
 class Capture:
 
-    def __init__(self, car, capture_interval = 2, folder_name = "autcar_training", rotation = None):
+    def __init__(self, car, camera, capture_interval = 2, folder_name = "autcar_training"):
         """
         A capture object can be used to record training data while the car is driving
 
         @param car: The car object which is used to retrieve the current commands
         @param folder_name: The folder where training images and commands are stored
         @param capture_interval: Defines how often pictures are taken while recording. Default is 2 seconds
-        @param rotation: Defines if camera images should be rotated. Default is none, use -1 for 180 degree rotation
+        @param camera: A camera object used to take training pictures
         """
         self.__folder_name = folder_name
         self.__car = car
-        self.__cam = Camera(rotation=rotation)
+        self.__cam = camera
         self.__frame = None
         self.__proc = Thread(target=self.__record_data)
         self.__stop_recording = False
@@ -54,7 +54,13 @@ class Capture:
                 self.__last_timestamp = current_time
 
     def start(self):
+        """
+        Start the recording of camera images and car movements. Results are saved locally
+        """
         self.__proc.start()
 
     def stop(self):
+        """
+        Stops the recoding of images and car movements
+        """
         self.__stop_recording = True

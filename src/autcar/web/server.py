@@ -19,6 +19,7 @@ def gen():
         if(car_port != 0):
             if(connected == False):
                 camera = Camera(True, car_ip, car_port-1)
+                print("Camera object created on "+car_ip+":"+str(car_port-1))
                 connected = True
 
             frame = camera.get_frame()
@@ -49,8 +50,6 @@ def connect():
 
     car_ip, car_port = address.split(":")
     car_port = int(car_port)
-
-    # return Response(status = 200)
 
     try:
         rc = RemoteController(car_ip, car_port)

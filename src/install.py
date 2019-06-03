@@ -60,6 +60,9 @@ def install_gpio():
 def install_numpy():
     subprocess.check_call("sudo apt-get -y install python3-dev python3-numpy", shell=True)
 
+def install_pandas():
+    subprocess.check_call("python3 -m pip install pandas", shell=True)
+
 def uninstall_old_numpy():
     subprocess.check_call("python3 -m pip uninstall numpy --yes", shell=True)
 
@@ -124,6 +127,10 @@ def main():
     print("Install ONNXRuntime")
     install_onnxruntime()
     print("ONNXRuntime installed")
+
+    print("Install Pandas")
+    install_pandas()
+    print("Pandas installed")
 
     print("Uninstall old numpy version...")
     uninstall_old_numpy()
