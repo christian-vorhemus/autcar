@@ -24,27 +24,8 @@ class Trainer:
         self.__image_width = image_width
         self.__image_height = image_height
         self.__deeplearning_framework = deeplearning_framework
-        self.__commands = ['left_light_backwards', 'left_light_forward', 'left_medium_forward', 'left_medium_backwards', 'move_fast_forward', 'move_medium_backwards', 'move_medium_forward', 'right_light_backwards', 'right_light_forward', 'right_medium_backwards', 'right_medium_forward', 'stop']
-        # Label mapping
-        # 0 = left_light_backwards
+        self.__commands = ['left_light_backwards', 'left_light_forward', 'left_medium_backwards', 'left_medium_forward', 'move_fast_forward', 'move_medium_backwards', 'move_medium_forward', 'right_light_backwards', 'right_light_forward', 'right_medium_backwards', 'right_medium_forward', 'stop']
 
-
-    # def __save_mean(self, fname, image_width, image_height, data):
-    #     root = et.Element('opencv_storage')
-    #     et.SubElement(root, 'Channel').text = '3'
-    #     et.SubElement(root, 'Row').text = str(image_height)
-    #     et.SubElement(root, 'Col').text = str(image_width)
-    #     meanImg = et.SubElement(root, 'MeanImg', type_id='opencv-matrix')
-    #     et.SubElement(meanImg, 'rows').text = '1'
-    #     et.SubElement(meanImg, 'cols').text = str(image_height * image_width * 3)
-    #     et.SubElement(meanImg, 'dt').text = 'f'
-    #     et.SubElement(meanImg, 'data').text = ' '.join(['%e\n' % n if (i+1)%4 == 0 else '%e' % n for i, n in enumerate(np.reshape(data, (image_height * image_width * 3)))])
-
-    #     tree = et.ElementTree(root)
-    #     tree.write(fname)
-    #     x = xml.dom.minidom.parse(fname)
-    #     with open(fname, 'w') as f:
-    #         f.write(x.toprettyxml(indent = '  '))
 
     def __scale_image(self, image, width=None, height=None):
 
@@ -107,9 +88,6 @@ class Trainer:
         max_class = max(command_counter_start, key = lambda x: command_counter_start.get(x))
         maximum = command_counter_start[max_class]
 
-        # Just use a generic normalization by assuming 128 is the mean of every image
-        # dataMean = np.full((3*self.__image_height*self.__image_width,), 128)
-        # self.__save_mean(outputfolder_path+"/meanfile.xml", self.__image_width, self.__image_height, dataMean)
         train_file = open(outputfolder_path+"/train_map.txt","w+")
         test_file = open(outputfolder_path+"/test_map.txt","w+")
 

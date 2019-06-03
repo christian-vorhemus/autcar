@@ -22,9 +22,11 @@ sdist/
 driver_model.onnx
 driver_keras.onnx
 driver_keras_old.onnx
+trafficsign.onnx
 driver_pytorch.onnx
 customvision.onnx
 pytorch.onnx
+driver_sample2.py
 driver_cntk.onnx
 car_cntk.model
 var/

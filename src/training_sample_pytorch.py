@@ -7,7 +7,7 @@ image_width = 224
 image_height = 168
 
 trainer = Trainer(deeplearning_framework="pytorch", image_height=image_height, image_width=image_width)
-# trainer.create_balanced_dataset(input_folder_path, output_folder_path=output_folder_path)
+trainer.create_balanced_dataset(input_folder_path, output_folder_path=output_folder_path)
 
 class DriverNet(Module):
     def __init__(self):

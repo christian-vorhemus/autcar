@@ -1,4 +1,4 @@
 from autcar import Camera
 
-cam = Camera(rotation=-1)
+cam = Camera(capture=True, rotation=-1)
 cam.listen()

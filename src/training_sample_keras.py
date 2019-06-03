@@ -8,8 +8,7 @@ image_width = 224
 image_height = 168
 
 trainer = Trainer(deeplearning_framework="keras", image_height=image_height, image_width=image_width)
-# trainer.create_balanced_dataset(input_folder_path, output_folder_path=output_folder_path)
-# num_classes = trainer.get_no_classes(output_folder_path)
+trainer.create_balanced_dataset(input_folder_path, output_folder_path=output_folder_path)
 
 model = Sequential([
     InputLayer(input_shape=[3,image_height,image_width]),
@@ -32,5 +31,5 @@ model = Sequential([
     Dense(12, activation='softmax')
 ])
 
-# trainer.train(output_folder_path, model, epochs=2, output_model_path="driver_keras.onnx")
+trainer.train(output_folder_path, model, epochs=5, output_model_path="driver_keras.onnx")
 trainer.test("driver_keras.onnx", output_folder_path+"/test_map.txt")

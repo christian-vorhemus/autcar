@@ -109,6 +109,28 @@ class Camera:
     #         print("new image")
     #         return jpeg.tobytes()
 
+    def listen(self):
+        serversocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+        serversocket.bind((self.host, self.port))
+        serversocket.listen(10)
+        print('Camera socket now listening on ' + self.host + ":" + str(self.port))
+
+        while True:
+            try:
+                conn, addr = serversocket.accept()
+                print("New client connection")
+                while True:
+                    ret, frame = self.__cam.read()
+                    (w, h, c) = frame.shape
+                    frame = cv2.resize(frame,(200, 150))
+                    data = pickle.dumps(frame)
+                    print("sending data...")
+                    tosend = struct.pack("L", len(data))+data
+                    conn.sendall(tosend)
+                    time.sleep(3)
+            except:
+                continue
+
     def start(self):
         """
         Starts a live streaming camera session. Should be called on the device which wants to broadcast

@@ -8,8 +8,7 @@ image_width = 224
 image_height = 168
 
 trainer = Trainer(deeplearning_framework="cntk", image_height=image_height, image_width=image_width)
-#trainer.create_balanced_dataset(input_folder_path, output_folder_path=output_folder_path)
-num_classes = trainer.get_no_classes(output_folder_path)
+trainer.create_balanced_dataset(input_folder_path, output_folder_path=output_folder_path)
 
 model = Sequential([
     Convolution2D(filter_shape=(5,5), num_filters=32, strides=(1,1), pad=True, name="first_conv"),
@@ -32,5 +31,5 @@ model = Sequential([
     Dense(12, activation=softmax)
 ])
 
-# trainer.train(output_folder_path, model, epochs=4, output_model_path="driver_cntk.onnx")
+trainer.train(output_folder_path, model, epochs=4, output_model_path="driver_cntk.onnx")
 trainer.test("driver_cntk.onnx", output_folder_path+"/test_map.txt")
