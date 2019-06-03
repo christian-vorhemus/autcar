@@ -40,7 +40,8 @@ Additionally, take the the following into account:
 
 <img src="../images/D1.jpg" width="400">
 
-6. Start driving your car manually by using the control buttons while the "REC" icon is flashing. Drive several rounds (we recommend to record at least 10 fully driven rounds) and when you're done, press the "STOP" button.
+6. Start driving your car manually by using the control buttons while the "REC" icon is flashing. **Note**: If you want to make life easier for the model, use as few commands as possible, for example don't use fast mode, don't use the "light" left or right buttons. If you use them, the predictions may become less accurat.
+Drive several rounds (we recommend to record at least 10 fully driven rounds) and when you're done, press the "STOP" button.
 
 7. Stop the execution of the rc_sample.py script on your Raspberry by entering Ctrl+C and type
  ```
