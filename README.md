@@ -4,6 +4,7 @@ This is the source code for the AutCar project - Build your own autonomous drivi
 
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/christian-vorhemus/autcar.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/christian-vorhemus/autcar/alerts/)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/christian-vorhemus/autcar.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/christian-vorhemus/autcar/context:javascript)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rena2damas/remote-opencv-streaming-live-video/blob/master/LICENSE)
 
 ## Getting started
 
@@ -28,7 +29,9 @@ Do you have a car ready to go? Great, next please follow the guide [here](docs/2
 ### 3) Learn how to use the library
 
 The following tutorials are available at the moment:<p>
-~~[1. Basics - Learn how AutCar works in general](docs/4_AutCar_General.md)~~
+- ~~[1. Basics - Learn how AutCar works in general](docs/4_AutCar_General.md)~~
+- ~~[2. External models - Train a model in customvision.ai and use it in AutCar](docs/5_Customvision.md)~~
+- ~~[3. Execute multiple models simultaneously - Learn how to write your own execution function](docs/6_Execution_Function.md)~~
 
 ## FAQ & troubleshooting
 <i>Q: I have trained a machine learning model but the car is not following the lines.</i>

@@ -40,7 +40,8 @@ Additionally, take the the following into account:
 
 <img src="../images/D1.jpg" width="400">
 
-6. Start driving your car manually by using the control buttons while the "REC" icon is flashing. Drive several rounds (we recommend to record at least 10 fully driven rounds) and when you're done, press the "STOP" button.
+6. Start driving your car manually by using the control buttons while the "REC" icon is flashing. **Note**: If you want to make life easier for the model, use as few commands as possible, for example don't use fast mode, don't use the "light" left or right buttons. If you use them, the predictions may become less accurat.
+Drive several rounds (we recommend to record at least 10 fully driven rounds) and when you're done, press the "STOP" button.
 
 7. Stop the execution of the rc_sample.py script on your Raspberry by entering Ctrl+C and type
  ```
@@ -83,7 +84,7 @@ Additionally, take the the following into account:
 2. Change the first parameter so it points to the .onnx model you created with `trainer.train()` and the second parameter to point to the balanced dataset `test_map.txt` file
 3. Run the function. You get two images as an output: A confusion matrix and a table containing several different scores:
 
-    <img src="../images/D3.jpg" width="400">
+    <img src="../images/D3_2.jpg" width="400">
     
  In this example you see that the model is pretty good at prediction "right" and "left" but confuses "left" and "forward" from time to time. In the table you see that the accuracy for prediction the class "forward" correctly is just about 60% - this is pretty low and tells us that we should improve the model in the next step.
 
