@@ -75,7 +75,7 @@ Additionally, take the the following into account:
   ```
  python autcar/src/training_sample.py
   ```
-  Training will take 30-60 minutes with 20 epochs depending on your PC. The output should be a file named `driver_model.onnx`
+  Training will roughly take 30-60 minutes with ~2000 images and 20 epochs depending on your PC. The output should be a file named `driver_model.onnx`
 
 ### 4) Test your model
 
@@ -89,6 +89,15 @@ Additionally, take the the following into account:
 
 ### 5) Run model on your AutCar
 
-- To do -
+1. Transfer your model to the autcar/src folder of your Raspberry Pi. Open an command prompt on your PC and type
+ ```
+ scp path/to/driver_model.onnx pi@192.168.1.101:/home/pi/autcar/src
+ ```
+ 
+2. On your Raspberry Pi shell, run `driver_sample.py` by typing
+ ```
+ python3 driver_sample.py
+ ```
 
+3. Your car should start moving after a few seconds. 
 <img src="../images/drive.gif" width="400">

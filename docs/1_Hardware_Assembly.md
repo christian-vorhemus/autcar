@@ -5,7 +5,7 @@ In this chapter you'll see how to assembly all the hardware parts to construct y
 ### 1) Prepare all parts
 Make sure you have all parts next to you before you start
 - The chassis (underbody)
-- 2x motors
+- 2x motors (we use 5V 28BYJ-48 stepper motors)
 - 2x motor-wheel connectors
 - Battery pack
 - Expansion board to connect motors and Raspberry Pi
@@ -14,6 +14,8 @@ Make sure you have all parts next to you before you start
 - Raspberry Pi 3
 - Raspberry Pi Camera
 - 2x screws
+
+Depending on where you live, you will get all these parts easily at your electronics retailer. The chassis and wheels can be 3D printed based on [these](https://github.com/christian-vorhemus/autcar/tree/master/3dmodels) models. If you don't want to collect the parts yourself, you can get a ready-to-use Dev Kit [here](https://www.autcar.com/index.php?route=product/product&product_id=50).
 
 Additionally, you will need the following:
 - Crosstip screwdriver
@@ -50,9 +52,9 @@ Repeat with the second back wheel and plug the motor-wheel connector on the moto
 
 <img src="../images/A7.jpg" width="400">
 
-Afterwards, plug both motors into the motor bracket.
+Afterwards, plug both motors into the motor bracket. Make sure the motors are connected as shown in the image below.
 
-<img src="../images/A8.jpg" width="400">
+<img src="../images/A8_2.jpg" width="400">
 
 ### 4) Connect all parts
 Gently place the battery pack in the chassis and put the Raspberry Pi on top of it. There is no need to fasten it. Now, plug the motors into the expansion board and put the expansion board on the GPIO pins as shown in the image below:
@@ -63,4 +65,4 @@ Last, plug the camera into the Raspberry Pi Camera CSI interface and fix it in t
 
 <img src="../images/A10.jpg" width="400">
 
-Your car is ready, perfect! Next, let's install the software, click [here](https://github.com/christian-vorhemus/autcar/blob/master/docs/Software_Setup.md)
+Your car is ready, perfect! Next, let's install the software, click [here](2_Software_Setup.md)

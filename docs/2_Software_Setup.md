@@ -14,26 +14,28 @@ You'll need the following:
 
 If you already have a Rasperry Pi 3 with the newest Raspbian Lite up and running, you can skip this section.
 
-1) Download Raspbian Lite from [here](https://www.raspberrypi.org/downloads/raspbian/)
-2) Download a tool to write disk images to a SD card. On Windows, you can use [Win32 Disk Imager](https://www.heise.de/download/product/win32-disk-imager-92033)
+1) Download **Raspbian Stretch Lite** from [here](https://www.raspberrypi.org/downloads/raspbian/)
+2) Download a tool to write disk images to a SD card. On Windows, you can use [Win32 Disk Imager](https://www.heise.de/download/product/win32-disk-imager-92033). On a Mac you may use [Etcher](https://www.balena.io/etcher/)
 3) Download a SSH client, for example [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
 4) Plug a SD card to your computer, start your disk image writer and write the Raspian .img file to the card
 5) Open the /boot partition of the SD card, and create a new file named "wpa_supplicant.conf"
 6) Add the following content to the file but replace &lt;YOUR-WIFI-SSID&gt; and &lt;YOUR-WIFI-KEY&gt; with the SSID (name) and password of your WLAN access point.
-```
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-country=AT
+    ```
+    ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+    update_config=1
+    country=AT
 
-network={
-    ssid="<YOUR-WIFI-SSID>"
-    psk="<YOUR-WIFI-KEY>"
-    key_mgmt=WPA-PSK
-}
-```
-6) Create an empty file "ssh" (no file ending!) on /boot partition to enable ssh
-7) Start your Raspberry Pi and search on your WLAN access point which IP address your Raspberry Pi is using. Most access points provide a web interface you can use to find the IP address, however, the address of the web interface differrs from router to router. If you don't know it, open a browser and try 192.168.1.1, 10.0.0.1 or 10.0.0.138 to open the web interface and note down the IP address of your Raspberry.
-8) Open PuTTY, enter the IP address of your Raspberry Pi and click "Open". The default credentials are
+    network={
+        ssid="<YOUR-WIFI-SSID>"
+        psk="<YOUR-WIFI-KEY>"
+        key_mgmt=WPA-PSK
+    }
+    ```
+    If you use an unsecured access point (you shouldn't do this by the way) remove the `psk` key-value pair and set `key_mgmt` to `NONE`
+7) Create an empty file "ssh" (no file ending!) on /boot partition to enable ssh
+    <p><img src="../images/boot_files.png" width="400" margin="20"></p>
+8) Start your Raspberry Pi and search on your WLAN access point which IP address your Raspberry Pi is using. Most access points provide a web interface you can use to find the IP address, however, the address of the web interface differrs from router to router. If you don't know it, open a browser and try 192.168.1.1, 10.0.0.1 or 10.0.0.138 to open the web interface and note down the IP address of your Raspberry.
+9) Open PuTTY, enter the IP address of your Raspberry Pi and click "Open". The default credentials are
 ```
 Username: pi
 Password: raspberry
@@ -66,7 +68,7 @@ cd autcar/src/
 ```
 python3 install.py
 ```
-Installation can take up to 1 hour on a Raspberry Pi 3. A restart is required after the installation and will be performed automatically. If you want to prevent that, use the --prevent-reboot flag
+Installation can take 30 to 60 minutes on a Raspberry Pi 3. A restart is required after the installation and will be performed automatically. If you want to prevent that, use the --prevent-reboot flag
 
 ```
 python3 install.py --prevent-reboot
@@ -76,7 +78,7 @@ It can happen that installation fails due to network timeouts. In that case, jus
 
 ### 4) Download and install AutCar on your PC
 
-Before you start, make sure that you have **Python 3.5 or newer** installed on your PC!
+Before you start, make sure that you have **Python 3.5 or newer** installed on your PC! Follow [this](https://www.python.org/downloads/) download page to get Python.
 
 1) We also need the AutCar library on our PC. Download the zipped library using [this link](https://github.com/christian-vorhemus/autcar/archive/master.zip)
 
@@ -103,4 +105,4 @@ pip install -r autcar/web/requirements.txt
 4. Enter the IP address and port of the car in the right upper corner and click on "Connect"<br>
 5. Click on the car control buttons to manually move the car.
 
-You should now be able to control the car manually, great! Next, let's see how we can enable autonomous driving mode, [click here](https://github.com/christian-vorhemus/autcar/blob/master/docs/Autonomous_Driving.md) to learn more.
+You should now be able to control the car manually, great! Next, let's see how we can enable autonomous driving mode, [click here](3_Autonomous_Driving.md) to learn more.

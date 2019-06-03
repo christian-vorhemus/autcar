@@ -19,16 +19,16 @@ Or, collect (and 3D print) all the parts yourself. You will need the following:
 4) A battery pack to run your Raspberry Pi.
 5) 3D printed chassis and wheels. You can find sample models [here](https://github.com/christian-vorhemus/autcar/tree/master/3dmodels).
 
-Please check [this document](https://github.com/christian-vorhemus/autcar/blob/master/docs/Hardware_Assembly.md) to learn how to assembly all parts.
+Please check [this document](docs/1_Hardware_Assembly.md) to learn how to assembly all parts.
 
 ### 2) Software setup
 
-Do you have a car ready to go? Great, next please follow the guide [here](https://github.com/christian-vorhemus/autcar/blob/master/docs/Software_Setup.md) to install all dependencies and start the car.
+Do you have a car ready to go? Great, next please follow the guide [here](docs/2_Software_Setup.md) to install all dependencies and start the car.
 
 ### 3) Learn how to use the library
 
 The following tutorials are available at the moment:<p>
-[1. Basics - Learn how AutCar works in general](https://github.com/christian-vorhemus/autcar/blob/master/docs/1_AutCar_General.md)
+~~[1. Basics - Learn how AutCar works in general](docs/4_AutCar_General.md)~~
 
 ## FAQ & troubleshooting
 <i>Q: I have trained a machine learning model but the car is not following the lines.</i>
