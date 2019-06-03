@@ -1,10 +1,10 @@
 # Overview of AutCar
 
-This tutorial gives an overview of the AutCar library and some detailed information about the training process and useful methods. As a prerequisites, make sure that your car is [assembled](https://github.com/christian-vorhemus/autcar/blob/master/docs/1_Hardware_Assembly.md), the [software is installed](https://github.com/christian-vorhemus/autcar/blob/master/docs/2_Software_Setup.md) and you have an open SSH connection to your car.
+This tutorial gives some hands-on experience with the AutCar library more information about the training process and useful methods. As a prerequisites, make sure that your car is [assembled](https://github.com/christian-vorhemus/autcar/blob/master/docs/1_Hardware_Assembly.md), the [software is installed](https://github.com/christian-vorhemus/autcar/blob/master/docs/2_Software_Setup.md) and you have an open SSH connection to your car.
 
 ## The library
 
-The AutCar library consists of indepependent modules depicted in the image below:
+The AutCar library consists of independent modules depicted in the image below:
 
 <img src="../images/autcar_stack.jpg" width="700">
 
@@ -71,14 +71,29 @@ Copy the following code into the file:
   
 ## Create a live stream from your car
 
-Let's take a look at some code how we can open a connection from our PC to the camera of our car. Create a file called 
+Let's take a look at some code how we can open a connection from our PC to the camera of our car. Create a file called `camera_test.py` on your car and copy and paste the following content:
   ```python
   from autcar import Camera
 
-  cam = Camera(rotation=-1)
+  cam = Camera(capture=True, rotation=-1)
   cam.listen()
   ```
+  
+  Execute the code with
+   ```
+   python3 camera_test.py
+  ```
+  
+  Your car is now listening on port 8089 for interested live stream viewers. The `capture=True` argument tells the camera to listen for other computers for connections, the `roatation=-1` argument flips the images by 180 degrees. This is necessary because the camera is mounted reversed in AutCar.
+  
+  On your PC, go to your autcar src folder and enter
+   ```
+   python autcar/web/server.py
+  ```
+  to start the AutCar Control Board server. Open a browser, enter http://localhost:8080 and 
 
 ## Create training data
 
-If our car should drive autonomously, we have to teach it how to drive. For this reason, we have to save
+If our car should drive autonomously, we have to teach it how to drive. And we want the car to learn how to drive from camera images only. To do so, we have to manually drive the car and capture all the images the car sees including the commands we used to control the car. Luckily, the AutCapture module does most of the job for us, but let's take a look at what happens here from scratch.
+
+Create a new file called `capture_test.py` and add the following code
