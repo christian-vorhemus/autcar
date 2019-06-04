@@ -79,6 +79,8 @@ Drive several rounds (we recommend to record at least 10 fully driven rounds) an
     
  The confusion matrix compares the predictions the model makes with the expected values (ground truth). Take a look at the first column: It contains all the predictions the model made for driving left. And as you see in the first row, the majority of predictions for driving left were actually correct. In the second row (still first column) you see in some cases the model predicted to drive left when actually driving forward was the correct command. This rectangle is light grey, it means we have fewer predictions on this (wrong) label than for the right class. Ideally, our confusion matrix shows us a diagonal black line from top left to bottom right.
  
+ **Note**: In the case above, we just used three commands. If you used more commands during data collection, your confusion matrix will contain more rows and columns.
+ 
  In the table you see that the accuracy for predicting the class "forward" correctly is 71% - this is okay but we could do better, we'll take a look on how we increase accuracy of our models in one of our tutorials.
 
 ### 5) Run model on your AutCar
