@@ -84,7 +84,7 @@ Let's take a look at some code how we can open a connection from our PC to the c
    python3 camera_test.py
   ```
   
-  Your car is now listening on port 8089 for interested live stream viewers. The `capture=True` argument tells the camera to listen for other computers for connections, the `roatation=-1` argument flips the images by 180 degrees. This is necessary because the camera is mounted reversed in AutCar.
+  Your car is now listening on port 8089 for interested live stream viewers. The `capture=True` argument tells the camera to listen for other computers for connections, the `rotation=-1` argument flips the images by 180 degrees. This is necessary because the camera is mounted reversed in AutCar.
   
   On your PC, go to your autcar src folder and enter
    ```
