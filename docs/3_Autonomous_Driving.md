@@ -68,17 +68,16 @@ Drive several rounds (we recommend to record at least 10 fully driven rounds) an
   ```
  python src/training_sample_keras.py
   ```
-  Training will roughly take 30-60 minutes with ~2000 images and 20 epochs depending on your PC. The output should be a file named `driver_keras.onnx`
+ Training will roughly take 30-60 minutes with ~2000 images and 20 epochs depending on your PC. The output should be a file named `driver_keras.onnx`
 
 ### 4) Test your model
 
-1. After training, we call the method `trainer.test()` to test how well out model performs. The method `trainer.create_balanced_dataset()` has created two files for us, `train_map.txt` and `test_map.txt`. 
-2. Change the first parameter so it points to the .onnx model you created with `trainer.train()` and the second parameter to point to the balanced dataset `test_map.txt` file
-3. Run the function. You get two images as an output: A confusion matrix and a table containing several different scores:
+1. After training, we call the method `trainer.test()` to test how well out model performs. The method `trainer.create_balanced_dataset()` has created two files for us, `train_map.txt` and `test_map.txt`. `train_map.txt` contains a list of path to images and the corresponding command we want to predict. `test_map.txt` was not used for training but can now be used to evaluate the model.
+2. When you run `trainer.test()` you get two images as an output: A confusion matrix and a table containing several different scores:
 
     <img src="../images/D3_2.jpg" width="400">
     
- The confusion matrix compares the predictions the model makes with the expected values (ground truth). Take a look at the first column: It contains all the predictions the model made for driving left. And as you see in the first row, the majority of predictions for driving left were actually correct. Ideally, our confusion matrix shows us a diagonal black line from top left to bottom right.
+ The confusion matrix compares the predictions the model makes with the expected values (ground truth). Take a look at the first column: It contains all the predictions the model made for driving left. And as you see in the first row, the majority of predictions for driving left were actually correct. In the second row (still first column) you see in some cases the model predicted to drive left when actually driving forward was the correct command. This rectangle is light grey, it means we have fewer predictions on this (wrong) label than for the right class. Ideally, our confusion matrix shows us a diagonal black line from top left to bottom right.
  
  In the table you see that the accuracy for predicting the class "forward" correctly is 71% - this is okay but we could do better, we'll take a look on how we increase accuracy of our models in one of our tutorials.
 
