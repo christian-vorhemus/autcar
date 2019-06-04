@@ -42,7 +42,7 @@ Additionally, take the the following into account:
 
 6. Start driving your car manually by using the control buttons while the "REC" icon is flashing. Drive several rounds (we recommend to record at least 10 fully driven rounds) and when you're done, press the "STOP" button.
 
-7. Stop the execution of the rc_sample.py script on your Raspberry by entering Ctrl+C and type
+7. Stop the execution of the `rc_sample.py` script on your Raspberry by entering Ctrl+C and type
  ```
  ls
  ```
