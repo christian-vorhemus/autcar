@@ -92,6 +92,10 @@ Let's take a look at some code how we can open a connection from our PC to the c
   ```
   to start the AutCar Control Board server. Open a browser, enter http://localhost:8080 and 
 
+## Listen for commands and send commands
+
+<To-do>
+
 ## Create training data
 
 If our car should drive autonomously, we have to teach it how to drive. And we want the car to learn how to drive from camera images only. To do so, we have to manually drive the car and capture all the images the car sees including the commands we used to control the car. Luckily, the AutCapture module does most of the job for us, but let's take a look at what happens here from scratch.
