@@ -29,7 +29,7 @@ Additionally, take the the following into account:
 
 2. On your PC, start the web client with
  ```
- python autcar/src/autcar/web/server.py
+ python src/autcar/web/server.py
  ```
 
 3. In the AutCar Control Board, connect to your car by entering the IP address and port in the upper right corner, click "Connect" and try if the connection works by clicking one of the control buttons.
