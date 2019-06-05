@@ -83,12 +83,15 @@ Create a new file `rc_test.py` on your car. Copy the following code into it:
   rc = RemoteController()
   rc.listen()
 
-  while True:
-    cmd = rc.get_cmds()
-    if(cmd == "forward"):
-      car.move()
-    elif(cmd == "stop"):
-      car.stop()
+  try:
+    while True:
+      cmd = rc.get_cmds()
+      if(cmd == "forward"):
+        car.move()
+      elif(cmd == "stop"):
+        car.stop()
+  except KeyboardInterrupt:
+    rc.close()
   ```
 
 With `rc = RemoteController()` we create a new RemoteController object. This object holds all the methods and properties we need to establish a connection between two car and the PC. With `rc.listen()` we tell the car to listen for incoming commands. Since we don't want to just process one command, we wrap the code into a while loop to continuously fetch new commands from the socket. In this example we just allow two commands: Move the car forward or stop the car.
@@ -97,6 +100,23 @@ Next we're going to write a simple script that allows users to enter commands on
 
   ```python
   from autcar import RemoteController
+  
+  rc = RemoteController(host = "192.168.1.1")
+  rc.connect()
+  
+  print("Enter 'f' to drive forward or 's' to stop the car:")
+  
+  try:
+    while True:
+      cmd = input("> ")
+      if(cmd == "f"):
+        rc.send_cmd("forward")
+      elif(cmd == "s"):
+        rc.send_cmd("stop"):
+      else:
+        print("Unknown command, enter 'f' or 's'")
+  except KeyboardInterrupt:
+    rc.close()
   ```
 
 ## Create a live stream from your car
