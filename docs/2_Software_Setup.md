@@ -98,7 +98,7 @@ pip install -r autcar/web/requirements.txt
 
 2. On your PC, start the web client with
  ```
- python autcar/src/autcar/web/server.py
+ python autcar/web/server.py
  ```
 3. Open a browser and enter the address http://localhost:8080. You should now see the AutCar Control Board:
     <p><img src="../images/autcar_controlboard.png" width="400" margin="20"></p>
