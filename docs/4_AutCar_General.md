@@ -44,7 +44,7 @@ Copy the following code into the file:
   
   This script creates a car object and calls the `move()` method which tells the car to drive forward. Then, we wait for three seconds until we stop the car.
  
- Lets play around with this methods even more: The following code generates a random integer between 0 and 3 and controlls the car based on this number. This happens 5 times until the car is stopped:
+ Let's play around with this methods even more: The following code generates a random integer between 0 and 3 and controls the car based on this number. This happens 5 times until the car is stopped:
   ```python
   from autcar import Car
   import random
@@ -67,16 +67,66 @@ Copy the following code into the file:
     
   car.stop()
   ```
-  You can pass arguments to the methods to specifiy in more detail what to do. For example, the first argument in `move()` method tells the car in which direction to move (supported are "forward" and "backwards"). The first argument in `left()` or `right()` tells the car how strong it should change the direction (supported are "light", "medium" and "harsh").
+  You can pass arguments to the methods to specify in more detail what to do. For example, the first argument in `move()` method tells the car in which direction to move (supported are "forward" and "backwards"). The first argument in `left()` or `right()` tells the car how strong it should change the direction (supported are "light", "medium" and "harsh").
+
+## Listen for commands and send commands
+
+It's nice to control the car directly on the car - but sometimes we want to send data from an external computer to the vehicle - that's what the _AutRemoteController_ module is for. Let's write two things now: A script that runs on your car listening ffor external commands and a script for your PC sending commands to the car.
+
+Create a new file `rc_test.py` on your car. Copy the following code into it:
+
+  ```python
+  from autcar import RemoteController, Car
+  import time
   
+  car = Car()
+  rc = RemoteController()
+  rc.listen()
+
+  try:
+    while True:
+      cmd = rc.get_cmds()
+      if(cmd == "forward"):
+        car.move()
+      elif(cmd == "stop"):
+        car.stop()
+  except KeyboardInterrupt:
+    rc.close()
+  ```
+
+With `rc = RemoteController()` we create a new RemoteController object. This object holds all the methods and properties we need to establish a connection between the car and the PC. With `rc.listen()` we tell the car to listen for incoming commands. Since we don't want to just process one command, we wrap the code into a while loop to continuously fetch new commands from the socket. In this example we just allow two commands: Move the car forward or stop the car.
+
+Next we're going to write a simple script that allows users to enter commands on the command line which are then sent to the car:
+
+  ```python
+  from autcar import RemoteController
+  
+  rc = RemoteController(host = "192.168.1.1")
+  rc.connect()
+  
+  print("Enter 'f' to drive forward or 's' to stop the car:")
+  
+  try:
+    while True:
+      cmd = input("> ")
+      if(cmd == "f"):
+        rc.send_cmd("forward")
+      elif(cmd == "s"):
+        rc.send_cmd("stop"):
+      else:
+        print("Unknown command, enter 'f' or 's'")
+  except KeyboardInterrupt:
+    rc.close()
+  ```
+
 ## Create a live stream from your car
 
 Let's take a look at some code how we can open a connection from our PC to the camera of our car. Create a file called `camera_test.py` on your car and copy and paste the following content:
   ```python
   from autcar import Camera
 
-  cam = Camera(capture=True, rotation=-1)
-  cam.listen()
+  cam = Camera(rotation=-1)
+  cam.start()
   ```
   
   Execute the code with
@@ -84,13 +134,13 @@ Let's take a look at some code how we can open a connection from our PC to the c
    python3 camera_test.py
   ```
   
-  Your car is now listening on port 8089 for interested live stream viewers. The `capture=True` argument tells the camera to listen for other computers for connections, the `roatation=-1` argument flips the images by 180 degrees. This is necessary because the camera is mounted reversed in AutCar.
+  Your car is now listening on port 8089 for interested live stream viewers. The `rotation=-1` argument flips the images by 180 degrees. This is necessary because the camera is mounted reversed in AutCar.
   
   On your PC, go to your autcar src folder and enter
    ```
    python autcar/web/server.py
   ```
-  to start the AutCar Control Board server. Open a browser, enter http://localhost:8080 and 
+  to start the AutCar Control Board server. Open a browser, enter the address http://localhost:8080 and enter the IP address of your car in the right upper corner. Click "Connect" and you should see the live stream in a second.
 
 ## Create training data
 
