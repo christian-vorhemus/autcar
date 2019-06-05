@@ -87,6 +87,8 @@ Before you start, make sure that you have **Python 3.5 or newer** installed on y
 pip install -r autcar/web/requirements.txt
 ```
 
+If you get the message that pip is not recognized as an internal or external command, make sure to add the pip binary to the PATH variable. For Windows, this procedure is described [here](https://projects.raspberrypi.org/en/projects/using-pip-on-windows/5).
+
 ### 5) Connect to your car and drive!
 
 1. On your Raspberry Pi, start the sample remote control script rc_sample.py
