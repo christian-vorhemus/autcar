@@ -73,7 +73,7 @@ Copy the following code into the file:
 
 It's nice to control the car directly on the car - but sometimes we want to send data from an external computer to the vehicle - that's what the _AutRemoteController_ module is for. Let's write two things now: A script that runs on your car listening ffor external commands and a script for your PC sending commands to the car.
 
-Create a new file `rc_test.py` on your car. Copy the following code into the file:
+Create a new file `rc_test.py` on your car. Copy the following code into it:
 
   ```python
   from autcar import RemoteController, Car
