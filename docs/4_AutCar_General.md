@@ -75,8 +75,8 @@ Let's take a look at some code how we can open a connection from our PC to the c
   ```python
   from autcar import Camera
 
-  cam = Camera(capture=True, rotation=-1)
-  cam.listen()
+  cam = Camera(rotation=-1)
+  cam.start()
   ```
   
   Execute the code with
