@@ -1,5 +1,6 @@
-flask
+Flask
 numpy
+opencv-python
 onnxruntime
 onnxmltools
 Pillow

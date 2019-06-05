@@ -12,7 +12,6 @@ import xml.etree.cElementTree as et
 import xml.dom.minidom
 from PIL import Image
 import onnxruntime as rt
-import pandas as pd
 import matplotlib.pyplot as plt
 
 class Trainer:
@@ -204,6 +203,7 @@ class Trainer:
         from keras.preprocessing.image import ImageDataGenerator
         from keras import Model
         import onnxmltools
+        import pandas as pd
 
         model: Model = model_definition
 
@@ -248,6 +248,7 @@ class Trainer:
         from torch.nn import CrossEntropyLoss, Module
         from torch.optim import Adam
         from torchvision.datasets import MNIST
+        import pandas as pd
 
         minibatch_size = 16
         num_channels = 3
@@ -351,6 +352,7 @@ class Trainer:
         from cntk.logging import ProgressPrinter
         from cntk.losses import cross_entropy_with_softmax
         from cntk import classification_error, softmax, relu, ModelFormat, element_times, momentum_schedule, momentum_sgd
+        import pandas as pd
 
         path_to_folder = path_to_folder.rstrip('/')
 
