@@ -2,6 +2,7 @@ import cv2
 import pickle
 import numpy as np
 import struct
+import base64
 import socket
 import threading
 import os
@@ -10,11 +11,11 @@ import subprocess
 
 class Camera:
 
-    def __init__(self, capture = False, host = 'localhost', port = 8089, rotation = None):
+    def __init__(self, connect_camera = False, host = 'localhost', port = 8089, rotation = None, capture_interval = 1):
         """
         A camera object which is used to capture single images from a camera or start a live stream. It uses OpenCV under the hood.
 
-        @param capture: If True, a camera socket is opened, default is false
+        @param connect_camera: If True, a socket connection is opened to the address and sport specified in the constructor
         @param host: Defines the name of the host for camera strean. Default is localhost
         @param port: Defines the port the camera is using for sending live images. Default to 8089
         @param rotation: Defines if camera images should be rotated. Default is none, use -1 for 180 degree rotation
@@ -26,24 +27,22 @@ class Camera:
         self.__nosignal = True
         self.__proc = threading.Thread(target=self.__listen_socket)
         self.__stop_sending = False
+        self.__capture_interval = capture_interval
         # Load Rasperry Pi Cam kernel module bcm2835-v4l2
         try:
             subprocess.check_call("sudo modprobe bcm2835-v4l2", shell=True)
         except:
             print("Warning: Couldn't load bcm2835-v4l2 kernel module")
         self.__cam = cv2.VideoCapture(0)
-        if(capture):
+        if(connect_camera):
             threading.Thread(target=self.__frame_updater).start()
 
     def get_frame(self):
         """
         Returns the current camera frame as byte object
         """
-        if(self.__nosignal == False):
-            return self.__frame
-        else:
-            fr = None
-            return fr
+        return self.__frame
+
 
     def read(self):
         """
@@ -64,72 +63,42 @@ class Camera:
             return
 
         data = b""
-        payload_size = struct.calcsize("L") 
-        while True:
-            while len(data) < payload_size:
-                data += clientsocket.recv(4096)
-
-            self.__nosignal = False
-            packed_msg_size = data[:payload_size]
-            data = data[payload_size:]
-            msg_size = struct.unpack("L", packed_msg_size)[0]
-
-            while len(data) < msg_size:
-                data += clientsocket.recv(65536)
-
-            frame_data = data[:msg_size]
-            data = data[msg_size:]
-
-            frame = pickle.loads(frame_data, encoding='latin1')
-            ret, jpeg = cv2.imencode('.jpg', frame)
-            self.__frame = jpeg.tobytes()
-
-    # def connect(self, host = 'localhost', port = 8089):
-    #     clientsocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    #     clientsocket.connect((host, port))
-
-    #     data = b""
-    #     payload_size = struct.calcsize("L") 
-    #     while True:
-    #         while len(data) < payload_size:
-    #             data += clientsocket.recv(4096)
-
-    #         packed_msg_size = data[:payload_size]
-    #         data = data[payload_size:]
-    #         msg_size = struct.unpack("L", packed_msg_size)[0]
-
-    #         while len(data) < msg_size:
-    #             data += clientsocket.recv(4096)
-
-    #         frame_data = data[:msg_size]
-    #         data = data[msg_size:]
-
-    #         frame = pickle.loads(frame_data, encoding='latin1')
-    #         # ret, jpeg = cv2.imencode('.jpg', frame)
-    #         print("new image")
-    #         return jpeg.tobytes()
-
-    def listen(self):
-        serversocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        serversocket.bind((self.host, self.port))
-        serversocket.listen(10)
-        print('Camera socket now listening on ' + self.host + ":" + str(self.port))
-
+        self.__nosignal = False
+        payload_size = struct.calcsize("<L")
         while True:
             try:
-                conn, addr = serversocket.accept()
-                print("New client connection")
-                while True:
-                    ret, frame = self.__cam.read()
-                    (w, h, c) = frame.shape
-                    frame = cv2.resize(frame,(200, 150))
-                    data = pickle.dumps(frame)
-                    print("sending data...")
-                    tosend = struct.pack("L", len(data))+data
-                    conn.sendall(tosend)
-                    time.sleep(3)
-            except:
-                continue
+                while len(data) < payload_size:
+                    data += clientsocket.recv(4096)
+
+                frame_size = struct.unpack("<L", data[:payload_size])[0]
+                data = data[payload_size:]
+
+                while len(data) < frame_size:
+                    data += clientsocket.recv(16384)
+
+                frame_data = data[:frame_size]
+                data = data[frame_size:]
+
+                img = base64.b64decode(frame_data)
+                npimg = np.fromstring(img, dtype=np.uint8)
+                frame = cv2.imdecode(npimg, 1)
+
+                #cv2.imwrite("img.jpg", frame)
+
+                ret, jpeg = cv2.imencode('.jpg', frame)
+                self.__frame = jpeg.tobytes()
+
+
+            except (socket.error,socket.timeout) as e:
+                # The timeout got reached or the client disconnected. Clean up the mess.
+                print("Cleaning up: ",e)
+                try:
+                    clientsocket.close()
+                except socket.error:
+                    pass
+                nosignal = True
+                break
+
 
     def start(self):
         """
@@ -148,25 +117,29 @@ class Camera:
         serversocket.bind((self.host, self.port))
         serversocket.listen(10)
         print('Camera socket now listening on ' + self.host + ":" + str(self.port))
-        encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),90]
 
-        while True:
-            if(self.__stop_sending):
-                serversocket.close()
-                break
-            try:
-                conn, addr = serversocket.accept()
-                print("New client connection")
-                while True:
-                    ret, frame = self.__cam.read()
-                    (w, h, c) = frame.shape
-                    frame = cv2.resize(frame,(200, 150))
-                    data = pickle.dumps(frame)
-                    print("sending data...")
-                    tosend = struct.pack("L", len(data))+data
-                    conn.sendall(tosend)
+        conn, addr = serversocket.accept()
+        print("New client connection")
+        last_timestamp = time.time()
 
-                    time.sleep(3)
-            except:
-                continue
+        while not self.__stop_sending:
+
+            ret, frame = self.read()
+            current_time = time.time()
+
+            if(current_time - last_timestamp > self.__capture_interval):
+                last_timestamp = current_time
+                frame = cv2.resize(frame,(200, 150))
+                encoded, buffer = cv2.imencode('.jpg', frame)
+                b_frame = base64.b64encode(buffer)
+                b_size = len(b_frame)
+                print("Frame size = ", b_size)
+                try:
+                    conn.sendall(struct.pack("<L", b_size) + b_frame)
+                except socket.error as e:
+                    print("Socket Error: "+str(e))
+                    self.__stop_sending = True
+                    conn.close()
+                    serversocket.close()
+
             

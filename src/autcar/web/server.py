@@ -7,23 +7,27 @@ from AutRemoteController import RemoteController
 app = Flask(__name__)
 rc = None
 car_ip = ""
+camera_port = 0
 car_port = 0
 connected = False
 
 def gen():
     global car_ip
+    global camera_port
     global car_port
     global connected
     camera = None
     while True:
-        if(car_port != 0):
+        if(camera_port != 0):
             if(connected == False):
-                camera = Camera(True, car_ip, car_port-1)
-                print("Camera object created on "+car_ip+":"+str(car_port-1))
+                camera = Camera(True, car_ip, camera_port)
+                print("Camera object created on "+car_ip+":"+str(camera_port))
                 connected = True
 
             frame = camera.get_frame()
+
             if(frame is None):
+                time.sleep(1)
                 continue
             yield (b'--frame\r\n'
             b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
@@ -45,11 +49,18 @@ def connect():
     global rc
     global car_ip
     global car_port
+    global camera_port
 
     address = request.args.get('address')
 
-    car_ip, car_port = address.split(":")
-    car_port = int(car_port)
+    if(":" in address):
+        car_ip, car_port = address.split(":")
+        camera_port = int(car_port)-1
+        car_port = int(car_port)
+    else:
+        car_ip = address
+        camera_port = 8089
+        car_port = 8090
 
     try:
         rc = RemoteController(car_ip, car_port)

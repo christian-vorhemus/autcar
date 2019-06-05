@@ -1,5 +1,4 @@
 flask
-cntk
 numpy
 onnxruntime
 onnxmltools
