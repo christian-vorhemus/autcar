@@ -68,7 +68,37 @@ Copy the following code into the file:
   car.stop()
   ```
   You can pass arguments to the methods to specify in more detail what to do. For example, the first argument in `move()` method tells the car in which direction to move (supported are "forward" and "backwards"). The first argument in `left()` or `right()` tells the car how strong it should change the direction (supported are "light", "medium" and "harsh").
+
+## Listen for commands and send commands
+
+It's nice to control the car directly on the car - but sometimes we want to send data from an external computer to the vehicle - that's what the _AutRemoteController_ module is for. Let's write two things now: A script that runs on your car listening ffor external commands and a script for your PC sending commands to the car.
+
+Create a new file `rc_test.py` on your car. Copy the following code into the file:
+
+  ```python
+  from autcar import RemoteController, Car
+  import time
   
+  car = Car()
+  rc = RemoteController()
+  rc.listen()
+
+  while True:
+    cmd = rc.get_cmds()
+    if(cmd == "forward"):
+      car.move()
+    elif(cmd == "stop"):
+      car.stop()
+  ```
+
+With `rc = RemoteController()` we create a new RemoteController object. This object holds all the methods and properties we need to establish a connection between two car and the PC. With `rc.listen()` we tell the car to listen for incoming commands. Since we don't want to just process one command, we wrap the code into a while loop to continuously fetch new commands from the socket. In this example we just allow two commands: Move the car forward or stop the car.
+
+Next we're going to write a simple script that allows users to enter commands on the command line which are then sent to the car:
+
+  ```python
+  from autcar import RemoteController
+  ```
+
 ## Create a live stream from your car
 
 Let's take a look at some code how we can open a connection from our PC to the camera of our car. Create a file called `camera_test.py` on your car and copy and paste the following content:
@@ -90,11 +120,7 @@ Let's take a look at some code how we can open a connection from our PC to the c
    ```
    python autcar/web/server.py
   ```
-  to start the AutCar Control Board server. Open a browser, enter http://localhost:8080 and 
-
-## Listen for commands and send commands
-
-<To-do>
+  to start the AutCar Control Board server. Open a browser, enter the address http://localhost:8080 and enter the IP address of your car in the right upper corner. Click "Connect" and you should see the live stream in a second.
 
 ## Create training data
 
