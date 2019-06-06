@@ -102,9 +102,12 @@ If you get the message that pip is not recognized as an internal or external com
  ```
  python autcar/web/server.py
  ```
+ 
+ If you're getting the error message `ImportError: DLL load failed: The specified module could not be found` you are likely missing some libraries on your machine. If you're running Windows 10 N, try to install the [Media Feature Pack](https://www.microsoft.com/en-us/software-download/mediafeaturepack) first, restart and then run `pip install` again.
+ 
 3. Open a browser and enter the address http://localhost:8080. You should now see the AutCar Control Board:
     <p><img src="../images/autcar_controlboard.png" width="400" margin="20"></p>
-4. Enter the IP address and port of the car in the right upper corner and click on "Connect"<br>
+4. Enter the IP address of the car in the right upper corner and click on "Connect"<br>
 5. Click on the car control buttons to manually move the car.
 
 You should now be able to control the car manually, great! Next, let's see how we can enable autonomous driving mode, [click here](3_Autonomous_Driving.md) to learn more.
