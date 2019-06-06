@@ -11,13 +11,15 @@ from autcar import Camera, Car
 
 
 class Model:
-    def __init__(self, model_file_path: str, execution_interval: float = 2):
+    def __init__(self, model_file_path: str, execution_interval: float = 2, name = None):
         """
         Model objects are used to define where a model is located and how often the model should be called during driving
 
         @param model_file_path: A file path that points to the .onnx model file
         @param execution_interval: Defines a timeout in seconds during repeated model calls
+        @param name: Is used to give your model a short name to identify it when multiple models are used
         """
+        self.name = name
         self.model_file_path = model_file_path
         self.last_command = None
         self.execution_interval = execution_interval
@@ -60,7 +62,10 @@ class Driver:
             if(os.path.isfile(model_instance.model_file_path) == False):
                 raise Exception("Error: File %s does not exist. Did you train and create a model file?"%model_instance.model_file_path)
                 return
-            modelname = model_instance.model_file_path
+            if(model_instance.name == None):
+                modelname = model_instance.model_file_path
+            else:
+                modelname = model_instance.name
             thread = Thread(target=self.__predict_onnx, args=(model_instance,modelname,))
             self.__prediction_dict[modelname] = [None, None]
             threads.append(thread)

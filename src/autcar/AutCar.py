@@ -68,6 +68,13 @@ class Car:
                         GPIO.output(self.__control_pins_left[pin], self.__sequence[len(self.__sequence)-halfstep-1][pin])
                 time.sleep(delay)
 
+    def __reset_movement(self):
+        try:
+            self.__tleft.terminate()
+            self.__tright.terminate()
+        except:
+            pass
+        self.__reset_pins()
 
     def move(self, direction = "forward", speed = "medium"):
         """
@@ -77,7 +84,7 @@ class Car:
         @param speed: One of the following strings "slow", "medium" or "fast"
         """
 
-        self.stop()
+        self.__reset_movement()
         time.sleep(0.1)
 
         if(direction == "forward"):
@@ -112,7 +119,6 @@ class Car:
         self.__reset_pins()
         self.current_command = {'type' : 'stop'}
 
-
     def right(self, style = "medium", direction = "forward"):
         """
         Move the car to the right.
@@ -121,7 +127,7 @@ class Car:
         @param speed: Defines the direction. One of the following strings: "forward" or "backwards"
         """
 
-        self.stop()
+        self.__reset_movement()
         time.sleep(0.1)
 
         if(direction == "backwards"):
@@ -151,7 +157,6 @@ class Car:
         self.__tleft.start()
         self.current_command = {'type' : 'right', 'direction' : direction, 'style': style}
 
-
     def left(self, style = "medium", direction = "forward"):
         """
         Move the car to the left
@@ -160,7 +165,7 @@ class Car:
         @param speed: Defines the direction. One of the following strings: "forward" or "backwards"
         """
 
-        self.stop()
+        self.__reset_movement()
         time.sleep(0.1)
 
         if(direction == "backwards"):

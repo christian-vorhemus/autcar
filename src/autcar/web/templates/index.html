@@ -33,12 +33,20 @@
 
             $.getJSON('/connect?&address=' + $("#address").val(), function(response) {
 
-                if(response['status'] == "success") {
-                    $("#connectcontainer").hide()
-                    $("#disconnectcontainer").show()
+                if(response['status'] == "success" && response['type'] == "connected") {
+                    $("#connectcontainer").hide();
+                    $("#disconnectcontainer").show();
                     $('#connectbutton').removeClass('disabled');
-                    //$("#notconnectedchip").hide()
-                    //$("#connectedchip").show()
+                }
+
+                if(response['status'] == "success" && response['type'] == "camera_connected") {
+                    $("#notconnectedchip").hide();
+                    $("#connectedchip").show();
+                }
+
+                if(response['status'] == "success" && response['type'] == "camera_disconnected") {
+                    $("#notconnectedchip").show();
+                    $("#connectedchip").hide();
                 }
 
                 if(response['status'] == "error") {

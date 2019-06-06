@@ -11,7 +11,7 @@ import subprocess
 
 class Camera:
 
-    def __init__(self, connect_camera = False, host = 'localhost', port = 8089, rotation = None, capture_interval = 1):
+    def __init__(self, connect_camera = False, host = '', port = 8089, rotation = None, capture_interval = 1):
         """
         A camera object which is used to capture single images from a camera or start a live stream. It uses OpenCV under the hood.
 
@@ -58,7 +58,8 @@ class Camera:
         clientsocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         try:
             clientsocket.connect((self.host, self.port))
-        except:
+        except Exception as e:
+            print("Could not connect to remote machine: "+str(e))
             self.__nosignal = True
             return
 

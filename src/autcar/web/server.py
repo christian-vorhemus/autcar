@@ -20,7 +20,7 @@ def gen():
     while True:
         if(camera_port != 0):
             if(connected == False):
-                camera = Camera(True, car_ip, camera_port)
+                camera = Camera(connect_camera=True, host=car_ip, port=camera_port)
                 print("Camera object created on "+car_ip+":"+str(camera_port))
                 connected = True
 
@@ -31,6 +31,8 @@ def gen():
                 continue
             yield (b'--frame\r\n'
             b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        else:
+            time.sleep(1)
 
 @app.route('/')
 def home():
@@ -50,6 +52,7 @@ def connect():
     global car_ip
     global car_port
     global camera_port
+    global connected
 
     address = request.args.get('address')
 
@@ -64,10 +67,14 @@ def connect():
 
     try:
         rc = RemoteController(car_ip, car_port)
+        time.sleep(1)
         rc.connect()
         message = {'status': 'success', 'type': 'connected'}
     except ConnectionRefusedError:
-        message = {'status': 'error', 'type': 'connection_refused'}
+        if(connected == False):
+            message = {'status': 'error', 'type': 'connection_refused'}
+        else:
+            message = {'status': 'success', 'type': 'camera_connected'}
 
     return jsonify(message)
 
