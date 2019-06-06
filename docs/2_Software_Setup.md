@@ -82,7 +82,7 @@ Before you start, make sure that you have **Python 3.5 or newer** installed on y
 
 1) We also need the AutCar library on our PC. Download the zipped library using [this link](https://github.com/christian-vorhemus/autcar/archive/master.zip)
 
-3) Open a cmd window, change directory to `autcar-master/src` and  install the dependencies with
+3) On Windows, open a command prompt [as an administrator](https://www.howtogeek.com/194041/how-to-open-the-command-prompt-as-administrator-in-windows-8.1/), change directory to `autcar-master/src` and  install the dependencies with
 ```
 pip install -r autcar/web/requirements.txt
 ```
