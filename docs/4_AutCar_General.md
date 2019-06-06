@@ -112,12 +112,13 @@ Next we're going to write a simple script that allows users to enter commands on
       if(cmd == "f"):
         rc.send_cmd("forward")
       elif(cmd == "s"):
-        rc.send_cmd("stop"):
+        rc.send_cmd("stop")
       else:
         print("Unknown command, enter 'f' or 's'")
   except KeyboardInterrupt:
     rc.close()
   ```
+  Change the IP address in line 3 to the IP address of your car and execute this script on your PC.
 
 ## Create a live stream from your car
 

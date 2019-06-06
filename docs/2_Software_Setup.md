@@ -82,10 +82,12 @@ Before you start, make sure that you have **Python 3.5 or newer** installed on y
 
 1) We also need the AutCar library on our PC. Download the zipped library using [this link](https://github.com/christian-vorhemus/autcar/archive/master.zip)
 
-3) Open a cmd window, change directory to `autcar-master/src` and  install the dependencies with
+3) On Windows, open a command prompt [as an administrator](https://www.howtogeek.com/194041/how-to-open-the-command-prompt-as-administrator-in-windows-8.1/), change directory to `autcar-master/src` and  install the dependencies with
 ```
 pip install -r autcar/web/requirements.txt
 ```
+
+If you get the message that pip is not recognized as an internal or external command, make sure to add the pip binary to the PATH variable. For Windows, this procedure is described [here](https://projects.raspberrypi.org/en/projects/using-pip-on-windows/5).
 
 ### 5) Connect to your car and drive!
 
@@ -100,9 +102,12 @@ pip install -r autcar/web/requirements.txt
  ```
  python autcar/web/server.py
  ```
+ 
+ If you're getting the error message `ImportError: DLL load failed: The specified module could not be found` you are likely missing some libraries on your machine. If you're running Windows 10 N, try to install the [Media Feature Pack](https://www.microsoft.com/en-us/software-download/mediafeaturepack) first, restart and then run `pip install` again.
+ 
 3. Open a browser and enter the address http://localhost:8080. You should now see the AutCar Control Board:
     <p><img src="../images/autcar_controlboard.png" width="400" margin="20"></p>
-4. Enter the IP address and port of the car in the right upper corner and click on "Connect"<br>
+4. Enter the IP address of the car in the right upper corner and click on "Connect"<br>
 5. Click on the car control buttons to manually move the car.
 
 You should now be able to control the car manually, great! Next, let's see how we can enable autonomous driving mode, [click here](3_Autonomous_Driving.md) to learn more.
