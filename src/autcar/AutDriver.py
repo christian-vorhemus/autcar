@@ -61,7 +61,6 @@ class Driver:
         for i, model_instance in enumerate(model_instance_list):
             if(os.path.isfile(model_instance.model_file_path) == False):
                 raise Exception("Error: File %s does not exist. Did you train and create a model file?"%model_instance.model_file_path)
-                return
             if(model_instance.name == None):
                 modelname = model_instance.model_file_path
             else:
@@ -216,7 +215,6 @@ class Driver:
 
             if(isinstance(self.__frame,(np.ndarray, np.generic)) == False):
                 time.sleep(model_instance.execution_interval)
-                pass
 
             #if(current_time - last_timestamp > self.__capture_interval):
                 #last_timestamp = current_time
