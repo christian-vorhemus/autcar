@@ -41,6 +41,7 @@ A: This could have multiple reasons
 <li>Check the training images and see if you are able to distinguish what direction a car should move just by looking at a specific image. If you can't do it, the model can't do it.</li>
   <li>You need more training data (at least 500 images per class is recommended)</li>
 <li>The lighting conditions are poor or the markings are barely highlighted compared to the ground</li>
+    <li>Test your model as described <a href="docs/3_Autonomous_Driving.md#4-test-your-model" target="_blank">here</a>. The AutTrainer test method is using the same measures as the method used to drive the car. If your model doesn't perform well here, it won't perform well when driving.</li>
     </ul>
 <p>
   <i>Q: The battery pack and/or Raspberry Pi are only loosely attached to the car</i>
