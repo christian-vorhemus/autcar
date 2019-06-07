@@ -8,7 +8,9 @@ Your car has to know when it is "on track" and when it leaves the track. Therefo
 - The boundaries of the track should be clearly distinguishable from the ground.
 - The right and left borders should have different colors.
 - The floor should be smooth, carpets do not work.
+
 Below, you see an example of a suitable track
+
 <img src="../images/C1.jpg" width="400">
 
 Also make sure that the track is wide enough for the car to be able to take bends well.
