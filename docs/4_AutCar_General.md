@@ -118,7 +118,7 @@ Next we're going to write a simple script that allows users to enter commands on
   except KeyboardInterrupt:
     rc.close()
   ```
-  Change the IP address in line 3 to the IP address of your car and execute this script on your PC.
+  Change the IP address in line 3 to the IP address of your car and execute this script on your PC. You should now be able to enter either "f" or "s" to control the car.
 
 ## Create a live stream from your car
 
