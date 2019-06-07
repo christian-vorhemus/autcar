@@ -145,6 +145,32 @@ Let's take a look at some code how we can open a connection from our PC to the c
 
 ## Create training data
 
-If our car should drive autonomously, we have to teach it how to drive. And we want the car to learn how to drive from camera images only. To do so, we have to manually drive the car and capture all the images the car sees including the commands we used to control the car. Luckily, the AutCapture module does most of the job for us, but let's take a look at what happens here from scratch.
+If our car should drive autonomously, we have to teach it how to drive. And we want the car to learn how to drive from camera images only. To do so, we have to manually drive the car and capture all the images the car sees including the commands we used to control the car. Luckily, the _AutCapture_ module does most of the job for us, but let's take a look at what happens here from scratch.
 
 Create a new file called `capture_test.py` and add the following code
+
+  ```python
+  from autcar import Car, Capture
+  import time
+
+  car = Car()
+  cam = Camera(rotation=-1)
+  cap = Capture(car, cam, capture_interval=1, folder_name="trainingdata")
+  
+  cap.start()
+  car.move()
+  time.sleep(3)
+  car.left()
+  time.sleep(3)
+  car.stop()
+  time.sleep(2)
+  cap.stop()
+  ```
+
+  AutCapture needs a camera object to take pictures from and the car object which is controlled to take the commands from. It saves the pictures and commands in a newly created folder named "trainingdata" on your car. Now let's copy this folder to your PC. On your PC enter
+  ```
+  scp -r pi@192.168.1.1:/home/pi/autcar/trainingdata .
+  ```
+  
+  Make sure to add the right path to your "trainingdata" folder and change the IP address accordingly.
+  
