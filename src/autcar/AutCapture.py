@@ -1,13 +1,12 @@
 from threading import Thread
-import subprocess
 import time
-from autcar import Camera
+from autcar import Camera, Car
 import cv2
 import os
 
 class Capture:
 
-    def __init__(self, car, camera, capture_interval = 2, folder_name = "autcar_training"):
+    def __init__(self, car: Car, camera: Camera, capture_interval: int = 2, folder_name: str = "autcar_training"):
         """
         A capture object can be used to record training data while the car is driving
 

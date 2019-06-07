@@ -1,11 +1,9 @@
 import cv2
-import pickle
 import numpy as np
 import struct
 import base64
 import socket
 import threading
-import os
 import time
 import subprocess
 
@@ -31,7 +29,7 @@ class Camera:
         # Load Rasperry Pi Cam kernel module bcm2835-v4l2
         try:
             subprocess.check_call("sudo modprobe bcm2835-v4l2", shell=True)
-        except:
+        except Exception as e:
             print("Warning: Couldn't load bcm2835-v4l2 kernel module")
         self.__cam = cv2.VideoCapture(0)
         if(connect_camera):
@@ -97,7 +95,7 @@ class Camera:
                     clientsocket.close()
                 except socket.error:
                     pass
-                nosignal = True
+                self.__nosignal = True
                 break
 
 

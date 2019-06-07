@@ -1,6 +1,5 @@
 import socket
 import json
-import sys, signal
 
 class RemoteController:
 
@@ -53,7 +52,7 @@ class RemoteController:
         """
         Method to receive commands send from another device. Should be called on the car
         """
-        if(self.__client_socket == None):
+        if(self.__client_socket is None):
             try:
                 (client_socket, client_address) = self.__connection.accept()
                 self.__client_socket = client_socket

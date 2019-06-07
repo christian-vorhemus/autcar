@@ -39,7 +39,7 @@ def create_swap():
     try:
         subprocess.check_call("sudo mkswap swapfile", shell=True)
         subprocess.check_call("sudo swapon swapfile", shell=True)
-    except:
+    except Exception as e:
         return
 
 def install_pip():

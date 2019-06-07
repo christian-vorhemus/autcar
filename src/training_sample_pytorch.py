@@ -1,5 +1,5 @@
 from autcar import Trainer
-from torch.nn import Sequential, Conv2d, BatchNorm2d, MaxPool2d, ReLU, Dropout2d, Linear, Module, LogSoftmax
+from torch.nn import Sequential, Conv2d, BatchNorm2d, MaxPool2d, ReLU, Linear, Module
 
 input_folder_path = "src/ml/data/autcar_training"
 output_folder_path = "src/ml/data/autcar_training_balanced"

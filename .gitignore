@@ -23,6 +23,7 @@ driver_model.onnx
 driver_keras.onnx
 driver_keras_old.onnx
 trafficsign.onnx
+trafficsample.onnx
 driver_pytorch.onnx
 customvision.onnx
 cam_sender.py

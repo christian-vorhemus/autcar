@@ -108,13 +108,13 @@ def cmds():
         try:
             rc.send_cmd("startrecording")
             message = {'status': 'success', 'type': 'recording_started'}
-        except:
+        except Exception as e:
             message = {'status': 'error', 'type': 'recording_notstarted'}
     if(cmd == "stoprecording"):
         try:
             rc.send_cmd("stoprecording")
             message = {'status': 'success', 'type': 'recording_stopped'}
-        except:
+        except Exception as e:
             message = {'status': 'error', 'type': 'recording_notstopped'}
     if(cmd == "retrievedata"):
         message = {'status': 'error', 'type': 'not_implemented'}

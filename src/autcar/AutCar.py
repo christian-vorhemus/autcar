@@ -1,10 +1,9 @@
 try:
     import RPi.GPIO as GPIO
-except:
+except Exception as e:
     print("Warning: RPi.GPIO could not be loaded")
 import time
-from threading import Thread
-from multiprocessing import Process, Value
+from multiprocessing import Process
 
 class Car:
 
@@ -38,12 +37,10 @@ class Car:
     def __reset_pins(self):
         time.sleep(0.1)
         for pin in self.__control_pins_left:
-            a = 1
             GPIO.setup(pin, GPIO.OUT)
             GPIO.output(pin, 0)
 
         for pin in self.__control_pins_right:
-            a = 1
             GPIO.setup(pin, GPIO.OUT)
             GPIO.output(pin, 0)
 
@@ -72,7 +69,7 @@ class Car:
         try:
             self.__tleft.terminate()
             self.__tright.terminate()
-        except:
+        except Exception as e:
             pass
         self.__reset_pins()
 
@@ -114,7 +111,7 @@ class Car:
         try:
             self.__tleft.terminate()
             self.__tright.terminate()
-        except:
+        except Exception as e:
             pass
         self.__reset_pins()
         self.current_command = {'type' : 'stop'}

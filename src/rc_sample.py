@@ -1,5 +1,4 @@
 from autcar import Camera, Car, RemoteController, Capture
-from threading import Thread
 import time
 
 rc = RemoteController()

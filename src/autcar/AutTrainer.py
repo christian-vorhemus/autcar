@@ -1,15 +1,11 @@
-from typing import List, TypeVar, Union
+from typing import List, Union
 import ast
 import csv
 import os
 import math
-from pathlib import Path
 import numpy as np
 import shutil
 import random
-import time
-import xml.etree.cElementTree as et
-import xml.dom.minidom
 from PIL import Image
 import onnxruntime as rt
 import matplotlib.pyplot as plt
@@ -28,9 +24,9 @@ class Trainer:
 
     def __scale_image(self, image, width=None, height=None):
 
-        if(width == None):
+        if(width is None):
             width = self.__image_width
-        if(height == None):
+        if(height is None):
             height = self.__image_height
 
         try:
@@ -64,7 +60,7 @@ class Trainer:
                     for row in csv_reader:
                         try:
                             command = ast.literal_eval(row[1])
-                        except:
+                        except Exception as e:
                             continue
                         cmd_type = command["type"]
                         if(cmd_type == "move"):
@@ -98,7 +94,7 @@ class Trainer:
                     image = row[0]
                     try:
                         command = ast.literal_eval(row[1])
-                    except:
+                    except Exception as e:
                         continue
                     cmd_type = command["type"]
                     if(cmd_type == "move"):
@@ -135,7 +131,7 @@ class Trainer:
                         image = row[0]
                         try:
                             command = ast.literal_eval(row[1])
-                        except:
+                        except Exception as e:
                             continue
                         cmd_type = command["type"]
                         if(cmd_type == "move"):
@@ -186,7 +182,7 @@ class Trainer:
 
 
     def train(self, path_to_folder: str, model_definition, epochs: int = 10, output_model_path: str = "driver_model.onnx", classes = None, minibatch_size: int = 64):
-        if(classes == None):
+        if(classes is None):
             classes = self.__commands
         
         if(self.__deeplearning_framework == "cntk"):
@@ -224,13 +220,10 @@ class Trainer:
         generator_train = train_datagen.flow_from_dataframe(df_train, classes=classes, target_size=(self.__image_height, self.__image_width), shuffle=True)
         generator_test = test_datagen.flow_from_dataframe(df_test, classes=classes, target_size=(self.__image_height, self.__image_width), shuffle=True)
 
-        a = generator_train.class_indices
-
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
         print("Training started")
-        res = model.fit_generator(generator_train, epochs=epochs, steps_per_epoch=round(df_train_len/minibatch_size), validation_data=generator_test, validation_steps=round(df_train_len/minibatch_size))
-        #res = model.fit_generator(generator_train, epochs=epochs, steps_per_epoch=16, validation_data=generator_test, validation_steps=8)
+        res = model.fit_generator(generator_train, epochs=epochs, steps_per_epoch=round(df_train_len/minibatch_size), validation_data=generator_test, validation_steps=round(df_test_len/minibatch_size))
 
         validation_loss = res.history["val_loss"]
         validation_accuracy = res.history["val_acc"]
@@ -308,11 +301,11 @@ class Trainer:
                 if(calculate_accuracy_every_iteration == True):
                     correct = 0
                     total = 0
-                    for images, labels in test_loader:
-                        outputs = model(images)
+                    for test_images, test_labels in test_loader:
+                        outputs = model(test_images)
                         _, predicted = torch.max(outputs.data, 1)
-                        total += labels.size(0)
-                        correct += (predicted == labels).sum()
+                        total += test_labels.size(0)
+                        correct += (predicted == test_labels).sum()
                         correct = correct.data.item()
 
                     curr_acc = correct/total
@@ -358,7 +351,6 @@ class Trainer:
 
         map_file_train = path_to_folder+"/train_map.txt"
         map_file_test = path_to_folder+"/test_map.txt"
-        mean_file = path_to_folder+"/meanfile.xml"
         classes_set = set()
         num_train = 0
         num_test = 0
@@ -553,8 +545,6 @@ class Trainer:
         try:
             with open(path_to_test_map) as csv_file:
                 csv_reader = csv.reader(csv_file, delimiter='\t')
-                row_count = 0
-                capture = False
                 for row in csv_reader:
                     images.append(row[0])
                     ground_truth.append(row[1])
@@ -572,8 +562,8 @@ class Trainer:
                 print("Cant read "+image)
             try:
                 processed_image = self.__scale_image(img)
-            except:
-                print("Err while reading " + image)
+            except Exception as e:
+                print("Err while reading " + image + ": " + str(e))
 
             X = np.array([np.moveaxis((np.array(processed_image).astype('float32')), -1, 0)])
             X -= np.mean(X, keepdims=True)

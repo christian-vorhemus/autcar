@@ -5,6 +5,5 @@ from autcar.AutCapture import Capture
 from autcar.AutDriver import Driver, Model
 try:
     from autcar.AutTrainer import Trainer
-except:
+except Exception as e:
     print("Warning: Could not load Trainer")
-    pass

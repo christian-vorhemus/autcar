@@ -1,6 +1,5 @@
 from threading import Thread
 from typing import List, Union
-from multiprocessing import Process, Value
 import time
 import onnxruntime as rt
 import cv2
@@ -8,7 +7,6 @@ import os
 from PIL import Image
 import numpy as np
 from autcar import Camera, Car
-
 
 class Model:
     def __init__(self, model_file_path: str, execution_interval: float = 2, name = None):
@@ -61,7 +59,7 @@ class Driver:
         for i, model_instance in enumerate(model_instance_list):
             if(os.path.isfile(model_instance.model_file_path) == False):
                 raise Exception("Error: File %s does not exist. Did you train and create a model file?"%model_instance.model_file_path)
-            if(model_instance.name == None):
+            if(model_instance.name is None):
                 modelname = model_instance.model_file_path
             else:
                 modelname = model_instance.name
@@ -69,7 +67,7 @@ class Driver:
             self.__prediction_dict[modelname] = [None, None]
             threads.append(thread)
 
-        if(execution_function == None):
+        if(execution_function is None):
             def execute(model_prediction: dict, car: Car):
                 prediction = model_prediction[list(model_prediction.keys())[0]][0]
                 last_command = model_prediction[list(model_prediction.keys())[0]][1]
