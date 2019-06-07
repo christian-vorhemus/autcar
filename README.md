@@ -29,9 +29,9 @@ Do you have a car ready to go? Great, next please follow the guide [here](docs/2
 ### 3) Learn how to use the library
 
 The following tutorials are available at the moment:<p>
-- ~~[1. Basics - Learn how AutCar works in general](docs/4_AutCar_General.md)~~
-- ~~[2. External models - Train a model in customvision.ai and use it in AutCar](docs/5_Customvision.md)~~
-- ~~[3. Execute multiple models simultaneously - Learn how to write your own execution function](docs/6_Execution_Function.md)~~
+- [1. Basics - Learn how AutCar works in general](docs/4_AutCar_General.md)
+- [2. External models - Train a model in customvision.ai and use it in AutCar](docs/5_Customvision.md)
+- [3. Execute multiple models simultaneously - Learn how to write your own execution function](docs/6_Execution_Function.md)
 
 ## FAQ & troubleshooting
 <i>Q: I have trained a machine learning model but the car is not following the lines.</i>
@@ -41,6 +41,7 @@ A: This could have multiple reasons
 <li>Check the training images and see if you are able to distinguish what direction a car should move just by looking at a specific image. If you can't do it, the model can't do it.</li>
   <li>You need more training data (at least 500 images per class is recommended)</li>
 <li>The lighting conditions are poor or the markings are barely highlighted compared to the ground</li>
+    <li>Test your model as described <a href="docs/3_Autonomous_Driving.md#4-test-your-model" target="_blank">here</a>. The AutTrainer test method is using the same measures as the method used to drive the car. If your model doesn't perform well here, it won't perform well when driving.</li>
     </ul>
 <p>
   <i>Q: The battery pack and/or Raspberry Pi are only loosely attached to the car</i>
