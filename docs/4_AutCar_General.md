@@ -1,6 +1,6 @@
 # Overview of AutCar
 
-This tutorial gives some hands-on experience with the AutCar library more information about the training process and useful methods. As a prerequisites, make sure that your car is [assembled](https://github.com/christian-vorhemus/autcar/blob/master/docs/1_Hardware_Assembly.md), the [software is installed](https://github.com/christian-vorhemus/autcar/blob/master/docs/2_Software_Setup.md) and you have an open SSH connection to your car.
+This tutorial gives some hands-on experience with the AutCar library more information about the training process and useful methods. As a prerequisite, make sure that your car is [assembled](https://github.com/christian-vorhemus/autcar/blob/master/docs/1_Hardware_Assembly.md), the [software is installed](https://github.com/christian-vorhemus/autcar/blob/master/docs/2_Software_Setup.md) and you have an open SSH connection to your car.
 
 ## The library
 
