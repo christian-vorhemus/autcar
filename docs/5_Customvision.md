@@ -52,9 +52,11 @@ Pick **at least 50** images for each of the three categories you want to use for
 
 <img src="../images/customvision_7.png" width="400" />
 
-Precision tells us, for example if the model predicted that on a certain image there is a stop sign, how likely is it that there really is a stop sign visible?
+Precision tells us, for example if the model predicted that on a certain image there is a stop sign, how likely is it that there really is a stop sign visible (true positives)?
 
 Recall is a measure how well out model finds the correct sign on an image. As an example: Out of all stop signs in the data set, how likely is it that our model finds them?
+
+If we want to increase precision, our model has to be very careful when picking images as every wrongly predicted class decreases precision. On the other hand, if it's too careful, it may miss some images with the right signs - which decreases recall.
 
 AP means "Average Precision". 
 
