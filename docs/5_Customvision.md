@@ -52,4 +52,96 @@ Pick **at least 50** images for each of the three categories you want to use for
 
 <img src="../images/customvision_7.png" width="400" />
 
-Precision tells us how well the 
+Precision tells us, for example if the model predicted that on a certain image there is a stop sign, how likely is it that there really is a stop sign visible?
+
+Recall is a measure how well out model finds the correct sign on an image. As an example: Out of all stop signs in the data set, how likely is it that our model finds them?
+
+AP means "Average Precision". 
+
+## Download and convert the model
+
+1) Click on the "Export" button in the header. If this button is grey, you didn't select a "compact" model when creating the project. In the modal window, you'll see several model formats you can choose to download:
+
+<img src="../images/customvision_8.png" width="400" />
+
+2) Download the "TensorFlow" model (don't pick the "ONNX Windows ML" option!). Unzip the package you get, you should see two files, `model.pb` and `labels.txt`. 
+
+3) We have to convert this model into a format our car can use. We'll use the [tensorflow-onnx model converter](https://github.com/onnx/tensorflow-onnx) to do this. Run the following script on your PC (assuimg TensorFlow is already installed)
+
+```
+pip install -U tf2onnx
+```
+
+Now run the following command. Make sure you're in the same directory as `model.pb`
+
+```
+python -m tf2onnx.convert --input model.pb --output model.onnx --inputs "Placeholder:0" --outputs "loss:0"
+```
+
+You should get a new file called `model.onnx`. This is the model we'll use for our car.
+
+## Write a custom model preprocessor
+
+Before an input image can be handeled by the model, it has to be preprocessed. When you use the `AutTrainer` module and the `train()` method, this preprocessing is done for you automatically. When you use an external model, we have to bring the image into the right format so the model can use it. 
+
+Let's take a closer look at the `model.onnx` file we just created. With a tool called [Netron](https://github.com/lutzroeder/netron) we can inspect how the model looks like:
+
+<img src="../images/customvision_9.png" width="400" />
+
+You see at "Placeholder:0" that our images must have the format [224x224x3] - this is not what we get from our car camera. To resize the image, create a new file called `trafficsign_sample.py` and add the following code:
+
+```python
+from autcar import Camera, Model
+import numpy as np
+import cv2
+
+cam = Camera(rotation=-1)
+
+class OwnModel(Model):
+  def preprocess(self, image):
+    image = image.convert('RGB')
+    r,g,b = np.array(image).T
+    image = np.array([b,g,r]).transpose()
+    h, w = image.shape[:2]
+    min_dim = min(w,h)
+    startx = w//2-(min_dim//2)
+    starty = h//2-(min_dim//2)
+    image = image[starty:starty+min_dim, startx:startx+min_dim]
+    resized_image = np.array([cv2.resize(image, (224, 224), interpolation = cv2.INTER_LINEAR)])
+    
+    return resized_image
+```
+
+Here we create a sub class `OwnModel` which inherits from the `Model` base class. We overwrite the `preprocess` method which is transforming the image before feeding it into the model. Step by step, here is what happens:
+
+- We get an RGB image, so the red channel is the first array. Our Custom Vision model expects images in the BGR format. Therefore, we split the channels and glue them together again in the expected order.
+- Next we get the height (h) and width (w) of our image and get the smaller edge with `min()`. The next three lines crop the image along the larger edge so that we get a square image which is then resized to the size 224x224
+- Finally we return the resized_image
+
+Now let's execute this model. We make use of our `Driver` class here even though for testing we don't really want the car to drive but just take a look at the real-time model predictions. Add the following code after the `OwnModel` class definition:
+
+```python
+model_trafficsigns = OwnModel("model.onnx", execution_interval=2, name="traffic_model")
+
+def execute(model_predictions: dict, car: Car):
+    print(model_predictions["traffic_model"][0])
+
+driver = Driver(model_trafficsigns, None, cam, execution_function=execute, execution_interval=3)
+driver.start()
+```
+
+First we create a model object with our `model.onnx` file. We also define that this model should be executed every two seconds. We also name this model to refer to it later.
+
+Next we define a function `execute` which will be handed over to the `Driver` class. This standard function will get two arguments by `Driver`, a dictionary of predictions and the car object. `model_predictions` contains all predictions of all models we execute, in this case we just have one. In `execute` we print the results of the model predictions. The result is a list of the last 5 predictions the model made, index 0 holds the most recent predictions as an integer value. If we want to map back this integer value to a label, take a look into the `labels.txt` file you downloaded earlier:
+
+<img src="../images/customvision_10.png" width="300" />
+
+So if our model predicts "0", it means no traffic sign was detected.
+
+Finally, run this script:
+
+```
+python trafficsign_sample.py
+```
+
+The script is now capturing data from the camera and prints the predictions (0 = No sign detected, 1 = major road sign detected, 2 = stop sign detected). Place the car infront of a sign to see how the predictions change.
