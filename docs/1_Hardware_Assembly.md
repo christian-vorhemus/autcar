@@ -1,6 +1,6 @@
 # Hardware Assembly
 
-In this chapter you'll see how to assembly all the hardware parts to construct your car!
+In this chapter you'll see how to assemble all the hardware parts to construct your car!
 
 ### 1) Prepare all parts
 Make sure you have all parts next to you before you start
