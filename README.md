@@ -14,7 +14,7 @@ You have two options: Either get a development kit with all hardware parts ready
 
 Or, collect (and 3D print) all the parts yourself. You will need the following:
 
-1) A Raspberry Pi 3 (important: the original Raspberry Pi or Raspberry Pi Zero (WH) **won't work**. You need a chip with ARMv7 processor).
+1) A Raspberry Pi 3 (the original Raspberry Pi or Raspberry Pi Zero (WH) **won't work**. You need a chip with ARMv7 processor).
 2) Two motors and an expansion board to connect both to your Raspberry Pi (we use 5V 28BYJ-48 stepper motors).
 3) A camera (either an USB webcam or a Raspberry Pi cam).
 4) A battery pack to run your Raspberry Pi.
