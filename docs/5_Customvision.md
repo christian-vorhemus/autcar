@@ -10,11 +10,11 @@ In this tutorial we will learn how to use the customvision.ai online service to 
 
 ## Why using Custom Vision?
 
-We can train and execute our model locally without any other services. However, very often, especially when dealing with large training or when large computing power is required, cloud services are used. Additionally, there is a variety of services that offer a zero-code interface to train models. Custom Vision is one of them. With Custom Vision you can simply upload images, add a label and train a model. Custom Vision makes use of **transfer learning**, meaning that a base model was already trained on million of images and the already learned model weights are fine tuned with the images you add. This is a state-of-the art technique to create very accurate and precise models.
+We can train and execute our model locally without any other services. However, very often, especially when dealing with large training or when large computing power is required, cloud services are used. Additionally, there is a variety of services that offer a zero-code interface to train models. Custom Vision is one of them. With Custom Vision you can simply upload images, add a label and train a model. Custom Vision makes use of **transfer learning**, meaning that a base model was already trained on millions of images and the already learned model weights are fine-tuned with the images you add. This is a state-of-the art technique to create very accurate and precise models.
 
 ## Create an Azure account and configure Custom Vision
 
-1) You need an Azure subscription to use Custom Vision. If you don't have one yet, you can start with a free account [here](https://azure.microsoft.com/free/). You have to enter some information including an email address which you can then use to sign in.
+1) You need an Azure subscription to use Custom Vision. If you don't have one yet, you can start with a free account [here](https://azure.microsoft.com/free/). You must enter some information including an email address which you can then use to sign in.
 
 2) Go to [www.customvision.ai](https://www.customvision.ai) and sign in with the email address you just provided. Accept the conditions and you should see the empty start page
 
@@ -30,7 +30,7 @@ We can train and execute our model locally without any other services. However, 
 
 2) When your track is prepared, power up your car and start the `rc_sample.py` file in your _autcar_ folder on your Raspberry Pi. Follow the procedure as described [here](3_Autonomous_Driving.md) tutorial to learn more) to create training data. 
 
-3) After you transfered the trainign data from your car to your PC, take a look at the images: We basically have three cases: Images where a stop sign is visible, images where a major road sign is visible and images where no traffic sign is visible
+3) After you transferred the training data from your car to your PC, take a look at the images: We basically have three cases: Images where a stop sign is visible, images where a major road sign is visible and images where no traffic sign is visible
 
 <p float="left">
   <img src="../images/customvision_2.png" width="150" />
@@ -38,7 +38,7 @@ We can train and execute our model locally without any other services. However, 
   <img src="../images/customvision_4.png" width="150" /> 
 </p>
 
-Pick **at least 50** images for each of the three categories you want to use for training. Also make sure you use roughly the same amount of images for each category.
+Pick **at least 50** images for each of the three categories you want to use for training. Also make sure you use roughly the same number of images for each category.
 
 4) In Custom Vision, click on "Add images" and choose all your selected images which contain a stop sign. 
 
@@ -60,7 +60,7 @@ Precision tells us, for example if the model predicted that on a certain image t
 
 Recall is a measure how well out model finds the correct sign on an image. As an example: Out of all stop signs in the data set, how likely is it that our model finds them?
 
-If we want to increase precision, our model has to be very careful when picking images as every wrongly predicted class decreases precision. On the other hand, if it's too careful, it may miss some images with the right signs - which decreases recall. In Custom Vision there is a "Probability Threshold" slider we can adjust to change the how strict the model should be in classifying images: The lower the threshold, the less strict is the model (which means low precision but high recall). Here is an example table of different thresholds and the respective precision and recall values:
+If we want to increase precision, our model must be very careful when picking images as every wrongly predicted class decreases precision. On the other hand, if it's too careful, it may miss some images with the right signs - which decreases recall. In Custom Vision there is a "Probability Threshold" slider we can adjust to change the how strict the model should be in classifying images: The lower the threshold, the less strict is the model (which means low precision but high recall). Here is an example table of different thresholds and the respective precision and recall values:
 
 | Probability Threshold  | Precision | Recall |
 | ------------- | ------------- | ------- |
@@ -81,7 +81,7 @@ We can plot this table as a curve:
 
 The model is the better, the more this curve is bent to the upper right corner. 
 
-Now suppose we have a different model with a different curve - how do we compare these curves and get a metric which curve is better? We could measure the **area under the curve** by calculating the integral between the lowest and highest precision-recall pair. In practice, we use an appromximation by summing up the rectangles defined by precision multiplied with recall at a certain threshold. And this is called "Average Precision" (AP).
+Now suppose we have a different model with a different curve - how do we compare these curves and get a metric which curve is better? We could measure the **area under the curve** by calculating the integral between the lowest and highest precision-recall pair. In practice, we use an approximation by summing up the rectangles defined by precision multiplied with recall at a certain threshold. And this is called "Average Precision" (AP).
 
 ## Download and convert the model
 
@@ -91,7 +91,7 @@ Now suppose we have a different model with a different curve - how do we compare
 
 2) Download the "TensorFlow" model (don't pick the "ONNX Windows ML" option!). Unzip the package you get, you should see two files, `model.pb` and `labels.txt`. 
 
-3) We have to convert this model into a format our car can use. We'll use the [tensorflow-onnx model converter](https://github.com/onnx/tensorflow-onnx) to do this. Run the following script on your PC (assuimg TensorFlow is already installed)
+3) We have to convert this model into a format our car can use. We'll use the [tensorflow-onnx model converter](https://github.com/onnx/tensorflow-onnx) to do this. Run the following script on your PC (assuming TensorFlow is already installed)
 
 ```
 pip install -U tf2onnx
@@ -107,7 +107,7 @@ You should get a new file called `model.onnx`. This is the model we'll use for o
 
 ## Write a custom model preprocessor
 
-Before an input image can be handeled by the model, it has to be preprocessed. When you use the `AutTrainer` module and the `train()` method, this preprocessing is done for you automatically. When you use an external model, we have to bring the image into the right format so the model can use it. 
+Before an input image can be handled by the model, it has to be preprocessed. When you use the `AutTrainer` module and the `train()` method, this preprocessing is done for you automatically. When you use an external model, we have to bring the image into the right format so the model can use it. 
 
 Let's take a closer look at the `model.onnx` file we just created. With a tool called [Netron](https://github.com/lutzroeder/netron) we can inspect how the model looks like:
 
@@ -141,7 +141,7 @@ Here we create a sub class `OwnModel` which inherits from the `Model` base class
 
 - We get an RGB image, so the red channel is the first array. Our Custom Vision model expects images in the BGR format. Therefore, we split the channels and glue them together again in the expected order.
 - Next we get the height (h) and width (w) of our image and get the smaller edge with `min()`. The next three lines crop the image along the larger edge so that we get a square image which is then resized to the size 224x224
-- Finally we return the resized_image
+- Finally, we return the resized_image
 
 Now let's execute this model. We make use of our `Driver` class here even though for testing we don't really want the car to drive but just take a look at the real-time model predictions. Add the following code after the `OwnModel` class definition:
 
@@ -155,7 +155,7 @@ driver = Driver(model_trafficsigns, None, cam, execution_function=execute, execu
 driver.start()
 ```
 
-First we create a model object with our `model.onnx` file. We also define that this model should be executed every two seconds. We also name this model to refer to it later.
+First, we create a model object with our `model.onnx` file. We also define that this model should be executed every two seconds. We also name this model to refer to it later.
 
 Next we define a function `execute` which will be handed over to the `Driver` class. This standard function will get two arguments by `Driver`, a dictionary of predictions and the car object. `model_predictions` contains all predictions of all models we execute, in this case we just have one. In `execute` we print the results of the model predictions. The result is a list of the last 5 predictions the model made, index 0 holds the most recent predictions as an integer value. If we want to map back this integer value to a label, take a look into the `labels.txt` file you downloaded earlier:
 
@@ -169,4 +169,4 @@ Finally, run this script:
 python trafficsign_sample.py
 ```
 
-The script is now capturing data from the camera and prints the predictions (0 = No sign detected, 1 = major road sign detected, 2 = stop sign detected). Place the car infront of a sign to see how the predictions change.
+The script is now capturing data from the camera and prints the predictions (0 = No sign detected, 1 = major road sign detected, 2 = stop sign detected). Place the car in front of a sign to see how the predictions change.
