@@ -1,7 +1,7 @@
 
 # Use Microsoft Custom Vision to train a model
 
-In this tutorial we will learn how to use the customvision.ai online service to train a model. This works completely without code, the trained model can be downloaded as a file. We aim to create a traffic sign detector: Our car should be capable of recongizing two different traffic signs:
+In this tutorial we will learn how to use the customvision.ai online service to train a model. This works completely without code, the trained model can be downloaded as a file. We aim to create a traffic sign detector: Our car should be capable of recognizing two different traffic signs:
 
 <p float="left">
   <img src="../images/major_road_sign.jpg" width="200" />
@@ -48,11 +48,15 @@ Pick **at least 50** images for each of the three categories you want to use for
 
 <img src="../images/customvision_6.png" width="400" />
 
-6) Click on the green "Train" button on top of your project and select "Fast Training". Training the model should take under one minute. Afterwards you'll see the training results:
+6) Click on the green "Train" button on top of your project and select "Fast Training". Training the model should take under one minute. Afterwards you'll see the training results.
+
+## Interpret Custom Vision training results
+
+On the "Performance" tab you should see the following diagrams after training:
 
 <img src="../images/customvision_7.png" width="400" />
 
-Precision tells us, for example if the model predicted that on a certain image there is a stop sign, how likely is it that there really is a stop sign visible (true positives)?
+Precision tells us, for example if the model predicted that on a certain image there is a stop sign, how likely is it that there really is a stop sign visible (true positives).
 
 Recall is a measure how well out model finds the correct sign on an image. As an example: Out of all stop signs in the data set, how likely is it that our model finds them?
 
