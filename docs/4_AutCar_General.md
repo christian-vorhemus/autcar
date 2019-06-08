@@ -135,7 +135,7 @@ Let's take a look at some code how we can open a connection from our PC to the c
    python3 camera_test.py
   ```
   
-  Your car is now listening on port 8089 for interested live stream viewers. The `rotation=-1` argument flips the images by 180 degrees. This is necessary because the camera is mounted reversed in AutCar.
+  Your car is now listening on port 8089 for interested live stream viewers. The `rotation=-1` argument flips the images by 180 degrees. This is necessary because the camera is mounted reversed in the AutCar development kit.
   
   On your PC, go to your autcar src folder and enter
    ```
@@ -150,7 +150,7 @@ If our car should drive autonomously, we have to teach it how to drive. And we w
 Create a new file called `capture_test.py` and add the following code
 
   ```python
-  from autcar import Car, Capture
+  from autcar import Car, Camera, Capture
   import time
 
   car = Car()
@@ -167,10 +167,32 @@ Create a new file called `capture_test.py` and add the following code
   cap.stop()
   ```
 
-  AutCapture needs a camera object to take pictures from and the car object which is controlled to take the commands from. It saves the pictures and commands in a newly created folder named "trainingdata" on your car. `capture_interval=1` tells our capture object to record data every second. Now let's copy this folder to your PC. On your PC enter
+  AutCapture needs a camera object to take pictures from and the car object which is controlled to take the commands from. It saves the pictures and commands in a newly created folder named "trainingdata" on your car. `capture_interval=1` tells our capture object to record data every second. 
+  
+  Execute the script with
+  ```
+  python3 capture_test.py
+  ```
+  
+  Your car should move forward, to the left and then stop. Now check if a newly created folder called "trainingdata" is available.
+  
+  ```
+  ls
+  ```
+  
+  Copy this folder to your PC by entering the following command on your PC console:
+  
   ```
   scp -r pi@192.168.1.1:/home/pi/autcar/trainingdata .
   ```
   
-  Make sure to add the right path to your "trainingdata" folder and change the IP address accordingly.
+Make sure to add the right path for your "trainingdata" folder and change the IP address accordingly.
+
+Now let's take a closer look what's in the folder. You should see several images starting with "0_car_snapshot.png". Additionally, a CSV file named "training.csv" is created. Open the file. There are two columns available: The first column contains the name of the image and the second column the corresponding command that was active when the picture was captured as a JSON string. As expected, we see the "move forward" command in the first three rows followed by the "left" command and "stop" afterwards. 
+
+<img src="../images/autcar_commands.png" width="400">
+
+This data can now be used to traing a machine learning model.
+
+
   
