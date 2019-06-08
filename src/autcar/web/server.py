@@ -19,12 +19,13 @@ def gen():
     camera = None
     while True:
         if(camera_port != 0):
+            frame = None
             if(connected == False):
                 camera = Camera(connect_camera=True, host=car_ip, port=camera_port)
                 print("Camera object created on "+car_ip+":"+str(camera_port))
                 connected = True
-
-            frame = camera.get_frame()
+            else:
+                frame = camera.get_frame()
 
             if(frame is None):
                 time.sleep(1)
