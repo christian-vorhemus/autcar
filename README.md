@@ -1,5 +1,5 @@
 <img src="images/autcar_logo.png" width="400" />
-This is the source code for the AutCar project - Build your own self-driving toy car!
+This is the source code for the AutCar project - build your own self-driving toy car!
 <img src="images/autcar_modelone.png" width="600" />
 
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/christian-vorhemus/autcar.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/christian-vorhemus/autcar/alerts/)
