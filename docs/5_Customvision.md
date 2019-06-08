@@ -56,9 +56,28 @@ Precision tells us, for example if the model predicted that on a certain image t
 
 Recall is a measure how well out model finds the correct sign on an image. As an example: Out of all stop signs in the data set, how likely is it that our model finds them?
 
-If we want to increase precision, our model has to be very careful when picking images as every wrongly predicted class decreases precision. On the other hand, if it's too careful, it may miss some images with the right signs - which decreases recall.
+If we want to increase precision, our model has to be very careful when picking images as every wrongly predicted class decreases precision. On the other hand, if it's too careful, it may miss some images with the right signs - which decreases recall. In Custom Vision there is a "Probability Threshold" slider we can adjust to change the how strict the model should be in classifying images: The lower the threshold, the less strict is the model (which means low precision but high recall). Here is an example table of different thresholds and the respective precision and recall values:
 
-AP means "Average Precision". 
+| Probability Threshold  | Precision | Recall |
+| ------------- | ------------- | ------- |
+| 10%  | 85.2% | 100% |
+| 20% | 88.5% | 100% |
+| 30% | 91.7% | 95.7% |
+| 40% | 91.7% | 95.7% |
+| 50% | 91.3% | 91.3% |
+| 60% | 95.5% | 91.3% |
+| 70% | 95.5% | 91.3% |
+| 80% | 100% | 82.6% |
+| 90% | 100% | 82.6% |
+| 100% | 100% | 21.7% |
+
+We can plot this table as a curve:
+
+<img src="../images/precision_recall.png" width="400" />
+
+The model is the better, the more this curve is bent to the upper right corner. 
+
+Now suppose we have a different model with a different curve - how do we compare these curves and get a metric which curve is better? We could measure the **area under the curve** by calculating the integral between the lowest and highest precision-recall pair. In practice, we use an appromximation by summing up the rectangles defined by precision multiplied with recall at a certain threshold. And this is called "Average Precision" (AP).
 
 ## Download and convert the model
 
