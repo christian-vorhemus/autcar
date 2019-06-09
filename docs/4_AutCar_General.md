@@ -232,8 +232,6 @@ When a machine learning model makes predictions, it doesn't output text. It alwa
 
 Before we get predictions, we have to define our model. 
 
-<img src="../images/kernels.gif" width="500">
-
   ```python
   from keras.models import Sequential
   from keras.layers import Dense, Conv2D, MaxPool2D, Flatten, InputLayer
@@ -252,3 +250,7 @@ Before we get predictions, we have to define our model.
     Dense(12, activation='softmax')
   ])
   ```
+  
+  <img src="../images/kernels.gif" width="500">
+  
+  <img src="../images/pooling.png" width="500">
