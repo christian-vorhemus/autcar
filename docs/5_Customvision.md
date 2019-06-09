@@ -1,7 +1,7 @@
 
 # Use Microsoft Custom Vision to train a model
 
-In this tutorial we will learn how to use the customvision.ai online service to train a model. This works completely without code, the trained model can be downloaded as a file. We aim to create a traffic sign detector: Our car should be capable of recognizing two different traffic signs:
+In this tutorial we will learn how to use the <a href="https://www.customvision.ai/" target="_blank">customvision.ai</a> online service to train a model. This works completely without code, the trained model can be downloaded as a file. We aim to create a traffic sign detector: Our car should be capable of recognizing two different traffic signs:
 
 <p float="left">
   <img src="../images/major_road_sign.jpg" width="200" />
