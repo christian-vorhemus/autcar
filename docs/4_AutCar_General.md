@@ -224,13 +224,15 @@ This should print the labels we have in the dataset and the corresponding amount
   {'move_medium_forward': 195, 'right_medium_forward': 198, 'left_medium_forward': 186}
   ```
   
-In this exaple we just used three commands to drive our car: "move_medium_forward", "right_medium_forward" and "left_medium_forward". In total, there are 12 possible commands to control the car. Each of these commands has a number assigned to it as shown in the image below:
+In this example we just used three commands to drive our car: "move_medium_forward", "right_medium_forward" and "left_medium_forward". In total, there are 12 possible commands to control the car. Each of these commands has a number assigned to it as shown in the image below:
 
 <img src="../images/controls.png" width="800">
 
 When a machine learning model makes predictions, it doesn't output text. It always outputs number. We have to map these numbers back to useful labels which means, if the model outputs for example "6" the corresponding command is "move the car forward with medium speed".
 
 Before we get predictions, we have to define our model. 
+
+  <img src="../images/movements.png" width="500">
 
   ```python
   from keras.models import Sequential
