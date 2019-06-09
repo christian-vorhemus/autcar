@@ -96,7 +96,7 @@ Create a new file `rc_test.py` on your car. Copy the following code into it:
 
 With `rc = RemoteController()` we create a new RemoteController object. This object holds all the methods and properties we need to establish a connection between the car and the PC. With `rc.listen()` we tell the car to listen for incoming commands. Since we don't want to just process one command, we wrap the code into a while loop to continuously fetch new commands from the socket. In this example we just allow two commands: Move the car forward or stop the car.
 
-Next we're going to write a simple script that allows users to enter commands on the command line which are then sent to the car:
+Next we're going to write a simple script that allows users to enter commands on the command line which are then sent to the car. Create a new file on your PC and copy the following code into it:
 
   ```python
   from autcar import RemoteController
