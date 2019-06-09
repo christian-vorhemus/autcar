@@ -229,3 +229,26 @@ In this exaple we just used three commands to drive our car: "move_medium_forwar
 <img src="../images/controls.png" width="800">
 
 When a machine learning model makes predictions, it doesn't output text. It always outputs number. We have to map these numbers back to useful labels which means, if the model outputs for example "6" the corresponding command is "move the car forward with medium speed".
+
+Before we get predictions, we have to define our model. 
+
+<img src="../images/kernels.gif" width="500">
+
+  ```python
+  from keras.models import Sequential
+  from keras.layers import Dense, Conv2D, MaxPool2D, Flatten, InputLayer
+  
+  model = Sequential([
+    InputLayer(input_shape=[3,168,224]),
+    Conv2D(filters=32, kernel_size=5, strides=1, padding='same', activation='relu'),
+    MaxPool2D(pool_size=8, padding='same'),
+    Conv2D(filters=48, kernel_size=3, strides=1, padding='same', activation='relu'),
+    MaxPool2D(pool_size=5, padding='same'),
+    Conv2D(filters=64, kernel_size=3, strides=1, padding='same', activation='relu'),
+    MaxPool2D(pool_size=3, padding='same'),
+    Conv2D(filters=32, kernel_size=5, strides=1, padding='same'),
+    Flatten(),
+    Dense(100, activation='relu'),
+    Dense(12, activation='softmax')
+  ])
+  ```
