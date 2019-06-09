@@ -71,7 +71,7 @@ Copy the following code into the file:
 
 ## Listen for commands and send commands
 
-It's nice to control the car directly on the car - but sometimes we want to send data from an external computer to the vehicle - that's what the _AutRemoteController_ module is for. Let's write two things now: A script that runs on your car listening ffor external commands and a script for your PC sending commands to the car.
+It's nice to control the car directly on the car - but sometimes we want to send data from an external computer to the vehicle - that's what the _AutRemoteController_ module is for. Let's write two things now: A script that runs on your car listening for external commands and a script for your PC sending commands to the car.
 
 Create a new file `rc_test.py` on your car. Copy the following code into it:
 
@@ -96,7 +96,7 @@ Create a new file `rc_test.py` on your car. Copy the following code into it:
 
 With `rc = RemoteController()` we create a new RemoteController object. This object holds all the methods and properties we need to establish a connection between the car and the PC. With `rc.listen()` we tell the car to listen for incoming commands. Since we don't want to just process one command, we wrap the code into a while loop to continuously fetch new commands from the socket. In this example we just allow two commands: Move the car forward or stop the car.
 
-Next we're going to write a simple script that allows users to enter commands on the command line which are then sent to the car:
+Next we're going to write a simple script that allows users to enter commands on the command line which are then sent to the car. Create a new file on your PC and copy the following code into it:
 
   ```python
   from autcar import RemoteController
@@ -192,7 +192,40 @@ Now let's take a closer look what's in the folder. You should see several images
 
 <img src="../images/autcar_commands.png" width="400">
 
-This data can now be used to traing a machine learning model.
+To get real training data, create a track  as described [here](3_Autonomous_Driving.md#1-create-track), place your car on the track and control the car manually through the circuit while capturing images. Do this for several rounds (we recommend at least 10) to get representing training data.
 
+## Train a machine learning model locally
 
+We have training data, now let's see how we can use it. AutCar offers a module called _AutTrainer_ which provides several methods to help you with training a model. The first method we'll take a look at is `create_balanced_dataset()`. This method does two things: First, it balances the dataset. It's unlikely that we use all commands (move, left, right...) the same number of times. But to create an unbiased model, all classes should appear roughly uniformly. `create_balanced_dataset()` is **upsampling** the data by simply copying underrepresented classes. Second, the method also splits our data into a **training** and a **test** set. While data in the training set is used to train the model, images in the test set are only used to evaluate model performance. And for a meaningful evaluation we have to use data, the model has not seen before durng training.
+
+To create a balanced dataset, use the following code:
+
+   ```python
+  from autcar import Trainer
+
+  trainer = Trainer()
+  trainer.create_balanced_dataset(input_folder_path = "path/to/trainingdata", output_folder_path = "path/to/trainingdata_balanced", train_test_split = 0.7)
+
+  ```
+
+The argument `input_folder_path` tells the trainer where our folder created by _AutCapture_ is located. `output_folder_path` can be an arbitrary path to location where the balanced dataset should be created. `train_test_split` tells our method how much training images should go into the training set (in this case 70%). 
+
+Let's use another method to see which and how many labels we have in our dataset. Add the following code:
+
+   ```python
+  labels = trainer.get_classes("path/to/trainingdata_balanced")
+  print(labels)
+
+  ```
   
+This should print the labels we have in the dataset and the corresponding amount on the console, for example:
+
+  ```
+  {'move_medium_forward': 195, 'right_medium_forward': 198, 'left_medium_forward': 186}
+  ```
+  
+In this exaple we just used three commands to drive our car: "move_medium_forward", "right_medium_forward" and "left_medium_forward". In total, there are 12 possible commands to control the car. Each of these commands has a number assigned to it as shown in the image below:
+
+<img src="../images/controls.png" width="800">
+
+When a machine learning model makes predictions, it doesn't output text. It always outputs number. We have to map these numbers back to useful labels which means, if the model outputs for example "6" the corresponding command is "move the car forward with medium speed".
