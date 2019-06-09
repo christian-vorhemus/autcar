@@ -34,7 +34,7 @@ class Trainer:
         except:
             raise Exception('scale_image error')   
 
-    def create_balanced_dataset(self, path_to_folders: Union[str, List[str]], output_folder_path: str = 'balanced_dataset', train_test_split: float = 0.8):
+    def create_balanced_dataset(self, input_folder_path: Union[str, List[str]], output_folder_path: str = 'balanced_dataset', train_test_split: float = 0.8):
         image_counter = 0
         command_counter_start = {}
         command_counter = {}
@@ -46,10 +46,10 @@ class Trainer:
         
         os.makedirs(outputfolder_path)
 
-        if(type(path_to_folders) == str):
-            files = [path_to_folders]
-        elif(isinstance(path_to_folders, list)):
-            files = path_to_folders
+        if(type(input_folder_path) == str):
+            files = [input_folder_path]
+        elif(isinstance(input_folder_path, list)):
+            files = input_folder_path
 
         for file in files:
             file = file.rstrip('/')
@@ -163,9 +163,9 @@ class Trainer:
         return True
 
 
-    def get_no_classes(self, path_to_folder: str):
+    def get_classes(self, path_to_folder: str):
         path_to_folder = path_to_folder.rstrip('/')
-        classes_set = set()
+        classes_dict = dict()
         map_file_train = path_to_folder+"/train_map.txt"
 
         try:
@@ -173,12 +173,15 @@ class Trainer:
                 csv_reader = csv.reader(f, delimiter='\t')
                 for row in csv_reader:
                     cmd = row[1]
-                    classes_set.add(cmd)
+                    if(cmd in classes_dict):
+                        classes_dict[cmd] += 1
+                    else:
+                        classes_dict[cmd] = 1
+
         except Exception as e:
             raise Exception("No train_map.txt file found in path "+path_to_folder+". Did you create a dataset using create_balanced_dataset()?")
 
-        num_classes = len(classes_set)
-        return num_classes
+        return classes_dict
 
 
     def train(self, path_to_folder: str, model_definition, epochs: int = 10, output_model_path: str = "driver_model.onnx", classes = None, minibatch_size: int = 64):
