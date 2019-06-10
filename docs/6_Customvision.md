@@ -79,9 +79,9 @@ We can plot this table as a curve:
 
 <img src="../images/precision_recall.png" width="400" />
 
-The model is the better, the more this curve is bent to the upper right corner. 
+A perfect model would have 100% precision and 100% recall at all different threshold values which would bend the curve to the right corner. 
 
-Now suppose we have a different model with a different curve - how do we compare these curves and get a metric which curve is better? We could measure the **area under the curve** by calculating the integral between the lowest and highest precision-recall pair. In practice, we use an approximation by summing up the rectangles defined by precision multiplied with recall at a certain threshold. And this is called "Average Precision" (AP).
+Now suppose we have a second model with a different curve - how do we compare these curves and get a metric which curve is better? We could measure the **area under the curve** by calculating the integral between the lowest and highest precision-recall pair. In practice, we use an approximation by summing up the rectangles defined by precision multiplied with recall at a certain threshold. And this is called "Average Precision" (AP).
 
 ## Download and convert the model
 
