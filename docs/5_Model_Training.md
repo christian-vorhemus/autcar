@@ -2,9 +2,9 @@
 
 In this tutorial we are going to take a closer look at that happens when we train a machine learning model. As a prerequisite make sure you have some training data collected as described [here](4_AutCar_General.md#create-training-data) or [here](3_Autonomous_Driving.md#2-capture-training-data).
 
-##
+## The AutTrainer module
 
-We have training data, now let's see how we can use it. AutCar offers a module called _AutTrainer_ which provides several methods to help you with training a model. The first method we'll take a look at is `create_balanced_dataset()`. This method does two things: First, it balances the dataset. It's unlikely that we use all commands (move, left, right...) the same number of times. But to create an unbiased model, all classes should appear roughly uniformly. `create_balanced_dataset()` is **upsampling** the data by simply copying underrepresented classes. Second, the method also splits our data into a **training** and a **test** set. While data in the training set is used to train the model, images in the test set are only used to evaluate model performance. And for a meaningful evaluation we have to use data, the model has not seen before durng training.
+Suppose have training data, now let's see how we can use it. AutCar offers a module called _AutTrainer_ which provides several methods to help you with training a model. The first method we'll take a look at is `create_balanced_dataset()`. This method does two things: First, it balances the dataset. It's unlikely that we use all commands (move, left, right...) the same number of times. But to create an unbiased model, all classes should appear roughly uniformly. `create_balanced_dataset()` is **upsampling** the data by simply copying underrepresented classes. Second, the method also splits our data into a **training** and a **test** set. While data in the training set is used to train the model, images in the test set are only used to evaluate model performance. And for a meaningful evaluation we have to use data, the model has not seen before durng training.
 
 To create a balanced dataset, use the following code:
 
@@ -36,6 +36,8 @@ In this example we just used three commands to drive our car: "move_medium_forwa
 
 <img src="../images/controls.png" width="800">
 
+## Convolutional Neural Network basics
+
 When a machine learning model makes predictions, it doesn't output text. It always outputs number. We have to map these numbers back to useful labels which means, if the model outputs for example "6" the corresponding command is "move the car forward with medium speed".
 
 Before we get predictions, we have to define our model and we'll use a Convolutional Neural Network (CNN) to do this job. Look at the images below: These are typical examples of what the car sees and the text below tells us what command we would expect to be executed when an image like this appears infront of the car:
@@ -65,8 +67,12 @@ Before we get predictions, we have to define our model and we'll use a Convoluti
   ])
   ```
   
-  Let's take a closer look at the single steps here: "InputLayer" needs the shape of out image, the standard size we use is 3 channels (Red, Green, Blue = RGB), 168 pixel height and 224 pixel width. Next, we convolutional operation takes place. Here, we define a set of filters which are sliding over the image and 
+  Let's take a closer look at the single steps here: "InputLayer" needs the shape of out image, the standard size we use is 3 channels (Red, Green, Blue = RGB), 168 pixel height and 224 pixel width. Next, the convolutional operation takes place. Here, we define a set of filters which are sliding over the image whereby the pixel values of the filter and the underlying part of the image are multiplied. The filter generates a large "pulse" when it moves over regions that are similar to the filter pattern (note: In the image below these results are represented as grey boxes in the filter map, in a real CNN, these values would be numbers)
   
   <img src="../images/kernels.gif" width="500">
   
+  In the "MaxPool2D" layer, the created feature map is resized to a smaller matrix:
+  
   <img src="../images/pooling.png" width="500">
+
+Finally, 
