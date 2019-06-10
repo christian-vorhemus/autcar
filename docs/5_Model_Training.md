@@ -80,9 +80,31 @@ Before we get predictions, we have to define our model and we'll use a Convoluti
 After we have defined our model, let's train it. _AutTrainer_ provides a method called `train()` which does most of the job for us:
 
   ```python
-  trainer.train(path_to_folder="path/to/trainingdata_balanced", model_definition=model, epochs=5, output_model_path="driver_keras.onnx")
+  trainer.train(path_to_folder="path/to/trainingdata_balanced", model_definition=model, epochs=5, output_model_path="driver_model.onnx")
   ```
   
   `path_to_folder` is the path to our balanced dataset containing a _train_map.txt_ and a _test_map.txt_ file. `model_definition` is the `Sequential` model object we defined above. `epochs` is a hyperparameter that tells our trainer how often the full training image set should flow through our CNN. The higher this number is, the better the model adapts to the training data (this is not necessarily a desired effect, see [Bias–variance tradeoff](https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff)). Finally, `output_model_path` tells the trainer where the trained model should be placed. The model file contains the definition of the model we defined and the learned weights.
 
-We have trained a model. But is it "good"? What does "good" mean anyway? 
+We have trained a model. But is it "good"? What does "good" mean anyway? There are several measures that tell us if a model is good:
+
+1) **Accuracy**: This is simply the number of all correctly classified images divided by the number of total images. Suppose we have 10 images of "drive left" in our test set and 8 of them were correctly classified as "drive left" by our model - the accuraacy is 80%
+
+2) **Precision**: How many of the images that were classified as "drive left" are actually "drive left"? Suppose, our model predicts that 8 images are "drive left" but just 4 of these images are really "drive left". The precision in that case is 50%.
+
+3) **Recall**: Measures how good the model is at finding certain classes. For example, if there are 10 "drive left" images in total and the model finds 7 of them, recall is 70%.
+
+4) **F1-Score**: Since there is a certain dependency between precision and recall (if you are stricter and use only the predictions for which the model gives high probability score, increase precision but decrease recall and vice versa), we can define a metric that combines both. F1 score is the harmonic mean of precision and recall.
+  
+  With _AutTrainer_ we get a list of all these score per class by executing the `test()` method. There are two parameters needed: The model file in ONNX format we trained earlier and the path to the `test_map.txt` file in our "trainingdata" folder:
+  
+  ```python
+  trainer.test(path_to_model="driver_model.onnx", path_to_test_map="path/to/trainingdata_balanced/test_map.txt")
+  ```
+  
+  The output looks like this:
+  
+  <img src="../images/D3_2.jpg" width="400">
+  
+  Additionally to our scores, we also get a **confusion matrix**. The columns represent the predict classes of the model, the rows the actual classes. In a good model, the diagonal squares should be clearly darker then the rest. 
+  
+  To finally answer the question if our model is good, we have to ask ourself: What are the "costs" of wrong predictions? Suppose our model confuses "left" and "forward" from time to time. This is certainly bad, but since the car is moving constantly and we gez frequently new images, the car can correct these mistakes easily. Suppose, our model confuses "left" and "right" from time to time. Here the implication is worse, it means out car will start to turn right in a left turn, this is certainly harder to correct in the next prediction round.
