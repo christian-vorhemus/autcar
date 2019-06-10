@@ -36,9 +36,9 @@ In this example we just used three commands to drive our car: "move_medium_forwa
 
 <img src="../images/controls.png" width="800">
 
-## Convolutional Neural Network basics
-
 When a machine learning model makes predictions, it doesn't output text. It always outputs number. We have to map these numbers back to useful labels which means, if the model outputs for example "6" the corresponding command is "move the car forward with medium speed".
+
+## Convolutional Neural Network basics
 
 Before we get predictions, we have to define our model and we'll use a Convolutional Neural Network (CNN) to do this job. Look at the images below: These are typical examples of what the car sees and the text below tells us what command we would expect to be executed when an image like this appears infront of the car:
 
@@ -75,4 +75,14 @@ Before we get predictions, we have to define our model and we'll use a Convoluti
   
   <img src="../images/pooling.png" width="500">
 
-Finally, 
+## Train and evaluate the model
+
+After we have defined our model, let's train it. _AutTrainer_ provides a method called `train()` which does most of the job for us:
+
+  ```python
+  trainer.train(path_to_folder="path/to/trainingdata_balanced", model_definition=model, epochs=5, output_model_path="driver_keras.onnx")
+  ```
+  
+  `path_to_folder` is the path to our balanced dataset containing a _train_map.txt_ and a _test_map.txt_ file. `model_definition` is the `Sequential` model object we defined above. `epochs` is a hyperparameter that tells our trainer how often the full training image set should flow through our CNN. The higher this number is, the better the model adapts to the training data (this is not necessarily a desired effect, see [Bias–variance tradeoff](https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff)). Finally, `output_model_path` tells the trainer where the trained model should be placed. The model file contains the definition of the model we defined and the learned weights.
+
+We have trained a model. But is it "good"? What does "good" mean anyway? 
