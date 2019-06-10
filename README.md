@@ -30,8 +30,8 @@ Do you have a car ready to go? Great, next please follow the guide [here](docs/2
 
 The following tutorials are available at the moment:<p>
 - [1. Basics - Learn how AutCar works in general](docs/4_AutCar_General.md)
-- [2. External models - Train a model in customvision.ai and use it in AutCar](docs/5_Customvision.md)
-- [3. Execute multiple models simultaneously - Learn how to write your own execution function](docs/6_Execution_Function.md)
+- [2. Machine Learning - Learn the basics about Convolutional Neural Networks for AutCar](docs/5_Model_Training.md)
+- [2. External models - Train a model in customvision.ai and use it in AutCar](docs/6_Customvision.md)
 
 ## FAQ & troubleshooting
 <i>Q: I have trained a machine learning model but the car is not following the lines.</i>
