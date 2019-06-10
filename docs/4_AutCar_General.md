@@ -167,7 +167,7 @@ Create a new file called `capture_test.py` and add the following code
   cap.stop()
   ```
 
-  AutCapture needs a camera object to take pictures from and the car object which is controlled to take the commands from. It saves the pictures and commands in a newly created folder named "trainingdata" on your car. `capture_interval=1` tells our capture object to record data every second. 
+  AutCapture needs a camera object and a car object. It saves the pictures and commands in a newly created folder named "trainingdata" on your car. `capture_interval=1` tells our capture object to record data every second. 
   
   Execute the script with
   ```
