@@ -40,11 +40,11 @@ When a machine learning model makes predictions, it doesn't output text. It alwa
 
 ## Convolutional Neural Network basics
 
-Before we get predictions, we have to define our model and we'll use a Convolutional Neural Network (CNN) to do this job. Look at the images below: These are typical examples of what the car sees and the text below tells us what command we would expect to be executed when an image like this appears infront of the car:
+Before we get predictions, we have to define our model and we'll use a Convolutional Neural Network (CNN) to do this job. Look at the images below: These are typical examples of what the car sees and the text below tells us what command we would expect to be executed when an image like this appears in front of the car:
 
   <img src="../images/movements.png" width="500">
 
-  CNNs are sequences of operations stacked on each other. We start with an input layer that represents our image. Next, the image goes through an "Convolution layer" (in Keras the corresponding method is called "Conv2D"). Then the images is shrinked in a layer called "MaxPool2D". This happens a few times until the 2D images is converted to a 1D vector through "Flatten". In the end we have a fully-connected 1D "Dense" layer consisting of 12 neurons representing the 12 possible movements the car can make. This vector holds probabilities, so for example if the output vector for one image looks like this `[0.05,0.05,0.8,0.1,0,0,0,0,0,0,0,0]` the highest probability is at index 2 which is equivalent to the command "left medium backwards".
+  CNNs are sequences of operations stacked on each other. We start with an input layer that represents our image. Next, the image goes through a "Convolution layer" (in Keras the corresponding method is called "Conv2D"). Then the image is scaled down in a layer called "MaxPool2D". This happens a few times until the 2D images is converted to a 1D vector through "Flatten". In the end we have a fully connected 1D "Dense" layer consisting of 12 neurons representing the 12 possible movements the car can make. This vector holds probabilities, so for example if the output vector for one image looks like this `[0.05,0.05,0.8,0.1,0,0,0,0,0,0,0,0]` the highest probability is at index 2 which is equivalent to the command "left medium backwards".
   
   In Keras, the CNN as described above can be implemented as follow:
 
@@ -67,7 +67,7 @@ Before we get predictions, we have to define our model and we'll use a Convoluti
   ])
   ```
   
-  Let's take a closer look at the single steps here: "InputLayer" needs the shape of out image, the standard size we use is 3 channels (Red, Green, Blue = RGB), 168 pixel height and 224 pixel width. Next, the convolutional operation takes place. Here, we define a set of filters which are sliding over the image whereby the pixel values of the filter and the underlying part of the image are multiplied. The filter generates a large "pulse" when it moves over regions that are similar to the filter pattern (note: In the image below these results are represented as grey boxes in the filter map, in a real CNN, these values would be numbers)
+  Let's take a closer look at the single steps here: "InputLayer" needs the shape of our image, the standard size we use is 3 channels (Red, Green, Blue = RGB), 168 pixel height and 224 pixel width. Next, the convolutional operation takes place. Here, we define a set of filters which are sliding over the image whereby the pixel values of the filter and the underlying part of the image are multiplied. The filter generates a large "pulse" when it moves over regions that are similar to the filter pattern (note: In the image below these results are represented as grey boxes in the filter map, in a real CNN, these values would be numbers)
   
   <img src="../images/kernels.gif" width="500">
   
@@ -87,9 +87,9 @@ After we have defined our model, let's train it. _AutTrainer_ provides a method 
 
 We have trained a model. But is it "good"? What does "good" mean anyway? There are several measures that tell us if a model is good:
 
-1) **Accuracy**: This is simply the number of all correctly classified images divided by the number of total images. Suppose we have 10 images of "drive left" in our test set and 8 of them were correctly classified as "drive left" by our model - the accuraacy is 80%
+1) **Accuracy**: This is simply the number of all correctly classified images divided by the number of total images. Suppose we have 10 images of "drive left" in our test set and 8 of them were correctly classified as "drive left" by our model - the accuracy is 80%
 
-2) **Precision**: How many of the images that were classified as "drive left" are actually "drive left"? Suppose, our model predicts that 8 images are "drive left" but just 4 of these images are really "drive left". The precision in that case is 50%.
+2) **Precision**: How many of the images that were classified as "drive left" are actually "drive left"? Suppose our model predicts that 8 images are "drive left" but just 4 of these images are really "drive left". The precision in that case is 50%.
 
 3) **Recall**: Measures how good the model is at finding certain classes. For example, if there are 10 "drive left" images in total and the model finds 7 of them, recall is 70%.
 
@@ -107,4 +107,4 @@ We have trained a model. But is it "good"? What does "good" mean anyway? There a
   
   Additionally to our scores, we also get a **confusion matrix**. The columns represent the predict classes of the model, the rows the actual classes. In a good model, the diagonal squares should be clearly darker then the rest. 
   
-  To finally answer the question if our model is good, we have to ask ourself: What are the "costs" of wrong predictions? Suppose our model confuses "left" and "forward" from time to time. This is certainly bad, but since the car is moving constantly and we gez frequently new images, the car can correct these mistakes easily. Suppose, our model confuses "left" and "right" from time to time. Here the implication is worse, it means out car will start to turn right in a left turn, this is certainly harder to correct in the next prediction round.
+  To finally answer the question if our model is good, we have to ask ourselves: What are the "costs" of wrong predictions? Suppose our model confuses "left" and "forward" from time to time. This is certainly bad, but since the car is moving constantly and we get frequently new images, the car can correct these mistakes easily. Suppose our model confuses "left" and "right" from time to time. Here the implication is worse, it means out car will start to turn right in a left turn, this is certainly harder to correct in the next prediction round.
