@@ -14,7 +14,7 @@ You have two options: Either get a development kit with all hardware parts ready
 
 Or, collect (and 3D print) all the parts yourself. You will need the following:
 
-1) A Raspberry Pi 3 (the original Raspberry Pi or Raspberry Pi Zero (WH) **won't work**. You need a chip with ARMv7 processor).
+1) A Raspberry Pi 3 (the original Raspberry Pi or Raspberry Pi Zero (WH) **won't work**).
 2) Two motors and an expansion board to connect both to your Raspberry Pi (we use 5V 28BYJ-48 stepper motors).
 3) A camera (either an USB webcam or a Raspberry Pi cam).
 4) A battery pack to run your Raspberry Pi.
@@ -28,7 +28,7 @@ Do you have a car ready to go? Great, next please follow the guide [here](docs/2
 
 ### 3) Learn how to use the library
 
-The following tutorials are available at the moment:<p>
+The following tutorials are available:<p>
 - [1. Basics - Learn how AutCar works in general](docs/4_AutCar_General.md)
 - [2. Machine Learning - Learn the basics of Convolutional Neural Networks for AutCar](docs/5_Model_Training.md)
 - [3. External models - Train a model in customvision.ai and use it in AutCar](docs/6_Customvision.md)
