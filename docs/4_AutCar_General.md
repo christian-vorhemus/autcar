@@ -230,9 +230,13 @@ In this example we just used three commands to drive our car: "move_medium_forwa
 
 When a machine learning model makes predictions, it doesn't output text. It always outputs number. We have to map these numbers back to useful labels which means, if the model outputs for example "6" the corresponding command is "move the car forward with medium speed".
 
-Before we get predictions, we have to define our model. 
+Before we get predictions, we have to define our model and we'll use a Convolutional Neural Network (CNN) to do this job. Look at the images below: These are typical examples of what the car sees and the text below tells us what command we would expect to be executed when an image like this appears infront of the car:
 
   <img src="../images/movements.png" width="500">
+
+  CNNs are sequences of operations stacked on each other. We start with an input layer that represents our image. Next, the image goes through an "Convolution layer" (in Keras the corresponding method is called "Conv2D"). Then the images is shrinked in a layer called "MaxPool2D". This happens a few times until the 2D images is converted to a 1D vector through "Flatten". In the end we have a fully-connected 1D "Dense" layer consisting of 12 neurons representing the 12 possible movements the car can make. This vector holds probabilities, so for example if the output vector for one image looks like this `[0.05,0.05,0.8,0.1,0,0,0,0,0,0,0,0]` the highest probability is at index 2 which is equivalent to the command "left medium backwards".
+  
+  In Keras, the CNN as described above can be implemented as follow:
 
   ```python
   from keras.models import Sequential
@@ -252,6 +256,8 @@ Before we get predictions, we have to define our model.
     Dense(12, activation='softmax')
   ])
   ```
+  
+  Let's take a closer look at the single steps here: "InputLayer" needs the shape of out image, the standard size we use is 3 channels (Red, Green, Blue = RGB), 168 pixel height and 224 pixel width. Next, we convolutional operation takes place. Here, we define a set of filters which are sliding over the image and 
   
   <img src="../images/kernels.gif" width="500">
   
