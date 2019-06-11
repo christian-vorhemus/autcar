@@ -132,7 +132,7 @@ class Camera:
                 encoded, buffer = cv2.imencode('.jpg', frame)
                 b_frame = base64.b64encode(buffer)
                 b_size = len(b_frame)
-                print("Frame size = ", b_size)
+                # print("Frame size = ", b_size)
                 try:
                     conn.sendall(struct.pack("<L", b_size) + b_frame)
                 except socket.error as e:

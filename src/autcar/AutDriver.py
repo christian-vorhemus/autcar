@@ -105,6 +105,7 @@ class Driver:
         self.__model_threads = threads
         self.__execution_function = execution_function
         self.__execution_thread = Thread(target=self.__execute)
+        self.__variables = dict()
         self.__frame = None
         self.__stop_driving = False
         self.__capture_interval = execution_interval
@@ -255,7 +256,7 @@ class Driver:
 
             if(current_time - self.__last_timestamp > self.__capture_interval):
                 self.__last_timestamp = current_time
-                self.__execution_function(self.__prediction_dict, self.__car)
+                self.__execution_function(self.__prediction_dict, self.__car, self.__variables)
 
     def start(self):
         """
