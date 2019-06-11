@@ -148,7 +148,7 @@ Now let's execute this model. We make use of our `Driver` class here even though
 ```python
 model_trafficsigns = OwnModel("model.onnx", execution_interval=2, name="traffic_model")
 
-def execute(model_predictions: dict, car: Car):
+def execute(model_predictions: dict, car: Car, variables: dict):
     print(model_predictions["traffic_model"][0])
 
 driver = Driver(model_trafficsigns, None, cam, execution_function=execute, execution_interval=3)
