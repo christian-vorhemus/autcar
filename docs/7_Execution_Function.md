@@ -38,7 +38,7 @@ model_traffic_sign = OwnModel("trafficsign.onnx", execution_interval=3)
 
 ## Movements of the car
 
-We have two model objects `model_drive` and `model_traffic_sign` ready to work with. Let's define the logic the car should follow: In general it should just follow the track, this is the job of _model_drive_. When a stop sign is visible, the prediction of _model_traffic_sign_ should overrule the predictions of _model_drive_ - the car should stop for a few seconds. Then, the car should continue driving but since it hasn't moved, it will recognize the stop sign again and stop. To prevent this, we ignore every sign recognition for a few iterations. When a priorty road sign is recognized, the car should drive faster for a few seconds and get back to normal after a few seconds.
+We have two model objects `model_drive` and `model_traffic_sign` ready to work with. Let's define the logic the car should follow: In general it should just follow the track, this is the job of _model_drive_. When a stop sign is visible, the prediction of _model_traffic_sign_ should overrule the predictions of _model_drive_ - the car should stop for a few seconds. Then, the car should continue driving but since it hasn't moved, it will recognize the stop sign again and stop. To prevent this, we ignore every sign recognition for a few iterations. When a priority road sign is recognized, the car should drive faster for a few seconds and get back to normal after a few seconds.
 
 Let's try to bring the logic above into a Python function.
 
@@ -46,7 +46,7 @@ When you have trained your `model_drive` model with `train()` of "AutTrainer", t
 
 <img src="../images/controls.png" width="800">
 
-So when `model_drive` outputs "0" it means drive a little bit to the left backwards. If it outputs "4" it means move fast forward and so on. In our training, it is unlikely that we use all commands, therefore a lot of labels will not be used.
+So, when `model_drive` outputs "0" it means drive a little bit to the left backwards. If it outputs "4" it means move fast forward and so on. In our training, it is unlikely that we use all commands, therefore a lot of labels will not be used.
 
 ## Write the execution function
 
@@ -82,7 +82,7 @@ if(drive_predictions_current != drive_predictions_last):
 
 If there is a difference between the current and the last prediction, enter the if-else statement and check for direction predictions. "1" stands for "drive left light", so when our model has predicted "1", tell our car to turn left. The same applies to every other direction.
 
-Next, write the code block for the traffic sign prediction behaviour:
+Next, write the code block for the traffic sign prediction behavior:
 
 ```python
 if(trafficsign_prediction == 0):
@@ -99,7 +99,7 @@ elif(trafficsign_prediction == 2):
     variables["ignore_stop_counter"] = 4
 ```
 
-If no traffic sign was detected, we just print the result on the console. If a priority road sign was detected, we also just output this on the result. However, for stop signs, we call `car.stop()` and stop the car for 4 seconds. Next we add a new entry to out dictionary called "ignore_stop_counter": This counter will be decremented till it reaches 0. While the counter is greather than 0, all new precitions of stop signs will be ignored.
+If no traffic sign was detected, we just print the result on the console. If a priority road sign was detected, we also just output this on the result. However, for stop signs, we call `car.stop()` and stop the car for 4 seconds. Next we add a new entry to out dictionary called "ignore_stop_counter": This counter will be decremented till it reaches 0. While the counter is greater than 0, all new predictions of stop signs will be ignored.
 
 Finally, we create the driver and hand over all needed arguments:
 
@@ -108,7 +108,7 @@ driver = Driver([model_drive, model_traffic_sign], car, cam, execution_function=
 driver.start()
 ```
 
-We cann pass two or models in a list to the `Driver` object. Additionally we have to hand over a car and camera object and define the function that should be executed. With `execution_interval` we define that our execution function should run every 2 seconds. Note: The execution of the function is completely independent from the execution of the models: It's possible that we collect predictions faster than we're doing something with them. In fact, we have defined three different time intervals for the execution function and the two models:
+We can pass two or models in a list to the `Driver` object. Additionally, we have to hand over a car and camera object and define the function that should be executed. With `execution_interval` we define that our execution function should run every 2 seconds. Note: The execution of the function is completely independent from the execution of the models: It's possible that we collect predictions faster than we're doing something with them. In fact, we have defined three different time intervals for the execution function and the two models:
 
 <img src="../images/execution_function.png" width="500">
 
