@@ -155,7 +155,7 @@ driver = Driver(model_trafficsigns, None, cam, execution_function=execute, execu
 driver.start()
 ```
 
-First, we create a model object with our `model.onnx` file. We also define that this model should be executed every two seconds. We also name this model to refer to it later.
+First, we create a model object with our `model.onnx` file. We also define that this model should be executed every two seconds (note that there is a different execution interval for the model and the execution function). We also name this model to refer to it later.
 
 Next we define a function `execute` which will be handed over to the `Driver` class. This standard function will get two arguments by `Driver`, a dictionary of predictions and the car object. `model_predictions` contains all predictions of all models we execute, in this case we just have one. In `execute` we print the results of the model predictions. The result is a list of the last 5 predictions the model made, index 0 holds the most recent predictions as an integer value. If we want to map back this integer value to a label, take a look into the `labels.txt` file you downloaded earlier:
 
