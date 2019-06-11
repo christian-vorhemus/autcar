@@ -109,5 +109,6 @@ If you get the message that pip is not recognized as an internal or external com
     <p><img src="../images/autcar_controlboard.png" width="400" margin="20"></p>
 4. Enter the IP address of the car in the right upper corner and click on "Connect"<br>
 5. Click on the car control buttons to manually move the car.
+    <p><img src="../images/autcar_controlboard.gif" width="400" margin="20"></p>
 
 You should now be able to control the car manually, great! Next, let's see how we can enable autonomous driving mode, [click here](3_Autonomous_Driving.md) to learn more.
