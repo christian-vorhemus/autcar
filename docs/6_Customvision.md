@@ -169,4 +169,4 @@ Finally, run this script:
 python trafficsign_sample.py
 ```
 
-The script is now capturing data from the camera and prints the predictions (0 = No sign detected, 1 = major road sign detected, 2 = stop sign detected). Place the car in front of a sign to see how the predictions change.
+Our car is now capturing data from the camera and prints the predictions on the console (0 = No sign detected, 1 = major road sign detected, 2 = stop sign detected). Place the car in front of a sign to see how the predictions change.
