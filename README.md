@@ -32,6 +32,7 @@ The following tutorials are available:<p>
 - [1. Basics - Learn how AutCar works in general](docs/4_AutCar_General.md)
 - [2. Machine Learning - Learn the basics of Convolutional Neural Networks for AutCar](docs/5_Model_Training.md)
 - [3. External models - Train a model in customvision.ai and use it in AutCar](docs/6_Customvision.md)
+- [4. Execute two or more models - Write a custom execution function](docs/7_Execution_Function.md)
 
 ## FAQ & troubleshooting
 <i>Q: I have trained a machine learning model but the car is not following the lines.</i>
