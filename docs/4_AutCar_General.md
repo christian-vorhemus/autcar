@@ -167,7 +167,7 @@ Create a new file called `capture_test.py` and add the following code
   cap.stop()
   ```
 
-  AutCapture needs a camera object to take pictures from and the car object which is controlled to take the commands from. It saves the pictures and commands in a newly created folder named "trainingdata" on your car. `capture_interval=1` tells our capture object to record data every second. 
+  AutCapture needs a camera object and a car object. It saves the pictures and commands in a newly created folder named "trainingdata" on your car. `capture_interval=1` tells our capture object to record data every second. 
   
   Execute the script with
   ```
@@ -193,39 +193,3 @@ Now let's take a closer look what's in the folder. You should see several images
 <img src="../images/autcar_commands.png" width="400">
 
 To get real training data, create a track  as described [here](3_Autonomous_Driving.md#1-create-track), place your car on the track and control the car manually through the circuit while capturing images. Do this for several rounds (we recommend at least 10) to get representing training data.
-
-## Train a machine learning model locally
-
-We have training data, now let's see how we can use it. AutCar offers a module called _AutTrainer_ which provides several methods to help you with training a model. The first method we'll take a look at is `create_balanced_dataset()`. This method does two things: First, it balances the dataset. It's unlikely that we use all commands (move, left, right...) the same number of times. But to create an unbiased model, all classes should appear roughly uniformly. `create_balanced_dataset()` is **upsampling** the data by simply copying underrepresented classes. Second, the method also splits our data into a **training** and a **test** set. While data in the training set is used to train the model, images in the test set are only used to evaluate model performance. And for a meaningful evaluation we have to use data, the model has not seen before durng training.
-
-To create a balanced dataset, use the following code:
-
-   ```python
-  from autcar import Trainer
-
-  trainer = Trainer()
-  trainer.create_balanced_dataset(input_folder_path = "path/to/trainingdata", output_folder_path = "path/to/trainingdata_balanced", train_test_split = 0.7)
-
-  ```
-
-The argument `input_folder_path` tells the trainer where our folder created by _AutCapture_ is located. `output_folder_path` can be an arbitrary path to location where the balanced dataset should be created. `train_test_split` tells our method how much training images should go into the training set (in this case 70%). 
-
-Let's use another method to see which and how many labels we have in our dataset. Add the following code:
-
-   ```python
-  labels = trainer.get_classes("path/to/trainingdata_balanced")
-  print(labels)
-
-  ```
-  
-This should print the labels we have in the dataset and the corresponding amount on the console, for example:
-
-  ```
-  {'move_medium_forward': 195, 'right_medium_forward': 198, 'left_medium_forward': 186}
-  ```
-  
-In this exaple we just used three commands to drive our car: "move_medium_forward", "right_medium_forward" and "left_medium_forward". In total, there are 12 possible commands to control the car. Each of these commands has a number assigned to it as shown in the image below:
-
-<img src="../images/controls.png" width="800">
-
-When a machine learning model makes predictions, it doesn't output text. It always outputs number. We have to map these numbers back to useful labels which means, if the model outputs for example "6" the corresponding command is "move the car forward with medium speed".

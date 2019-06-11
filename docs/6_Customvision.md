@@ -1,7 +1,7 @@
 
 # Use Microsoft Custom Vision to train a model
 
-In this tutorial we will learn how to use the customvision.ai online service to train a model. This works completely without code, the trained model can be downloaded as a file. We aim to create a traffic sign detector: Our car should be capable of recognizing two different traffic signs:
+In this tutorial we will learn how to use the <a href="https://www.customvision.ai/" target="_blank">customvision.ai</a> online service to train a model. This works completely without code, the trained model can be downloaded as a file. We aim to create a traffic sign detector: Our car should be capable of recognizing two different traffic signs:
 
 <p float="left">
   <img src="../images/major_road_sign.jpg" width="200" />
@@ -79,9 +79,9 @@ We can plot this table as a curve:
 
 <img src="../images/precision_recall.png" width="400" />
 
-The model is the better, the more this curve is bent to the upper right corner. 
+A perfect model would have 100% precision and 100% recall at all different threshold values which would bend the curve to the right corner. 
 
-Now suppose we have a different model with a different curve - how do we compare these curves and get a metric which curve is better? We could measure the **area under the curve** by calculating the integral between the lowest and highest precision-recall pair. In practice, we use an approximation by summing up the rectangles defined by precision multiplied with recall at a certain threshold. And this is called "Average Precision" (AP).
+Now suppose we have a second model with a different curve - how do we compare these curves and get a metric which curve is better? We could measure the **area under the curve** by calculating the integral between the lowest and highest precision-recall pair. In practice, we use an approximation by summing up the rectangles defined by precision multiplied with recall at a certain threshold. And this is called "Average Precision" (AP).
 
 ## Download and convert the model
 
@@ -169,4 +169,4 @@ Finally, run this script:
 python trafficsign_sample.py
 ```
 
-The script is now capturing data from the camera and prints the predictions (0 = No sign detected, 1 = major road sign detected, 2 = stop sign detected). Place the car in front of a sign to see how the predictions change.
+Our car is now capturing data from the camera and prints the predictions on the console (0 = No sign detected, 1 = major road sign detected, 2 = stop sign detected). Place the car in front of a sign to see how the predictions change.

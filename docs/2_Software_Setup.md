@@ -91,7 +91,7 @@ If you get the message that pip is not recognized as an internal or external com
 
 ### 5) Connect to your car and drive!
 
-1. On your Raspberry Pi, start the sample remote control script rc_sample.py
+1. On your Raspberry Pi, start the sample remote control script rc_sample.py in the folder ~/autcar/src:
  ```
  python3 rc_sample.py
  ```
