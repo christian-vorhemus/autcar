@@ -36,6 +36,8 @@ model_traffic_sign = OwnModel("trafficsign.onnx", execution_interval=3)
 
 ```
 
+## Movements of the car
+
 We have two model objects `model_drive` and `model_traffic_sign` ready to work with. Let's define the logic the car should follow: In general it should just follow the track, this is the job of _model_drive_. When a stop sign is visible, the prediction of _model_traffic_sign_ should overrule the predictions of _model_drive_ - the car should stop for a few seconds. Then, the car should continue driving but since it hasn't moved, it will recognize the stop sign again and stop. To prevent this, we ignore every sign recognition for a few iterations. When a priorty road sign is recognized, the car should drive faster for a few seconds and get back to normal after a few seconds.
 
 Let's try to bring the logic above into a Python function.
@@ -45,6 +47,8 @@ When you have trained your `model_drive` model with `train()` of "AutTrainer", t
 <img src="../images/controls.png" width="800">
 
 So when `model_drive` outputs "0" it means drive a little bit to the left backwards. If it outputs "4" it means move fast forward and so on. In our training, it is unlikely that we use all commands, therefore a lot of labels will not be used.
+
+## Write the execution function
 
 Let's assume we just used the commands left light, left medium, forward, right light and right medium (1, 3, 6, 8, 10) while training the model. The first thing we do is defining an execution function and getting the predictions from the two models:
 
