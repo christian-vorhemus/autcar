@@ -44,3 +44,5 @@ When you have trained your `model_drive` model with `train()` of "AutTrainer", t
 <img src="../images/controls.png" width="800">
 
 So when `model_drive` outputs "0" it means drive a little bit to the left backwards. If it outputs "4" it means move fast forward and so on. In our training, it is unlikely that we use all commands, therefore a lot of labels will not be used.
+
+<img src="../images/execution_function.png" width="500">
