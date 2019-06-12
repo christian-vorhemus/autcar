@@ -122,7 +122,6 @@ import cv2
 
 car = Car()
 cam = Camera(rotation=-1)
-cam.start()
 
 class OwnModel(Model):
     def preprocess(self, image):
