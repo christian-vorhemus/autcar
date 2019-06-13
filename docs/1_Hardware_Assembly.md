@@ -52,7 +52,7 @@ Repeat with the second back wheel and plug the motor-wheel connector on the moto
 
 <img src="../images/A7.jpg" width="400">
 
-Afterwards, plug both motors into the motor bracket. Make sure the motors are connected as shown in the image below.
+Afterwards, plug both motors into the motor bracket. Make sure the motors are connected as shown in the image below. Additionally, you can **add the rubber bands** to the brackets to fix the motors when they get hot.
 
 <img src="../images/A8_2.jpg" width="400">
 
