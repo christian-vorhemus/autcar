@@ -105,6 +105,6 @@ We have trained a model. But is it "good"? What does "good" mean anyway? There a
   
   <img src="../images/D3_2.jpg" width="400">
   
-  Additionally to our scores, we also get a **confusion matrix**. The columns represent the predict classes of the model, the rows the actual classes. In a good model, the diagonal squares should be clearly darker then the rest. 
+  Additionally to our scores, we also get a **confusion matrix**. The columns represent the predicted classes of the model, the rows the actual classes. In a good model, the diagonal squares should be clearly darker than the rest. 
   
-  To finally answer the question if our model is good, we have to ask ourselves: What are the "costs" of wrong predictions? Suppose our model confuses "left" and "forward" from time to time. This is certainly bad, but since the car is moving constantly and we get frequently new images, the car can correct these mistakes easily. Suppose our model confuses "left" and "right" from time to time. Here the implication is worse, it means out car will start to turn right in a left turn, this is certainly harder to correct in the next prediction round.
+  To finally answer the question if our model is good, we have to ask ourselves: What are the "costs" of wrong predictions? Suppose our model confuses "left" and "forward" from time to time. This is certainly bad, but since the car is moving constantly and we get frequently new images, the car can correct these mistakes easily. Suppose our model confuses "left" and "right" from time to time. Here, the implication is worse, it means out car will start to turn right in a left turn, this is certainly harder to correct in the next prediction round.

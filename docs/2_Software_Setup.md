@@ -98,7 +98,7 @@ If you get the message that pip is not recognized as an internal or external com
 
  Your car is now listening for commands (by default on port 8090)
 
-2. On your PC, start the web client with
+2. On your PC, change directory into the `src` folder and start the web client with
  ```
  python autcar/web/server.py
  ```
@@ -108,6 +108,7 @@ If you get the message that pip is not recognized as an internal or external com
 3. Open a browser and enter the address http://localhost:8080. You should now see the AutCar Control Board:
     <p><img src="../images/autcar_controlboard.png" width="400" margin="20"></p>
 4. Enter the IP address of the car in the right upper corner and click on "Connect"<br>
-5. Click on the car control buttons to manually move the car.
+5. Click on the car control buttons to manually move the car. The live camera **won't be visible by default**, you'll learn later how to turn it on.
+    <p><img src="../images/autcar_controlboard.gif" width="400" margin="20"></p>
 
 You should now be able to control the car manually, great! Next, let's see how we can enable autonomous driving mode, [click here](3_Autonomous_Driving.md) to learn more.
