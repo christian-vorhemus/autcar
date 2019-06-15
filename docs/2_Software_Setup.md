@@ -98,7 +98,7 @@ If you get the message that pip is not recognized as an internal or external com
 
  Your car is now listening for commands (by default on port 8090)
 
-2. On your PC, start the web client with
+2. On your PC, change directory into the `src` folder and start the web client with
  ```
  python autcar/web/server.py
  ```
