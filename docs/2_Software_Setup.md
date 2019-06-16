@@ -96,7 +96,7 @@ If you get the message that pip is not recognized as an internal or external com
  python3 rc_sample.py
  ```
 
- Your car is now listening for commands (by default on port 8090). **Important**: You'll see warnings saying `warnings.warn('Unsupported architecture (%s). ONNX Runtime supports 64bit architecture, only. Warning: Could not load Trainer` - this is expected, you can ignore those. When you see `Listening on :8090` on the screen, your car is listening for commands and works as expected.
+ Your car is now listening for commands (by default on port 8090). **Important**: You'll see warnings saying `warnings.warn('Unsupported architecture (%s). ONNX Runtime supports 64bit architecture, only. Warning: Could not load Trainer` - this is expected, you can ignore those. When you see `Listening on :8090` as the last statement on the screen, your car is listening for commands and works as expected.
 
 2. On your PC, change directory into the `src` folder and start the web client with
  ```
