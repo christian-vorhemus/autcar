@@ -78,7 +78,7 @@ It can happen that installation fails due to network timeouts. In that case, jus
 
 ### 4) Download and install AutCar on your PC
 
-Before you start, make sure that you have **Python 3.5 or newer** installed on your PC! Follow [this](https://www.python.org/downloads/) download page to get Python.
+Before you start, make sure that you have **64bit Python 3.5 or newer** installed on your PC! Follow [this](https://www.python.org/downloads/) download page to get Python.
 
 1) We also need the AutCar library on our PC. Download the zipped library using [this link](https://github.com/christian-vorhemus/autcar/archive/master.zip)
 
@@ -96,7 +96,7 @@ If you get the message that pip is not recognized as an internal or external com
  python3 rc_sample.py
  ```
 
- Your car is now listening for commands (by default on port 8090)
+ Your car is now listening for commands (by default on port 8090). **Important**: You'll see warnings saying `warnings.warn('Unsupported architecture (%s). ONNX Runtime supports 64bit architecture, only. Warning: Could not load Trainer` - this is expected, you can ignore those. When you see `Listening on :8090` on the screen, your car is listening for commands and works as expected.
 
 2. On your PC, change directory into the `src` folder and start the web client with
  ```
