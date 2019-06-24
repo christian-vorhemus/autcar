@@ -52,7 +52,7 @@ Repeat with the second back wheel and plug the motor-wheel connector on the moto
 
 <img src="../images/A7.jpg" width="400">
 
-Afterwards, plug both motors into the motor bracket. Make sure the motors are connected as shown in the image below. Additionally, you can **add the rubber bands** to the brackets to fix the motors when they get hot.
+Afterwards, plug both motors into the motor bracket. Make sure the motors are connected as shown in the image below. Additionally, you can **add rubber bands** to the brackets to fix the motors when they get hot.
 
 <img src="../images/A8_2.jpg" width="400">
 
@@ -61,7 +61,7 @@ Gently place the battery pack in the chassis and put the Raspberry Pi on top of 
 
 <img src="../images/A9.jpg" width="400">
 
-Last, plug the camera into the Raspberry Pi Camera CSI interface and fix it in the front mounting. The battery pack has a built-in micro USB cable you can use to power the Raspberry Pi. Don't power up your device yet, first prepare a micro SD card with the operating system on it. You'll learn how to do this in a second.
+Last, remove the blue protection film from the camera lense, plug the camera into the Raspberry Pi Camera CSI interface and fix it in the front mounting. The battery pack has a built-in micro USB cable you can use to power the Raspberry Pi. Don't power up your device yet, first prepare a micro SD card with the operating system on it. You'll learn how to do this in a second.
 
 <img src="../images/A10.jpg" width="400">
 
