@@ -69,14 +69,14 @@ def install_pillow():
     subprocess.check_call("python3 -m pip install Pillow", shell=True)
 
 def install_imageops():
-    subprocess.check_call("sudo apt-get -y install python-imaging", shell=True)
+    subprocess.check_call("sudo apt-get -y install python-pil python3-pil", shell=True)
 
 def install_libqt4():
     subprocess.check_call("sudo apt-get -y install libqt4-test", shell=True)
 
 def install_opencv():
-    subprocess.check_call("sudo apt-get -y install libcblas-dev libhdf5-dev libhdf5-serial-dev libatlas-base-dev libjasper-dev libqtgui4 libilmbase-dev openexr libgstreamer1.0-0 libavcodec-dev libavformat-dev libswscale-dev", shell=True)
-    subprocess.check_call("python3 -m pip install opencv-python", shell=True)
+    subprocess.check_call("sudo apt-get -y install libatlas-base-dev libhdf5-dev libhdf5-serial-dev libjasper-dev libqtgui4 libilmbase-dev openexr libgstreamer1.0-0 libavcodec-dev libavformat-dev libswscale-dev", shell=True)
+    subprocess.check_call("", shell=True)
 
 def main():
     args = parse_arguments()
