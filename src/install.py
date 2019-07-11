@@ -49,7 +49,8 @@ def enable_camera():
     subprocess.check_call("sudo raspi-config nonint do_camera 0", shell=True)
 
 def update():
-    subprocess.check_call("sudo apt-get update && sudo apt-get -y upgrade", shell=True)
+    subprocess.check_call("sudo apt update ", shell=True)
+    subprocess.check_call("sudo apt -y upgrade", shell=True)
 
 def install_git():
     subprocess.check_call("sudo apt-get -y install git", shell=True)
