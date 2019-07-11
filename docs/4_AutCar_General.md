@@ -141,7 +141,7 @@ Let's take a look at some code how we can open a connection from our PC to the c
    ```
    python autcar/web/server.py
   ```
-  to start the AutCar Control Board server. Open a browser, enter the address http://localhost:8080 and enter the IP address of your car in the right upper corner. Click "Connect" and you should see the live stream in a second.
+  to start the AutCar Control Board server. Open a browser, type in http://localhost:8080 and enter the IP address of your car in the right upper corner. Click "Connect" and you should see the live stream in a second.
 
 ## Create training data
 

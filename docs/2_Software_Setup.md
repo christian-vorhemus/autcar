@@ -78,7 +78,13 @@ It can happen that installation fails due to network timeouts. In that case, jus
 
 ### 4) Download and install AutCar on your PC
 
-Before you start, make sure that you have **Python 3.5 or newer** installed on your PC! Follow [this](https://www.python.org/downloads/) download page to get Python.
+Before you start, make sure that you have **64bit Python 3.5 or newer** installed on your PC! Check the architecture by entering
+```
+python -c "exec(\"import platform\nprint(platform.architecture()[0])\")"
+```
+The output should be `64bit`. Check the version by typing `python --version`. The version should be 3.5.x or higher.
+
+Windows users can download the executable [here](https://www.python.org/ftp/python/3.7.0/python-3.7.0-amd64.exe).
 
 1) We also need the AutCar library on our PC. Download the zipped library using [this link](https://github.com/christian-vorhemus/autcar/archive/master.zip)
 
@@ -96,7 +102,7 @@ If you get the message that pip is not recognized as an internal or external com
  python3 rc_sample.py
  ```
 
- Your car is now listening for commands (by default on port 8090)
+ Your car is now listening for commands (by default on port 8090). **Important**: You'll see warnings saying `warnings.warn('Unsupported architecture (%s). ONNX Runtime supports 64bit architecture, only. Warning: Could not load Trainer` - this is expected, you can ignore those. When you see `Listening on :8090` as the last statement on the screen, your car is listening for commands and works as expected.
 
 2. On your PC, change directory into the `src` folder and start the web client with
  ```
@@ -108,7 +114,7 @@ If you get the message that pip is not recognized as an internal or external com
 3. Open a browser and enter the address http://localhost:8080. You should now see the AutCar Control Board:
     <p><img src="../images/autcar_controlboard.png" width="400" margin="20"></p>
 4. Enter the IP address of the car in the right upper corner and click on "Connect"<br>
-5. Click on the car control buttons to manually move the car. The live camera **won't be visible by default**, you'll learn later how to turn it on.
+5. Click on the car control buttons to manually move the car. The live camera **won't be visible by default**, see [this](4_AutCar_General.md#create-a-live-stream-from-your-car) section to learn how to turn it on.
     <p><img src="../images/autcar_controlboard.gif" width="400" margin="20"></p>
 
 You should now be able to control the car manually, great! Next, let's see how we can enable autonomous driving mode, [click here](3_Autonomous_Driving.md) to learn more.
