@@ -76,7 +76,7 @@ def install_libqt4():
 
 def install_opencv():
     subprocess.check_call("sudo apt-get -y install libatlas-base-dev libhdf5-dev libhdf5-serial-dev libjasper-dev libqtgui4 libilmbase-dev openexr libgstreamer1.0-0 libavcodec-dev libavformat-dev libswscale-dev", shell=True)
-    subprocess.check_call("", shell=True)
+    subprocess.check_call("sudo apt -y install python3-opencv", shell=True)
 
 def main():
     args = parse_arguments()
