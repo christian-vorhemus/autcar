@@ -85,13 +85,11 @@ It can happen that installation fails due to network timeouts. In that case, jus
 
 ### 4) Download and install AutCar on your PC
 
-Before you start, make sure that you have **64bit Python 3.5 or newer** installed on your PC! Check the architecture by entering
+Before you start, make sure that you have **64bit Python 3.5 or newer** installed on your PC! Check the architecture by opening a cmd prompt and enter
 ```
 python -c "exec(\"import platform\nprint(platform.architecture()[0])\")"
 ```
-The output should be `64bit`. Check the version by typing `python --version`. The version should be 3.5.x or higher.
-
-Windows users can download the executable [here](https://www.python.org/ftp/python/3.7.0/python-3.7.0-amd64.exe).
+The output should be `64bit`. Check the version by typing `python --version`. The version should be 3.5.x or higher. If you get the information that Python is not recognized as an internal or external command, install Python first. Windows users can download the executable [here](https://www.python.org/ftp/python/3.7.0/python-3.7.0-amd64.exe).
 
 1) We also need the AutCar library on our PC. Download the zipped library using [this link](https://github.com/christian-vorhemus/autcar/archive/master.zip)
 
