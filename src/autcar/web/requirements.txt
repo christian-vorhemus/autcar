@@ -2,6 +2,7 @@ Flask
 numpy
 matplotlib
 opencv-python
+onnx==1.4.1
 onnxruntime
 onnxmltools
 Pillow
