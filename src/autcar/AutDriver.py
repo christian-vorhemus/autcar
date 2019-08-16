@@ -68,7 +68,7 @@ class Driver:
             threads.append(thread)
 
         if(execution_function is None):
-            def execute(model_prediction: dict, car: Car):
+            def execute(model_prediction: dict, car: Car, variables: dict):
                 prediction = model_prediction[list(model_prediction.keys())[0]][0]
                 last_command = model_prediction[list(model_prediction.keys())[0]][1]
 
