@@ -1,5 +1,6 @@
 Flask
 numpy
+matplotlib
 opencv-python
 onnxruntime
 onnxmltools
