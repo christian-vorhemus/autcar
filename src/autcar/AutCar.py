@@ -3,7 +3,7 @@ try:
 except Exception as e:
     print("Warning: RPi.GPIO could not be loaded")
 import time
-from multiprocessing import Process
+from threading import Thread
 
 class Car:
 
@@ -28,7 +28,9 @@ class Car:
         @param model: Selects which model type should be used. At the moment, only "one" is supported
         """
         self.__tright = None
+        self.__moving_right = False
         self.__tleft = None
+        self.__moving_left = False
         self._model = model
         GPIO.setmode(GPIO.BOARD)
         self.__reset_pins()
@@ -46,6 +48,8 @@ class Car:
 
     def __right_motor(self, direction, delay):
         while True:
+            if(self.__moving_right == False):
+                break
             for halfstep in range(len(self.__sequence)):
                 for pin in range(4):
                     if(direction == 1):
@@ -57,6 +61,8 @@ class Car:
 
     def __left_motor(self, direction, delay):
         while True:
+            if(self.__moving_left == False):
+                break
             for halfstep in range(len(self.__sequence)):
                 for pin in range(4):
                     if(direction == 1):
@@ -67,8 +73,8 @@ class Car:
 
     def __reset_movement(self):
         try:
-            self.__tleft.terminate()
-            self.__tright.terminate()
+            self.__moving_right = False
+            self.__moving_left = False
         except Exception as e:
             pass
         self.__reset_pins()
@@ -98,8 +104,10 @@ class Car:
         else:
             motor_delay = 0.001
 
-        self.__tright = Process(target = self.__right_motor, args = (di,motor_delay,))
-        self.__tleft = Process(target = self.__left_motor, args = (di,motor_delay,))
+        self.__tright = Thread(target = self.__right_motor, args = (di,motor_delay,))
+        self.__tleft = Thread(target = self.__left_motor, args = (di,motor_delay,))
+        self.__moving_left = True
+        self.__moving_right = True
         self.__tright.start()
         self.__tleft.start()
         self.current_command = {'type' : 'move', 'direction' : direction, 'speed': speed}
@@ -109,8 +117,8 @@ class Car:
         Stops the motors of the car
         """
         try:
-            self.__tleft.terminate()
-            self.__tright.terminate()
+            self.__moving_right = False
+            self.__moving_left = False
         except Exception as e:
             pass
         self.__reset_pins()
@@ -147,9 +155,11 @@ class Car:
 
         time.sleep(0.1)
 
-        self.__tright = Process(target = self.__right_motor, args = (di,__speed_right,))
-        self.__tleft = Process(target = self.__left_motor, args = (di,__speed_left,))
+        self.__tright = Thread(target = self.__right_motor, args = (di,__speed_right,))
+        self.__tleft = Thread(target = self.__left_motor, args = (di,__speed_left,))
 
+        self.__moving_left = True
+        self.__moving_right = True
         self.__tright.start()
         self.__tleft.start()
         self.current_command = {'type' : 'right', 'direction' : direction, 'style': style}
@@ -185,9 +195,11 @@ class Car:
 
         time.sleep(0.1)
 
-        self.__tright = Process(target = self.__right_motor, args = (di,__speed_right,))
-        self.__tleft = Process(target = self.__left_motor, args = (di,__speed_left,))
+        self.__tright = Thread(target = self.__right_motor, args = (di,__speed_right,))
+        self.__tleft = Thread(target = self.__left_motor, args = (di,__speed_left,))
 
+        self.__moving_left = True
+        self.__moving_right = True
         self.__tright.start()
         self.__tleft.start()
         self.current_command = {'type' : 'left', 'direction' : direction, 'style': style}

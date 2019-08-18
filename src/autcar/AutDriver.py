@@ -76,28 +76,40 @@ class Driver:
                     return
 
                 if(prediction == 0):
+                    print("prediction 0: left light backwards")
                     car.left("light", "backwards")
                 elif(prediction == 1):
+                    print("prediction 1: left light forward")
                     car.left("light", "forward")
                 elif(prediction == 2):
+                    print("prediction 2: left medium backwards")
                     car.left("medium", "backwards")
                 elif(prediction == 3):
+                    print("prediction 3: left medium forward")
                     car.left("medium", "forward")
                 elif(prediction == 4):
+                    print("prediction 4: move fast forward")
                     car.move("forward", "fast")
                 elif(prediction == 5):
+                    print("prediction 5: move medium backwards")
                     car.move("backwards", "medium")
                 elif(prediction == 6):
+                    print("prediction 6: move medium forward")
                     car.move("forward", "medium")
                 elif(prediction == 7):
+                    print("prediction 7: right light backwards")
                     car.right("light", "backwards")
                 elif(prediction == 8):
+                    print("prediction 8: right light forward")
                     car.right("light", "forward")
                 elif(prediction == 9):
+                    print("prediction 9: left medium backwards")
                     car.right("medium", "backwards")
                 elif(prediction == 10):
+                    print("prediction 10: right medium forward")
                     car.right("medium", "forward")
                 elif(prediction == 11):
+                    print("prediction 11: stop")
                     car.stop()
                     
             execution_function = execute

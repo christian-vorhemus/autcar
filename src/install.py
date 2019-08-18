@@ -16,25 +16,22 @@ def reboot():
 	subprocess.check_call("sudo reboot", shell=True)
 
 def install_onnxruntime():
-    subprocess.check_call("python3 -m pip install tools/onnxruntime-0.5.0-cp37-cp37m-linux_armv7l.whl", shell=True)
     import pip._internal
-    print(pip._internal.pep425tags.get_supported())
-    # from pip import pep425tags
-    # supported_tags = pep425tags.supported_tags
-    # paths = glob.glob("tools/*.whl")
-    # filepath = ""
+    supported_tags = pip._internal.pep425tags.get_supported()
+    paths = glob.glob("tools/*.whl")
+    filepath = ""
 
-    # for supported_tag in supported_tags:
-    #     for tag in supported_tag:
-    #         if(tag.startswith("linux")):
-    #             for path in paths:
-    #                 if(tag in path):
-    #                     filepath = path
+    for supported_tag in supported_tags:
+        for tag in supported_tag:
+            if(tag.startswith("linux")):
+                for path in paths:
+                    if(tag in path):
+                        filepath = path
 
-    # if(filepath == ""):
-    #     raise Exception("No supported wheel file found in /tools folder")
-    # else:
-    #     subprocess.check_call("python3 -m pip install "+filepath, shell=True)
+    if(filepath == ""):
+        raise Exception("No supported wheel file found in /tools folder")
+    else:
+        subprocess.check_call("python3 -m pip install "+filepath, shell=True)
 
 def create_swap():
     if(os.path.isfile('./swapfile') is False):
