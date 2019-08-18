@@ -25,7 +25,7 @@ class Car:
         """
         Use this object to control the motor of the car
 
-        @param model: Selects which model type should be used. At the moment, only "one" is supported
+        @param model: Selects which model type should be used.
         """
         self.__tright = None
         self.__moving_right = False
