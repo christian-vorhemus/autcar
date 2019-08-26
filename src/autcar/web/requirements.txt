@@ -8,7 +8,7 @@ onnx
 onnxruntime
 onnxmltools
 Pillow
-pandas
+pandas==0.24
 pandas-ml
 tensorflow
 keras

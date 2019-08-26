@@ -100,6 +100,8 @@ pip install -r autcar/web/requirements.txt
 
 If you get the message that pip is not recognized as an internal or external command, make sure to add the pip binary to the PATH variable. For Windows, this procedure is described [here](https://projects.raspberrypi.org/en/projects/using-pip-on-windows/5).
 
+4) On a Windows PC, download and install the Visual C++ 2015 Redistributable Update from [here](https://www.microsoft.com/en-us/download/details.aspx?id=53587)
+
 ### 5) Connect to your car and drive!
 
 1. On your Raspberry Pi, start the sample remote control script rc_sample.py in the folder ~/autcar/src:
