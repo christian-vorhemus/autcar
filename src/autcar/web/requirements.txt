@@ -1,8 +1,9 @@
 Flask
 numpy
 matplotlib
+keras2onnx
 opencv-python
-onnx==1.4.1
+onnx
 onnxruntime
 onnxmltools
 Pillow
