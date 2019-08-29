@@ -91,9 +91,9 @@ class Car:
         time.sleep(0.1)
 
         if(direction == "forward"):
-            di = 1
-        else:
             di = 0
+        else:
+            di = 1
 
         if(speed == "fast"):
             motor_delay = 0.0007
@@ -136,9 +136,9 @@ class Car:
         time.sleep(0.1)
 
         if(direction == "backwards"):
-            di = 0
-        else:
             di = 1
+        else:
+            di = 0
 
         __speed_right = 0.001
         __speed_left = 0.001
@@ -176,9 +176,9 @@ class Car:
         time.sleep(0.1)
 
         if(direction == "backwards"):
-            di = 0
-        else:
             di = 1
+        else:
+            di = 0
 
         __speed_right = 0.001
         __speed_left = 0.001
