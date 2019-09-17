@@ -21,11 +21,12 @@ class Car:
         [1,0,0,1]
     ]
 
-    def __init__(self, model='one'):
+    def __init__(self, model='one', switch_left_right=False):
         """
         Use this object to control the motor of the car
 
         @param model: Selects which model type should be used.
+        @param switch_left_right: Should be set to True when you notice that the car confuses left and right commands
         """
         self.__tright = None
         self.__moving_right = False
@@ -34,6 +35,7 @@ class Car:
         self._model = model
         GPIO.setmode(GPIO.BOARD)
         self.__reset_pins()
+        self.__switch_left_right = switch_left_right
         self.current_command = {'type': 'started'}
 
     def __reset_pins(self):
@@ -155,6 +157,11 @@ class Car:
 
         time.sleep(0.1)
 
+        if(self.__switch_left_right):
+            temp = __speed_right
+            __speed_right = __speed_left
+            __speed_left = temp
+
         self.__tright = Thread(target = self.__right_motor, args = (di,__speed_right,))
         self.__tleft = Thread(target = self.__left_motor, args = (di,__speed_left,))
 
@@ -194,6 +201,11 @@ class Car:
             __speed_left = 0.002
 
         time.sleep(0.1)
+
+        if(self.__switch_left_right):
+            temp = __speed_right
+            __speed_right = __speed_left
+            __speed_left = temp
 
         self.__tright = Thread(target = self.__right_motor, args = (di,__speed_right,))
         self.__tleft = Thread(target = self.__left_motor, args = (di,__speed_left,))
