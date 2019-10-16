@@ -12,12 +12,45 @@ You'll need the following:
 
 ### 2) Configure your Raspberry Pi
 
-If you already have a Rasperry Pi 3 with the newest Raspbian Lite up and running, you can skip this section.
+To use the AutCar software, you have two options: Either use a preconfigured Raspbian image already including all necessary dependencies qne libraries or install the library on your own. If you go for the first option, read on below at 2a, for the second option go to 2b. IMPORTANT: Go for either 2a or 2b, not both!
+
+#### 2a) Use a prebuilt image
+
+1) Download the prebuilt image from [here](https://github.com/christian-vorhemus/autcar/releases/download/v1/autcar.zip) to your PC.
+2) Unzip the file and download a tool to write disk images to a SD card. On Windows, you can use [Win32 Disk Imager]
+3) Download a SSH client, for example [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
+4) Plug a SD card to your computer, start your disk image writer and write the autcar.img file to the card by selecting the image and clicking the "Write" button
+5) Open the /boot partition of the SD card, and create a new file named "wpa_supplicant.conf"
+6) Add the following content to the file but replace &lt;YOUR-WIFI-SSID&gt; and &lt;YOUR-WIFI-KEY&gt; with the SSID (name of your Wi-Fi) and password of your WLAN access point.
+    ```
+    ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+    update_config=1
+    country=AT
+
+    network={
+        ssid="<YOUR-WIFI-SSID>"
+        psk="<YOUR-WIFI-KEY>"
+        key_mgmt=WPA-PSK
+    }
+    ```
+    If you use an unsecured access point (you shouldn't do this by the way) remove the `psk` key-value pair and set `key_mgmt` to `NONE`
+7) Create an empty file "ssh" (no file ending!) on /boot partition to enable ssh
+    <p><img src="../images/boot_files.png" width="400" margin="20"></p>
+8) Start your Raspberry Pi and search on your WLAN access point which IP address your Raspberry Pi is using. Most access points provide a web interface you can use to find the IP address, however, the address of the web interface differrs from router to router. If you don't know it, open a browser and try 192.168.1.1, 10.0.0.1 or 10.0.0.138 to open the web interface and note down the IP address of your Raspberry.
+9) Open PuTTY, enter the IP address of your Raspberry Pi and click "Open". The default credentials are
+```
+Username: pi
+Password: raspberry
+```
+
+You are now all set on your Raspberry, please continue below at section 3!
+
+#### 2b) Install the library on your own
 
 1) Download **Raspbian Buster Lite** from [here](https://www.raspberrypi.org/downloads/raspbian/)
 2) Download a tool to write disk images to a SD card. On Windows, you can use [Win32 Disk Imager](https://www.heise.de/download/product/win32-disk-imager-92033). On a Mac you may use [Etcher](https://www.balena.io/etcher/)
 3) Download a SSH client, for example [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
-4) Plug a SD card to your computer, start your disk image writer and write the Raspian .img file to the card
+4) Plug a SD card to your computer, start your disk image writer and write the Raspian .img file to the card by selecting the image and clicking the "Write" button
 5) Open the /boot partition of the SD card, and create a new file named "wpa_supplicant.conf"
 6) Add the following content to the file but replace &lt;YOUR-WIFI-SSID&gt; and &lt;YOUR-WIFI-KEY&gt; with the SSID (name) and password of your WLAN access point.
     ```
@@ -47,24 +80,22 @@ passwd
 ```
 and change the default password.
 
-### 3) Download and install AutCar on your Raspberry
-
-1) First, install Git. You can do so by entering the following command on your Raspberry Pi shell:
+10) Next, install Git. You can do so by entering the following command on your Raspberry Pi shell:
 ```
 sudo apt-get -y install git
 ```
 
-2) Download the AutCar library
+11) Download the AutCar library
 ```
 git clone https://github.com/christian-vorhemus/autcar.git
 ```
 
-3) Change directory to enter the /src folder of the downloaded /autcar folder
+12) Change directory to enter the /src folder of the downloaded /autcar folder
 ```
 cd autcar/src/
 ```
 
-4) Install the dependencies
+13) Install the dependencies
 ```
 python3 install.py
 ```
@@ -83,7 +114,7 @@ python3 install.py --prevent-reboot
 It can happen that installation fails due to network timeouts. In that case, just run the install script again until you see "Sucessfully installed AutCar platform!"
 
 
-### 4) Download and install AutCar on your PC
+### 3) Download and install AutCar on your PC
 
 Before you start, make sure that you have **64bit Python 3.5 or newer** installed on your PC! Check the architecture by opening a cmd prompt and enter
 ```
@@ -102,7 +133,7 @@ If you get the message that pip is not recognized as an internal or external com
 
 4) On a Windows PC, download and install the Visual C++ 2015 Redistributable Update from [here](https://www.microsoft.com/en-us/download/details.aspx?id=53587)
 
-### 5) Connect to your car and drive!
+### 4) Connect to your car and drive!
 
 1. On your Raspberry Pi, start the sample remote control script rc_sample.py in the folder ~/autcar/src:
  ```
