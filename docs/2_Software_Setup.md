@@ -17,7 +17,7 @@ To use the AutCar software, you have two options: Either use a preconfigured Ras
 #### 2a) Use a prebuilt image
 
 1) Download the prebuilt image from [here](https://github.com/christian-vorhemus/autcar/releases/download/v1/autcar.zip) to your PC.
-2) Unzip the file and download a tool to write disk images to a SD card. On Windows, you can use [Win32 Disk Imager]
+2) Unzip the file and download a tool to write disk images to a SD card. On Windows, you can use [Win32 Disk Imager](https://www.heise.de/download/product/win32-disk-imager-92033)
 3) Download a SSH client, for example [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
 4) Plug a SD card to your computer, start your disk image writer and write the autcar.img file to the card by selecting the image and clicking the "Write" button
 5) Open the /boot partition of the SD card, and create a new file named "wpa_supplicant.conf"
